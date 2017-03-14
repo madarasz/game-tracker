@@ -6,6 +6,7 @@
  */
 
 window.Tether = require('tether');
+toastr = require('toastr');
 require('./bootstrap');
 
 /**
