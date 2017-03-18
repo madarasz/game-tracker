@@ -16,3 +16,6 @@ Route::get('/', function () {
 });
 
 Route::get('games', 'GameController@manageGames');
+Auth::routes();
+
+Route::get('/home', 'HomeController@index');

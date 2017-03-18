@@ -48,6 +48,11 @@
             .title {
                 font-size: 84px;
             }
+            .subtitle {
+                font-size: 50px;
+                font-family: 'Hevletica', sans-serif;
+
+            }
 
             .links > a {
                 color: #636b6f;
@@ -55,7 +60,7 @@
                 font-size: 12px;
                 font-weight: 600;
                 letter-spacing: .1rem;
-                text-decoration: none;
+                text-decoration: underline;
                 text-transform: uppercase;
             }
 
@@ -78,16 +83,15 @@
             @endif
 
             <div class="content">
-                <div class="title m-b-md">
-                    Laravel
+                <div class="title">
+                    Game-tracker
+                </div>
+                <div class="subtitle m-b-md">
+                    by Gatlako team
                 </div>
 
                 <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                    <a href="/games">Games management</a>
                 </div>
             </div>
         </div>
