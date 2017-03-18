@@ -34,7 +34,7 @@
                     <td>@{{ item.title }}</td>
                     <td>@{{ item.description }}</td>
                     <td class="text-center">@{{ types[item.game_type_id] }}</td>
-                    <td class="text-center">0</td>
+                    <td class="text-center">-</td>
                     <td>
                         <button class="btn btn-primary" @click.prevent="modalForEdit(item)">Edit</button>
                         <button class="btn btn-danger" @click.prevent="deleteGame(item.id)">Delete</button>
