@@ -82,15 +82,6 @@
                                 </div>
                             </div>
 
-                            {{--URL--}}
-                            <div class="form-group row">
-                                <label for="url" class="col-sm-3 col-form-label">URL:</label>
-                                <div class="col-sm-9">
-                                    <input type="text" name="url" class="form-control" v-model="game.url" />
-                                    <span v-if="formErrors['url']" class="error text-danger">@{{ formErrors['url'].toString() }}</span>
-                                </div>
-                            </div>
-
                             {{--Thumbnail--}}
                             <div class="form-group row">
                                 <div class="col-sm-10">
@@ -100,15 +91,6 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <img :src="game.thumbnail_url" class="img-fluid"/>
-                                </div>
-                            </div>
-
-                            {{--Foreign ID--}}
-                            <div class="form-group row">
-                                <label for="foreign_id" class="col-sm-3 col-form-label">Foreign ID:</label>
-                                <div class="col-sm-9">
-                                    <input type="text" name="foreign_id" class="form-control" v-model="game.foreign_id" />
-                                    <span v-if="formErrors['foreign_id']" class="error text-danger">@{{ formErrors['foreign_id'].toString() }}</span>
                                 </div>
                             </div>
 

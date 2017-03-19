@@ -25,8 +25,7 @@ class GameRequest extends FormRequest
     {
         return [
             'title' => 'required',
-            'game_type_id' => 'required',
-            'foreign_id' => 'nullable|integer'
+            'game_type_id' => 'required'
         ];
     }
 }

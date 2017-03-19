@@ -17,10 +17,8 @@ class CreateGamesTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->text('description')->nullable();
-            $table->string('url')->nullable();
             $table->string('thumbnail_url')->nullable();
             $table->integer('game_type_id')->unsigned();
-            $table->integer('foreign_id')->unsigned()->nullable(); // BGG id or STEAM id
             $table->timestamps();
             $table->softDeletes();
         });

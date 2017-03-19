@@ -9,7 +9,7 @@ class Game extends Model
 {
     use SoftDeletes;
     public $timestamps = true;
-    protected $fillable = ['title', 'description', 'url', 'thumbnail_url', 'game_type_id', 'foreign_id'];
+    protected $fillable = ['title', 'description', 'thumbnail_url', 'game_type_id'];
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
     protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
 
