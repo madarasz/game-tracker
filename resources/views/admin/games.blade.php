@@ -23,7 +23,7 @@
                         <th>title</th>
                         <th>description</th>
                         <th class="text-center">type</th>
-                        <th class="text-center">#games</th>
+                        <th class="text-center">#sessions</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -37,7 +37,7 @@
                         </td>
                         <td>@{{ item.description }}</td>
                         <td class="text-center">@{{ types[item.game_type_id] }}</td>
-                        <td class="text-center">-</td>
+                        <td class="text-center">@{{ item.sessionCount }}</td>
                         <td>
                             <button class="btn btn-primary" @click.prevent="modalForEdit($event, item)">Edit</button>
                             <button class="btn btn-danger" @click.prevent="deleteGame($event, item.id)">Delete</button>
