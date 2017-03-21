@@ -91,7 +91,7 @@
                 </div>
 
                 <div class="links">
-                    <a href="/games">Games management</a>
+                    <a href="/admin/games">Games management</a>
                 </div>
             </div>
         </div>

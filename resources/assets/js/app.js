@@ -8,6 +8,8 @@
 window.Tether = require('tether');
 toastr = require('toastr');
 require('./bootstrap');
+gt = require('./gametracker.js');
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

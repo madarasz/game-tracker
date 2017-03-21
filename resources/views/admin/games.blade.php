@@ -1,50 +1,54 @@
 @extends('layout.general')
 
 @section('content')
-    <div id="manage-games">
-        {{--Header--}}
-        <div class="row mt-2">
-            <div class="col-sm-12">
-                <div class="float-left">
-                    <h2>Games</h2>
+    <div class="card mt-3" id="manage-games">
+        <div class="card-block">
+            {{--Header--}}
+            <div class="row">
+                <div class="col-sm-6">
+                    <h4 class="card-title page-header">Games</h4>
                 </div>
-                <div class="float-right">
+                <div class="col-sm-6 text-right">
                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-game" @click="modalForCreate">
-                        Create Game
+                        Create game
                     </button>
                 </div>
             </div>
+
+            {{--Item Listing--}}
+            <table class="table table-bordered vmiddle hover-row mt-3">
+                <thead>
+                    <tr>
+                        <th style="width: 200px"></th>
+                        <th>title</th>
+                        <th>description</th>
+                        <th class="text-center">type</th>
+                        <th class="text-center">#games</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in items" @click="navigateToGame(item.id)">
+                        <td class="text-center">
+                            <img :src="item.thumbnail_url" class="img-thumb"/>
+                        </td>
+                        <td>
+                            @{{ item.title }}
+                        </td>
+                        <td>@{{ item.description }}</td>
+                        <td class="text-center">@{{ types[item.game_type_id] }}</td>
+                        <td class="text-center">-</td>
+                        <td>
+                            <button class="btn btn-primary" @click.prevent="modalForEdit($event, item)">Edit</button>
+                            <button class="btn btn-danger" @click.prevent="deleteGame($event, item.id)">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
-        {{--Item Listing--}}
-        <table class="table table-bordered vmiddle">
-            <thead>
-                <tr>
-                    <th style="width: 200px"></th>
-                    <th>title</th>
-                    <th>description</th>
-                    <th class="text-center">type</th>
-                    <th class="text-center">#games</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="item in items">
-                    <td class="text-center"><img :src="item.thumbnail_url" class="img-thumb"/></td>
-                    <td>@{{ item.title }}</td>
-                    <td>@{{ item.description }}</td>
-                    <td class="text-center">@{{ types[item.game_type_id] }}</td>
-                    <td class="text-center">-</td>
-                    <td>
-                        <button class="btn btn-primary" @click.prevent="modalForEdit(item)">Edit</button>
-                        <button class="btn btn-danger" @click.prevent="deleteGame(item.id)">Delete</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
         {{--Modal for new/edit game--}}
-        <div class="modal fade" id="modal-game" tabindex="-1" role="dialog" aria-labelledby="Create Game" aria-hidden="true">
+        <div class="modal fade" id="modal-game" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -142,21 +146,26 @@
                 // prepare modal for new game creation
                 modalForCreate: function() {
                     this.game = {'game_type_id': 1};    // default values
+                    this.formErrors = [];
                     this.modalTitle = 'Create Game';
                     this.modalButton = 'Create';
                     this.editMode = false;
                 },
                 // open modal for edit game
-                modalForEdit: function(game) {
+                modalForEdit: function(event, game) {
                     manageGames.game = game;
+                    this.formErrors = [];add
                     this.modalTitle = 'Edit Game';
                     this.modalButton = 'Edit';
                     this.editMode = true;
                     $("#modal-game").modal('show');
+
+                    // stop onclick propagation, no onclick on table row
+                    gt.stopEventPropagation(event);
                 },
                 // create new game
                 createGame: function() {
-                    axios.post('api/games', this.game)
+                    axios.post('/api/games', this.game)
                         .then(function(response) {
                                 manageGames.getGames();
                                 $("#modal-game").modal('hide');
@@ -168,15 +177,17 @@
                     );
                 },
                 // delete game
-                deleteGame: function(id) {
-                    axios.delete('api/games/' + id).then(function(response) {
+                deleteGame: function(event, id) {
+                    axios.delete('/api/games/' + id).then(function(response) {
                         manageGames.getGames();
                         toastr.info('Game deleted.', '', {timeOut: 1000});
                     });
+                    // stop onclick propagation, no onclick on table row
+                    gt.stopEventPropagation(event);
                 },
                 // update game
                 updateGame: function() {
-                    axios.put('api/games/' + this.game.id, this.game)
+                    axios.put('/api/games/' + this.game.id, this.game)
                             .then(function(response) {
                                 $("#modal-game").modal('hide');
                                 toastr.info('Game updated successfully.', '', {timeOut: 1000});
@@ -185,6 +196,10 @@
                                 manageGames.formErrors = response.response.data;
                             }
                     );
+                },
+                // navigate to game
+                navigateToGame: function(id) {
+                    window.location.href = '/games/' + id;
                 }
             }
         })

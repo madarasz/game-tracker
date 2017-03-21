@@ -5,3 +5,8 @@
 table.vmiddle > tbody > tr > td {
     vertical-align: middle;
 }
+
+table.hover-row > tbody > tr:hover > td {
+    background-color: #ccc;
+    cursor: pointer;
+}
