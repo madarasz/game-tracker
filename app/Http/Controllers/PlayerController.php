@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Game;
-use App\Http\Requests\GameRequest;
+use App\Http\Requests\PlayerRequest;
+use App\Player;
+use App\User;
 use Illuminate\Http\Request;
 
-class GameController extends Controller
+class PlayerController extends Controller
 {
+    public function indexUsers() {
+        $users = User::get();
 
-    public function manageGames() {
-        return view('admin.games');
-    }
-
-    public function viewGame($id) {
-        return view('viewer.game', ['id' => $id]);
+        return response()->json($users);
     }
 
     /**
@@ -24,9 +22,13 @@ class GameController extends Controller
      */
     public function index()
     {
-        $games = Game::get();
+        //
+    }
 
-        return response()->json($games);
+    public function indexForSession($sessionid) {
+        $players = Player::where('game_session_id', $sessionid)->with('user')->get();
+
+        return response()->json($players);
     }
 
     /**
@@ -36,18 +38,18 @@ class GameController extends Controller
      */
     public function create()
     {
-        // NOT USED
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param GameRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
-    public function store(GameRequest $request)
+    public function store(PlayerRequest $request)
     {
-        $created = Game::create($request->all());
+        $created = Player::create($request->all());
 
         return response()->json($created);
     }
@@ -60,9 +62,7 @@ class GameController extends Controller
      */
     public function show($id)
     {
-        $game = Game::findOrFail($id);
-
-        return response()->json($game);
+        //
     }
 
     /**
@@ -83,11 +83,11 @@ class GameController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(GameRequest $request, $id)
+    public function update(PlayerRequest $request, $id)
     {
-        $edit = Game::find($id)->update($request->all());
+        $player = Player::find($id)->update($request->all());
 
-        return response()->json($edit);
+        return response()->json($player);
     }
 
     /**
@@ -98,7 +98,8 @@ class GameController extends Controller
      */
     public function destroy($id)
     {
-        Game::find($id)->delete();
+        Player::find($id)->delete();
+
         return response()->json(['done']);
     }
 }

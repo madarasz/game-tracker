@@ -56,7 +56,8 @@ class GameSessionController extends Controller
      */
     public function show($id)
     {
-        $session = GameSession::findOrFail($id);
+        $session = GameSession::with(['game', 'players', 'players.user'])->findOrFail($id);
+        $session->setHidden(['game_id', 'created_at', 'updated_at', 'deleted_at']);
 
         return response()->json($session);
     }
@@ -79,7 +80,7 @@ class GameSessionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(GameSessionRequest $request, $id)
     {
         $session = GameSession::find($id)->update($request->all());
 

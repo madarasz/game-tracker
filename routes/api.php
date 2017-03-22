@@ -20,5 +20,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::resource('games', 'GameController');
 Route::resource('game-types', 'GameTypeController');
 Route::resource('game-sessions', 'GameSessionController');
+Route::resource('players', 'PlayerController');
 
 Route::get('game-sessions/game/{gameid}', 'GameSessionController@indexForGame');
+Route::get('users', 'PlayerController@indexUsers');
+Route::get('players/session/{sessionid}', 'PlayerController@indexForSession');

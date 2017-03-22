@@ -29,12 +29,48 @@
                             <strong>notes:</strong> @{{ session.notes }}<br/>
                         </div>
                     </div>
+                    {{--Players--}}
                     <div class="row mt-3">
-                        <div class="col-sm-12">
+                        <div class="col-sm-6">
                             <h5>Players</h5>
-                            <em style="font-size: 80%">not yet developed</em>
+                        </div>
+                        <div class="col-sm-6 text-right">
+                            <button type="button" class="btn btn-sm btn-success" data-toggle="modal"
+                                    data-target="#modal-player" @click="modalPlayerForCreate">
+                                Add player
+                            </button>
                         </div>
                     </div>
+                    <div class="row mt-3">
+                        <div class="col-sm-12">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>player</th>
+                                        <th class="text-right">score</th>
+                                        <th>notes</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(player, index) in session.players">
+                                        <td>@{{ player.user.name }}</td>
+                                        <td class="text-right">@{{ player.score }}</td>
+                                        <td>@{{ player.notes }}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-sm btn-primary" @click.prevent="modalPlayerForEdit(index)">
+                                                Edit
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-danger" @click.prevent="deletePlayer(index)">
+                                                Delete
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    {{--Photos--}}
                     <div class="row mt-3">
                         <div class="col-sm-12">
                             <h5>Photos</h5>
@@ -79,7 +115,7 @@
         </div>
         <div class="col-sm-12 col-lg-3 pull-lg-9">
             {{--Game info--}}
-            <div class="card"/>
+            <div class="card">
                 <img class="card-img-top img-fluid hidden-md-down" :src="game.thumbnail_url"/>
                 <div class="card-block">
                     <img class="hidden-lg-up img-thumb float-left mr-3" :src="game.thumbnail_url"/>
@@ -111,58 +147,107 @@
             </div>
         </div>
 
-        <div class="modal fade" id="modal-session" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="myModalLabel">@{{ modalSessionTitle }}</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    </div>
-                    <div class="modal-body">
+    {{--Session modal--}}
+    <div class="modal fade" id="modal-session" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">@{{ modalSessionTitle }}</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
 
-                        <form method="POST" enctype="multipart/form-data" @submit.prevent="(sessionEditMode ? updateSession() : createSession())">
+                    <form method="POST" enctype="multipart/form-data" @submit.prevent="(sessionEditMode ? updateSession() : createSession())">
 
-                            {{--Game--}}
-                            <input type="hidden" name="game_id" v-model="sessionForm.game_id" />
+                        {{--Game--}}
+                        <input type="hidden" name="game_id" v-model="sessionForm.game_id" />
 
-                            {{--Date--}}
-                            <div class="form-group row">
-                                <label for="date" class="col-sm-3 col-form-label">Date:</label>
-                                <div class="col-sm-9">
-                                    <input type="text" name="date" class="form-control" v-model="sessionForm.date" />
-                                    <span v-if="formErrors['date']" class="error text-danger">@{{ formErrors['date'].toString() }}</span>
-                                </div>
+                        {{--Date--}}
+                        <div class="form-group row">
+                            <label for="date" class="col-sm-3 col-form-label">Date:</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="date" class="form-control" v-model="sessionForm.date" />
+                                <span v-if="formSessionErrors['date']" class="error text-danger">@{{ formSessionErrors['date'].toString() }}</span>
                             </div>
+                        </div>
 
-                            {{--Place--}}
-                            <div class="form-group row">
-                                <label for="place" class="col-sm-3 col-form-label">Place:</label>
-                                <div class="col-sm-9">
-                                    <input type="text" name="place" class="form-control" v-model="sessionForm.place" />
-                                    <span v-if="formErrors['place']" class="error text-danger">@{{ formErrors['place'].toString() }}</span>
-                                </div>
+                        {{--Place--}}
+                        <div class="form-group row">
+                            <label for="place" class="col-sm-3 col-form-label">Place:</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="place" class="form-control" v-model="sessionForm.place" />
+                                <span v-if="formSessionErrors['place']" class="error text-danger">@{{ formSessionErrors['place'].toString() }}</span>
                             </div>
+                        </div>
 
-                            {{--Notes--}}
-                            <div class="form-group">
-                                <label for="notes">Notes:</label>
-                                <textarea name="notes" class="form-control" v-model="sessionForm.notes"></textarea>
-                                <span v-if="formErrors['notes']" class="error text-danger">@{{ formErrors['notes'].toString() }}</span>
-                            </div>
+                        {{--Notes--}}
+                        <div class="form-group">
+                            <label for="notes">Notes:</label>
+                            <textarea name="notes" class="form-control" v-model="sessionForm.notes"></textarea>
+                            <span v-if="formSessionErrors['notes']" class="error text-danger">@{{ formSessionErrors['notes'].toString() }}</span>
+                        </div>
 
-                            <div class="form-group text-center">
-                                <button type="submit" class="btn btn-success">@{{ modalSessionButton }}</button>
-                            </div>
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-success">@{{ modalSessionButton }}</button>
+                        </div>
 
-                        </form>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
-
     </div>
 
+    {{--Player modal--}}
+    <div class="modal fade" id="modal-player" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">@{{ modalPlayerTitle }}</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
 
+                    <form method="POST" enctype="multipart/form-data" @submit.prevent="(playerEditMode ? updatePlayer() : createPlayer())">
+
+                        {{--Session--}}
+                        <input type="hidden" name="game_id" v-model="playerForm.game_session_id" />
+
+                        {{--User--}}
+                        <div class="form-group row">
+                            <label for="user_id" class="col-sm-3 col-form-label">Player:</label>
+                            <div class="col-sm-9">
+                                <select v-model="playerForm.user_id" class="form-control" name="user_id">
+                                    <option v-for="user in users" :value="user.id">@{{ user.name }}</option>
+                                </select>
+                                <span v-if="formPlayerErrors['user_id']" class="error text-danger">@{{ formPlayerErrors['user_id'].toString() }}</span>
+                            </div>
+                        </div>
+
+                        {{--Score--}}
+                        <div class="form-group row">
+                            <label for="place" class="col-sm-3 col-form-label">Score:</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="score" class="form-control" v-model="playerForm.score" />
+                                <span v-if="formPlayerErrors['score']" class="error text-danger">@{{ formPlayerErrors['score'].toString() }}</span>
+                            </div>
+                        </div>
+
+                        {{--Notes--}}
+                        <div class="form-group">
+                            <label for="notes">Notes:</label>
+                            <textarea name="notes" class="form-control" v-model="playerForm.notes"></textarea>
+                            <span v-if="formPlayerErrors['notes']" class="error text-danger">@{{ formPlayerErrors['notes'].toString() }}</span>
+                        </div>
+
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-success">@{{ modalPlayerButton }}</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('script')
@@ -173,18 +258,25 @@
             data: {
                 id: '{{ $id }}',
                 game: {},
+                users: [],
                 session: {},
                 sessionForm: {},
                 sessionList: [],
-                formErrors: [],
+                formSessionErrors: [],
                 modalSessionTitle: '',
                 modalSessionButton: '',
-                sessionEditMode: false
+                sessionEditMode: false,
+                playerForm: {},
+                formPlayerErrors: [],
+                modalPlayerTitle: '',
+                modalPlayerButton: '',
+                playerEditMode: false
             },
 
             mounted: function() {
                 this.loadGame();
                 this.listSessionsForGame();
+                this.loadUsers();
             },
 
             methods: {
@@ -196,7 +288,7 @@
                     this.modalSessionButton = 'Create';
                     this.sessionEditMode = false;
                 },
-                // prepate modal for edit session
+                // prepare modal for edit session
                 modalSessionForEdit: function() {
                     this.sessionForm = this.session;
                     this.formErrors = [];
@@ -205,6 +297,26 @@
                     this.sessionEditMode = true;
                     $("#modal-session").modal('show');
                 },
+                // prepare modal for create player
+                modalPlayerForCreate: function() {
+                    this.playerForm = { game_session_id : this.session.id};
+                    this.formPlayerErrors = [];
+                    this.modalPlayerTitle = 'Add player';
+                    this.modalPlayerButton = 'Add';
+                    this.playerEditMode = false;
+                },
+                // prepare modal for edit player
+                modalPlayerForEdit: function(index) {
+                    this.playerForm = this.session.players[index];
+                    this.playerForm.game_session_id = this.session.id;
+                    this.playerForm.user_id = this.session.players[index].user.id;
+                    this.formPlayerErrors = [];
+                    this.modalPlayerTitle = 'Edit player';
+                    this.modalPlayerButton = 'Edit';
+                    this.playerEditMode = true;
+                    $("#modal-player").modal('show');
+                },
+
                 // loads basic info about the game
                 loadGame: function() {
                     axios.get('/api/games/' + this.id).then(function (response) {
@@ -215,6 +327,12 @@
                 listSessionsForGame: function() {
                     axios.get('/api/game-sessions/game/' + this.id).then(function (response) {
                         viewGame.sessionList = response.data;
+                    });
+                },
+                // loads users
+                loadUsers: function() {
+                    axios.get('/api/users').then(function (response) {
+                        viewGame.users = response.data;
                     });
                 },
                 // display session
@@ -228,11 +346,12 @@
                     axios.post('/api/game-sessions', this.sessionForm)
                             .then(function(response) {
                                 viewGame.displaySession(response.data.id);
+                                viewGame.listSessionsForGame();
                                 $("#modal-session").modal('hide');
                                 toastr.info('Session created successfully.', '', {timeOut: 1000});
                             }, function(response) {
                                 // error handling
-                                viewGame.formErrors = response.response.data;
+                                viewGame.formSessionErrors = response.response.data;
                             }
                     );
                 },
@@ -245,7 +364,7 @@
                                 viewGame.listSessionsForGame();
                             }, function(response) {
                                 // error handling
-                                viewGame.formErrors = response.response.data;
+                                viewGame.formSessionErrors = response.response.data;
                             }
                     );
                 },
@@ -256,8 +375,41 @@
                         viewGame.listSessionsForGame();
                         toastr.info('Session deleted.', '', {timeOut: 1000});
                     });
+                },
+                // create player
+                createPlayer: function() {
+                    axios.post('/api/players', this.playerForm)
+                            .then(function(response) {
+                                viewGame.displaySession(viewGame.session.id);
+                                $("#modal-player").modal('hide');
+                                toastr.info('Player added successfully.', '', {timeOut: 1000});
+                            }, function(response) {
+                                // error handling
+                                viewGame.formPlayerErrors = response.response.data;
+                            }
+                    );
+                },
+                // update player
+                updatePlayer: function() {
+                    axios.put('/api/players/' + this.playerForm.id, this.playerForm)
+                            .then(function(response) {
+                                viewGame.displaySession(viewGame.session.id);
+                                $("#modal-player").modal('hide');
+                                toastr.info('Player updated successfully.', '', {timeOut: 1000});
+                                viewGame.listSessionsForGame();
+                            }, function(response) {
+                                // error handling
+                                viewGame.formPlayerErrors = response.response.data;
+                            }
+                    );
+                },
+                // delete player
+                deletePlayer: function(index) {
+                    axios.delete('/api/players/' + this.session.players[index].id).then(function(response) {
+                        viewGame.displaySession(viewGame.session.id);
+                        toastr.info('Player deleted.', '', {timeOut: 1000});
+                    });
                 }
-
             }
 
         });
