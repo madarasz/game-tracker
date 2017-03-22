@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Game;
 use App\Http\Requests\GameRequest;
-use Illuminate\Http\Request;
 
 class GameController extends Controller
 {
@@ -79,7 +78,7 @@ class GameController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\GameRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PlayerRequest;
 use App\Player;
 use App\User;
-use Illuminate\Http\Request;
 
 class PlayerController extends Controller
 {
@@ -44,7 +43,7 @@ class PlayerController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\PlayerRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(PlayerRequest $request)
@@ -79,7 +78,7 @@ class PlayerController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\PlayerRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */

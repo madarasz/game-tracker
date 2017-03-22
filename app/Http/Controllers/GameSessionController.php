@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\GameSession;
 use App\Http\Requests\GameSessionRequest;
-use Illuminate\Http\Request;
 
 class GameSessionController extends Controller
 {
@@ -56,7 +55,9 @@ class GameSessionController extends Controller
      */
     public function show($id)
     {
-        $session = GameSession::with(['game', 'players', 'players.user'])->findOrFail($id);
+        $session = GameSession::with(['game', 'players' => function($query) {
+            $query->orderBy('score', 'desc');
+        }, 'players.user'])->findOrFail($id);
         $session->setHidden(['game_id', 'created_at', 'updated_at', 'deleted_at']);
 
         return response()->json($session);
