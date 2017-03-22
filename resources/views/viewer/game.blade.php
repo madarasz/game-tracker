@@ -72,9 +72,14 @@
                     </div>
                     {{--Photos--}}
                     <div class="row mt-3">
-                        <div class="col-sm-12">
+                        <div class="col-sm-6">
                             <h5>Photos</h5>
-                            <em style="font-size: 80%">not yet developed</em>
+                        </div>
+                        <div class="col-sm-6 text-right">
+                            <button type="button" class="btn btn-sm btn-success" data-toggle="modal"
+                                    data-target="#modal-photo" @click="photoForm.game_session_id = session.id">
+                                Add photo
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -210,7 +215,7 @@
                     <form method="POST" enctype="multipart/form-data" @submit.prevent="(playerEditMode ? updatePlayer() : createPlayer())">
 
                         {{--Session--}}
-                        <input type="hidden" name="game_id" v-model="playerForm.game_session_id" />
+                        <input type="hidden" name="game_session_id" v-model="playerForm.game_session_id" />
 
                         {{--User--}}
                         <div class="form-group row">
@@ -248,6 +253,49 @@
             </div>
         </div>
     </div>
+
+    {{--Photo modal--}}
+    <div class="modal fade" id="modal-photo" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Add photo</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+
+                    <form method="POST" enctype="multipart/form-data" action="/api/photos" @submit.prevent="addPhoto">
+
+                        {{--Session--}}
+                        <input type="hidden" name="game_session_id" v-model="photoForm.game_session_id"/>
+
+                        {{--Photo file--}}
+                        <div class="form-group row">
+                            <label for="date" class="col-sm-3 col-form-label">Photo:</label>
+                            <div class="col-sm-9">
+                                <input type="file" name="photo" class="form-control" id="photoInput"/>
+                                <span v-if="formPhotoErrors['photo']" class="error text-danger">@{{ formPhotoErrors['photo'].toString() }}</span>
+                            </div>
+                        </div>
+
+                        {{--Title--}}
+                        <div class="form-group row">
+                            <label for="title" class="col-sm-3 col-form-label">Title:</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="title" class="form-control" v-model="photoForm.title"/>
+                                <span v-if="formPhotoErrors['title']" class="error text-danger">@{{ formPhotoErrors['title'].toString() }}</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-success">Add photo</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('script')
@@ -270,7 +318,9 @@
                 formPlayerErrors: [],
                 modalPlayerTitle: '',
                 modalPlayerButton: '',
-                playerEditMode: false
+                playerEditMode: false,
+                photoForm: {},
+                formPhotoErrors: []
             },
 
             mounted: function() {
@@ -283,7 +333,7 @@
                 // prepare modal for create session
                 modalSessionForCreate: function() {
                     this.sessionForm = { game_id: '{{ $id }}', date: ''};
-                    this.formErrors = [];
+                    this.formSessionErrors = [];
                     this.modalSessionTitle = 'Create session';
                     this.modalSessionButton = 'Create';
                     this.sessionEditMode = false;
@@ -291,7 +341,7 @@
                 // prepare modal for edit session
                 modalSessionForEdit: function() {
                     this.sessionForm = this.session;
-                    this.formErrors = [];
+                    this.formSessionErrors = [];
                     this.modalSessionTitle = 'Edit session';
                     this.modalSessionButton = 'Save';
                     this.sessionEditMode = true;
@@ -409,6 +459,28 @@
                         viewGame.displaySession(viewGame.session.id);
                         toastr.info('Player deleted.', '', {timeOut: 1000});
                     });
+                },
+                // add photo
+                addPhoto: function() {
+                    // sending files is complicated
+                    var fdata = new FormData();
+                    fdata.append('photo', document.getElementById('photoInput').files[0]);
+                    fdata.append('game_session_id', this.photoForm.game_session_id);
+                    fdata.append('title', this.photoForm.title);
+
+                    axios.post('/api/photos', fdata, {headers: {'Content-Type': "multipart/form-data; charset=utf-8; boundary=" + Math.random().toString().substr(2)}})
+                            .then(function(response) {
+                                viewGame.displaySession(viewGame.session.id);
+                                $("#modal-photo").modal('hide');
+                                toastr.info('Photo added successfully.', '', {timeOut: 1000});
+
+                                // clear form
+                                viewGame.photoForm.title = '';
+                            }, function(response) {
+                                // error handling
+                                viewGame.formPhotoErrors = response.response.data;
+                            }
+                    );
                 }
             }
 
