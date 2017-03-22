@@ -319,7 +319,7 @@
                 modalPlayerTitle: '',
                 modalPlayerButton: '',
                 playerEditMode: false,
-                photoForm: {},
+                photoForm: { title: ''},
                 formPhotoErrors: []
             },
 

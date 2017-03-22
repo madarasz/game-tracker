@@ -17,7 +17,7 @@ class CreateGameSessionsTable extends Migration
             $table->increments('id');
             $table->date('date');
             $table->string('place');
-            $table->string('notes')->default('');
+            $table->string('notes')->nullable();
             $table->integer('game_id');
 
             $table->softDeletes();

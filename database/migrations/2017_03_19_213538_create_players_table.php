@@ -18,7 +18,7 @@ class CreatePlayersTable extends Migration
             $table->integer('game_session_id');
             $table->integer('user_id');
             $table->integer('score');
-            $table->string('notes')->default('');
+            $table->string('notes')->nullable();
             $table->boolean('winner')->default(false);
         });
     }

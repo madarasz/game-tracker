@@ -15,7 +15,7 @@ class CreatePhotosTable extends Migration
     {
         Schema::create('photos', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title')->default('');
+            $table->string('title')->nullable();
             $table->integer('game_session_id');
         });
     }
