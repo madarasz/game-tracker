@@ -100,8 +100,8 @@
                     </div>
                 </div>
             </div>
-            {{--Sessions header--}}
-            <div class="card">
+            {{--Sessions list--}}
+            <div class="card mb-3">
                 <div class="card-block">
                     <div class="row">
                         <div class="col-sm-6">
@@ -145,27 +145,27 @@
                         <p>@{{ game.description }}</p>
                         <p>
                             <em>
-                            number of games: 0<br/>
-                            number of players: 0
+                            number of sessions: @{{ game.sessionCount }}<br/>
+                            {{--number of players: 0--}}
                             </em>
                         </p>
                     </p>
                 </div>
             </div>
             {{--Leaderboard--}}
-            <div class="card mt-3">
-                <div class="card-block">
-                    <h5 class="card-title">Leaderboard</h5>
-                    <p class="card-text">
-                        <p>
-                            top score: <em style="font-size: 80%">not yet developed</em>
-                        </p>
-                        <p>
-                            <em style="font-size: 80%">not yet developed</em>
-                        </p>
-                    </p>
-                </div>
-            </div>
+            {{--<div class="card mt-3">--}}
+                {{--<div class="card-block">--}}
+                    {{--<h5 class="card-title">Leaderboard</h5>--}}
+                    {{--<p class="card-text">--}}
+                        {{--<p>--}}
+                            {{--top score: <em style="font-size: 80%">not yet developed</em>--}}
+                        {{--</p>--}}
+                        {{--<p>--}}
+                            {{--<em style="font-size: 80%">not yet developed</em>--}}
+                        {{--</p>--}}
+                    {{--</p>--}}
+                {{--</div>--}}
+            {{--</div>--}}
         </div>
 
     {{--Session modal--}}
