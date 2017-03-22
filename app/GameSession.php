@@ -21,4 +21,8 @@ class GameSession extends Model
     public function players() {
         return $this->hasMany(Player::class, 'game_session_id');
     }
+
+    public function photos() {
+        return $this->hasMany(Photo::class, 'game_session_id');
+    }
 }
