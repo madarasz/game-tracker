@@ -25,7 +25,7 @@ class GameSessionController extends Controller
                     $q->select('user_id', 'game_session_id', 'score', 'winner')->orderBy('score','desc');
                 },
                 'players.user'
-            ])->get();
+            ])->orderBy('date', 'desc')->orderBy('id','desc')->get();
 
         return response()->json($sessions);
     }
