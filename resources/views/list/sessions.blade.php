@@ -12,7 +12,7 @@
     <td>@{{ gsession.date }}</td>
     <td>@{{ gsession.place }}</td>
     <td>
-        <span v-for="(player, index) in gsession.players" :class="(player.winner ? 'font-weight-bold' : '')">
+        <span v-for="(player, index) in gsession.players" :class="(parseInt(player.winner) ? 'font-weight-bold' : '')">
             @{{ player.user.name }} (@{{ player.score }})<span v-if="index < gsession.players.length -1">, </span>
         </span>
     </td>

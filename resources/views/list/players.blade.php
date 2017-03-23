@@ -11,7 +11,7 @@
     <tbody>
     <tr v-for="(player, index) in session.players">
         <td style="width: 1%">
-            <i class="fa fa-trophy" aria-hidden="true" v-if="player.winner"></i>
+            <i class="fa fa-trophy" aria-hidden="true" v-if="parseInt(player.winner)"></i>
         </td>
         <td>
             @{{ player.user.name }}
