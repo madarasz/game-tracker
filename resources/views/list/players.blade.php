@@ -1,4 +1,4 @@
-<table class="table table-striped">
+<table class="table table-striped mt-3" v-if="session.players.length > 0">
     <thead>
     <tr>
         <th>player</th>
@@ -23,3 +23,6 @@
     </tr>
     </tbody>
 </table>
+<div class="small-text" v-if="session.players.length == 0">
+    no players yet
+</div>

@@ -41,14 +41,10 @@
                             </button>
                         </div>
                     </div>
-                    <div class="row mt-3">
-                        <div class="col-sm-12">
-                            {{--Player table--}}
-                            @include('list.players')
-                        </div>
-                    </div>
+                    {{--Player table--}}
+                    @include('list.players')
                     {{--Photos--}}
-                    <div class="row mt-3">
+                    <div class="row mt-4">
                         <div class="col-sm-6">
                             <h5>Photos</h5>
                         </div>

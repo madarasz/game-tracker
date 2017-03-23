@@ -1,5 +1,5 @@
 {{--Gallery--}}
-<div class="row">
+<div class="row" v-if="session.photos.length > 0">
     <div class="gallery-item" v-for="photo in session.photos">
         <div style="position: relative;">
             {{--image--}}
@@ -13,4 +13,7 @@
             </button>
         </div>
     </div>
+</div>
+<div class="small-text" v-if="session.photos.length == 0">
+    no photos yet
 </div>

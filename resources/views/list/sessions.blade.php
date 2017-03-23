@@ -1,5 +1,5 @@
 {{--Session table--}}
-<table class="table table-striped vmiddle hover-row mt-3">
+<table class="table table-striped vmiddle hover-row mt-3" v-if="sessionList.length > 0">
     <thead>
     <tr>
         <th>date</th>
@@ -15,3 +15,6 @@
     </tr>
     </tbody>
 </table>
+<div class="small-text" v-if="sessionList.length == 0">
+    no sessions yet
+</div>

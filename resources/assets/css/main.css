@@ -28,3 +28,7 @@ table.hover-row > tbody > tr:hover > td {
 .fade-in:hover {
     opacity: 1;
 }
+.small-text {
+    font-size: 80%;
+    font-style: italic;
+}
