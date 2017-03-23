@@ -96,6 +96,14 @@
                     {{--</p>--}}
                 {{--</div>--}}
             {{--</div>--}}
+
+            {{--Back to games list--}}
+            <div class="text-center mt-3">
+                <a href="/" class="btn btn-primary btn-sm">
+                    <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    all games
+                </a>
+            </div>
         </div>
 
     {{--Session modal--}}
