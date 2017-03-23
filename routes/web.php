@@ -11,11 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/admin/games', 'GameController@manageGames');
+Route::get('/', 'GameController@manageGames');
 Route::get('/games/{id}', 'GameController@viewGame');
 Auth::routes();
 

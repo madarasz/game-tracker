@@ -9,11 +9,11 @@ class GameController extends Controller
 {
 
     public function manageGames() {
-        return view('admin.games');
+        return view('games');
     }
 
     public function viewGame($id) {
-        return view('viewer.game', ['id' => $id]);
+        return view('sessions', ['id' => $id]);
     }
 
     /**
