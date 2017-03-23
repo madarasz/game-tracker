@@ -19,7 +19,13 @@ class GameSessionController extends Controller
 
     public function indexForGame($gameid)
     {
-        $sessions = GameSession::where('game_id', $gameid)->get();
+        $sessions = GameSession::where('game_id', $gameid)
+            ->with([
+                'players' => function($q) {
+                    $q->select('user_id', 'game_session_id', 'score', 'winner')->orderBy('score','desc');
+                },
+                'players.user'
+            ])->get();
 
         return response()->json($sessions);
     }

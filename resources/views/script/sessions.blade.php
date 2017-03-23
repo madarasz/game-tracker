@@ -130,6 +130,7 @@
                 axios.post('/api/players', this.playerForm)
                         .then(function(response) {
                             viewGame.displaySession(viewGame.session.id);
+                            viewGame.listSessionsForGame();
                             $("#modal-player").modal('hide');
                             toastr.info('Player added successfully.', '', {timeOut: 1000});
                         }, function(response) {
@@ -143,6 +144,7 @@
                 axios.put('/api/players/' + this.playerForm.id, this.playerForm)
                         .then(function(response) {
                             viewGame.displaySession(viewGame.session.id);
+                            viewGame.listSessionsForGame();
                             $("#modal-player").modal('hide');
                             toastr.info('Player updated successfully.', '', {timeOut: 1000});
                             viewGame.listSessionsForGame();
@@ -156,6 +158,7 @@
             deletePlayer: function(index) {
                 axios.delete('/api/players/' + this.session.players[index].id).then(function(response) {
                     viewGame.displaySession(viewGame.session.id);
+                    viewGame.listSessionsForGame();
                     toastr.info('Player deleted.', '', {timeOut: 1000});
                 });
             },

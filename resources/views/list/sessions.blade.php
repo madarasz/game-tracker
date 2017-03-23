@@ -4,14 +4,18 @@
     <tr>
         <th>date</th>
         <th>place</th>
-        <th>players</th>
+        <th>players (score)</th>
     </tr>
     </thead>
     <tbody>
     <tr v-for="gsession in sessionList" @click="displaySession(gsession.id)">
     <td>@{{ gsession.date }}</td>
     <td>@{{ gsession.place }}</td>
-    <td></td>
+    <td>
+        <span v-for="(player, index) in gsession.players">
+            @{{ player.user.name }} (@{{ player.score }})<span v-if="index < gsession.players.length -1">, </span>
+        </span>
+    </td>
     </tr>
     </tbody>
 </table>
