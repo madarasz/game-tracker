@@ -83,7 +83,7 @@ class GameSessionController extends Controller
      */
     public function update(GameSessionRequest $request, $id)
     {
-        $session = GameSession::find($id)->update($request->all());
+        $session = GameSession::findOrFail($id)->update($request->all());
 
         return response()->json($session);
     }

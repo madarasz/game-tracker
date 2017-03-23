@@ -84,7 +84,7 @@ class GameController extends Controller
      */
     public function update(GameRequest $request, $id)
     {
-        $edit = Game::find($id)->update($request->all());
+        $edit = Game::findOrFail($id)->update($request->all());
 
         return response()->json($edit);
     }

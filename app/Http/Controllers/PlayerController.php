@@ -84,7 +84,7 @@ class PlayerController extends Controller
      */
     public function update(PlayerRequest $request, $id)
     {
-        $player = Player::find($id)->update($request->all());
+        $player = Player::findOrFail($id)->update($request->all());
 
         return response()->json($player);
     }
