@@ -147,7 +147,6 @@
                             viewGame.listSessionsForGame();
                             $("#modal-player").modal('hide');
                             toastr.info('Player updated successfully.', '', {timeOut: 1000});
-                            viewGame.listSessionsForGame();
                         }, function(response) {
                             // error handling
                             viewGame.formPlayerErrors = response.response.data;
@@ -190,6 +189,20 @@
                     viewGame.displaySession(viewGame.session.id);
                     toastr.info('Photo deleted.', '', {timeOut: 1000});
                 });
+            },
+            // negates winner flag for player
+            toggleWinner: function(index) {
+                axios.put('/api/players/' + this.session.players[index].id,
+                        {
+                            'user_id' : this.session.players[index].user.id,
+                            'score': this.session.players[index].score,
+                            'winner': 1 - this.session.players[index].winner
+                        })
+                        .then(function(response) {
+                            viewGame.displaySession(viewGame.session.id);
+                            viewGame.listSessionsForGame();
+                        }
+                );
             }
         }
 
