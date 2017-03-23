@@ -43,7 +43,7 @@
                     </div>
                     <div class="row mt-3">
                         <div class="col-sm-12">
-                            <table class="table table-bordered">
+                            <table class="table table-striped">
                                 <thead>
                                     <tr>
                                         <th>player</th>
@@ -57,7 +57,7 @@
                                         <td>@{{ player.user.name }}</td>
                                         <td class="text-right">@{{ player.score }}</td>
                                         <td>@{{ player.notes }}</td>
-                                        <td>
+                                        <td class="text-right">
                                             <button type="button" class="btn btn-sm btn-primary" @click.prevent="modalPlayerForEdit(index)">
                                                 Edit
                                             </button>
@@ -114,7 +114,7 @@
                             </button>
                         </div>
                     </div>
-                    <table class="table table-bordered vmiddle hover-row mt-3">
+                    <table class="table table-striped vmiddle hover-row mt-3">
                         <thead>
                             <tr>
                                 <th>date</th>

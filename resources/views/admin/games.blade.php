@@ -9,14 +9,14 @@
                     <h4 class="card-title page-header">Games</h4>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-game" @click="modalForCreate">
+                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-game" @click="modalForCreate">
                         Create game
                     </button>
                 </div>
             </div>
 
             {{--Item Listing--}}
-            <table class="table table-bordered vmiddle hover-row mt-3">
+            <table class="table table-striped vmiddle hover-row mt-3">
                 <thead>
                     <tr>
                         <th style="width: 200px"></th>
@@ -38,9 +38,9 @@
                         <td>@{{ item.description }}</td>
                         <td class="text-center">@{{ types[item.game_type_id] }}</td>
                         <td class="text-center">@{{ item.sessionCount }}</td>
-                        <td>
-                            <button class="btn btn-primary" @click.prevent="modalForEdit($event, item)">Edit</button>
-                            <button class="btn btn-danger" @click.prevent="deleteGame($event, item.id)">Delete</button>
+                        <td class="text-right">
+                            <button class="btn btn-primary btn-sm" @click.stop="modalForEdit($event, item)">Edit</button>
+                            <button class="btn btn-danger btn-sm" @click.stop="deleteGame($event, item.id)">Delete</button>
                         </td>
                     </tr>
                 </tbody>
@@ -154,14 +154,11 @@
                 // open modal for edit game
                 modalForEdit: function(event, game) {
                     manageGames.game = game;
-                    this.formErrors = [];add
+                    this.formErrors = [];
                     this.modalTitle = 'Edit Game';
                     this.modalButton = 'Edit';
                     this.editMode = true;
                     $("#modal-game").modal('show');
-
-                    // stop onclick propagation, no onclick on table row
-                    gt.stopEventPropagation(event);
                 },
                 // create new game
                 createGame: function() {
@@ -182,8 +179,6 @@
                         manageGames.getGames();
                         toastr.info('Game deleted.', '', {timeOut: 1000});
                     });
-                    // stop onclick propagation, no onclick on table row
-                    gt.stopEventPropagation(event);
                 },
                 // update game
                 updateGame: function() {
