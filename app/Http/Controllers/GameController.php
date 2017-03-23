@@ -4,16 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Game;
 use App\Http\Requests\GameRequest;
+use Illuminate\Support\Facades\Auth;
 
 class GameController extends Controller
 {
 
     public function manageGames() {
-        return view('games');
+        $user = Auth::user();
+        return view('games', ['user' => $user]);
     }
 
     public function viewGame($id) {
-        return view('sessions', ['id' => $id]);
+        $user = Auth::user();
+        return view('sessions', ['id' => $id, 'user' => $user]);
     }
 
     /**

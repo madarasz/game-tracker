@@ -8,9 +8,11 @@
                 <img :src="photo.thumbnail_url" />
             </a>
             {{--delete button--}}
+            @if ($user)
             <button type="button" class="btn btn-sm btn-danger abs-top-left fade-in" @click.prevent="deletePhoto(photo.id)">
                 X
             </button>
+            @endif
         </div>
     </div>
 </div>

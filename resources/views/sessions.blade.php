@@ -11,12 +11,14 @@
                             <h4 class="card-title page-header">Session details</h4>
                         </div>
                         <div class="col-sm-6 text-right">
+                            @if ($user)
                             <button type="button" class="btn btn-sm btn-primary" @click.prevent="modalSessionForEdit">
                                 Edit
                             </button>
                             <button type="button" class="btn btn-sm btn-danger" @click.prevent="deleteSession">
                                 Delete
                             </button>
+                            @endif
                             <button type="button" class="close ml-1" aria-label="Close" @click.prevent="session = {}">
                                 <span aria-hidden="true">×</span>
                             </button>
@@ -35,10 +37,12 @@
                             <h5>Players</h5>
                         </div>
                         <div class="col-sm-6 text-right">
+                            @if ($user)
                             <button type="button" class="btn btn-sm btn-success" data-toggle="modal"
                                     data-target="#modal-player" @click="modalPlayerForCreate">
                                 Add player
                             </button>
+                            @endif
                         </div>
                     </div>
                     {{--Player table--}}
@@ -49,10 +53,12 @@
                             <h5>Photos</h5>
                         </div>
                         <div class="col-sm-6 text-right">
+                            @if ($user)
                             <button type="button" class="btn btn-sm btn-success" data-toggle="modal"
                                     data-target="#modal-photo" @click="photoForm.game_session_id = session.id">
                                 Add photo
                             </button>
+                            @endif
                         </div>
                     </div>
                     {{--Gallery--}}
@@ -67,10 +73,12 @@
                             <h4 class="card-title page-header">Game sessions</h4>
                         </div>
                         <div class="col-sm-6 text-right">
+                            @if ($user)
                             <button type="button" class="btn btn-sm btn-success" data-toggle="modal"
                                     data-target="#modal-session" @click="modalSessionForCreate">
                                 Create session
                             </button>
+                            @endif
                         </div>
                     </div>
                     {{--Session table--}}

@@ -22,8 +22,10 @@
     <td class="text-center">@{{ types[item.game_type_id] }}</td>
     <td class="text-center">@{{ item.sessionCount }}</td>
     <td class="text-right">
+        @if ($user)
         <button class="btn btn-primary btn-sm" @click.stop="modalForEdit($event, item)">Edit</button>
         <button class="btn btn-danger btn-sm" @click.stop="deleteGame($event, item.id)">Delete</button>
+        @endif
     </td>
     </tr>
     </tbody>

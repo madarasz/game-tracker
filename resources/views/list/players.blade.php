@@ -19,6 +19,7 @@
         <td class="text-right">@{{ player.score }}</td>
         <td>@{{ player.notes }}</td>
         <td class="text-right">
+            @if ($user)
             <button type="button" class="btn btn-sm btn-info" @click.prevent="toggleWinner(index)">
                 <i class="fa fa-trophy" aria-hidden="true"></i>
             </button>
@@ -28,6 +29,7 @@
             <button type="button" class="btn btn-sm btn-danger" @click.prevent="deletePlayer(index)">
                 Delete
             </button>
+            @endif
         </td>
     </tr>
     </tbody>

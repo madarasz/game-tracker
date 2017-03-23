@@ -9,9 +9,11 @@
                     <h4 class="card-title page-header">Games</h4>
                 </div>
                 <div class="col-sm-6 text-right">
+                    @if ($user)
                     <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-game" @click="modalForCreate">
                         Create game
                     </button>
+                    @endif
                 </div>
             </div>
 
@@ -20,7 +22,7 @@
         </div>
 
         {{--Modal for new/edit game--}}
-        @include('modal.games');
+        @include('modal.games')
     </div>
 @stop
 
