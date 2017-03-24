@@ -119,11 +119,13 @@
             },
             // delete session
             deleteSession: function() {
-                axios.delete('/api/game-sessions/' + this.session.id).then(function(response) {
-                    viewGame.session = {};
-                    viewGame.listSessionsForGame();
-                    toastr.info('Session deleted.', '', {timeOut: 1000});
-                });
+                if (confirm('Delete the session?')) {
+                    axios.delete('/api/game-sessions/' + this.session.id).then(function (response) {
+                        viewGame.session = {};
+                        viewGame.listSessionsForGame();
+                        toastr.info('Session deleted.', '', {timeOut: 1000});
+                    });
+                }
             },
             // create player
             createPlayer: function() {
@@ -155,11 +157,13 @@
             },
             // delete player
             deletePlayer: function(index) {
-                axios.delete('/api/players/' + this.session.players[index].id).then(function(response) {
-                    viewGame.displaySession(viewGame.session.id);
-                    viewGame.listSessionsForGame();
-                    toastr.info('Player deleted.', '', {timeOut: 1000});
-                });
+                if (confirm('Delete the player?')) {
+                    axios.delete('/api/players/' + this.session.players[index].id).then(function (response) {
+                        viewGame.displaySession(viewGame.session.id);
+                        viewGame.listSessionsForGame();
+                        toastr.info('Player deleted.', '', {timeOut: 1000});
+                    });
+                }
             },
             // add photo
             addPhoto: function() {
@@ -186,11 +190,13 @@
             },
             // delete photo
             deletePhoto: function(id) {
-                axios.delete('/api/photos/' + id).then(function(response) {
-                    viewGame.displaySession(viewGame.session.id);
-                    viewGame.listSessionsForGame();
-                    toastr.info('Photo deleted.', '', {timeOut: 1000});
-                });
+                if (confirm('Delete the photo?')) {
+                    axios.delete('/api/photos/' + id).then(function (response) {
+                        viewGame.displaySession(viewGame.session.id);
+                        viewGame.listSessionsForGame();
+                        toastr.info('Photo deleted.', '', {timeOut: 1000});
+                    });
+                }
             },
             // negates winner flag for player
             toggleWinner: function(index) {

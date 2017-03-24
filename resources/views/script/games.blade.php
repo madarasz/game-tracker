@@ -62,10 +62,12 @@
             },
             // delete game
             deleteGame: function(event, id) {
-                axios.delete('/api/games/' + id).then(function(response) {
-                    manageGames.getGames();
-                    toastr.info('Game deleted.', '', {timeOut: 1000});
-                });
+                if (confirm('Delete the game?')) {
+                    axios.delete('/api/games/' + id).then(function (response) {
+                        manageGames.getGames();
+                        toastr.info('Game deleted.', '', {timeOut: 1000});
+                    });
+                }
             },
             // update game
             updateGame: function() {
