@@ -172,6 +172,7 @@
                 axios.post('/api/photos', fdata, {headers: {'Content-Type': "multipart/form-data; charset=utf-8; boundary=" + Math.random().toString().substr(2)}})
                         .then(function(response) {
                             viewGame.displaySession(viewGame.session.id);
+                            viewGame.listSessionsForGame();
                             $("#modal-photo").modal('hide');
                             toastr.info('Photo added successfully.', '', {timeOut: 1000});
 
@@ -187,6 +188,7 @@
             deletePhoto: function(id) {
                 axios.delete('/api/photos/' + id).then(function(response) {
                     viewGame.displaySession(viewGame.session.id);
+                    viewGame.listSessionsForGame();
                     toastr.info('Photo deleted.', '', {timeOut: 1000});
                 });
             },
@@ -196,7 +198,7 @@
                         {
                             'user_id' : this.session.players[index].user.id,
                             'score': this.session.players[index].score,
-                            'winner': 1 - this.session.players[index].winner
+                            'winner': 1 - this.session.players[index].winner // negate flag
                         })
                         .then(function(response) {
                             viewGame.displaySession(viewGame.session.id);

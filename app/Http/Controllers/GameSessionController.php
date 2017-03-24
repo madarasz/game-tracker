@@ -64,7 +64,7 @@ class GameSessionController extends Controller
         $session = GameSession::with(['game', 'players' => function($query) {
             $query->orderBy('score', 'desc');
         }, 'players.user', 'photos'])->findOrFail($id);
-        $session->setHidden(['game_id', 'created_at', 'updated_at', 'deleted_at']);
+        $session->setHidden(['game_id', 'created_at', 'updated_at', 'deleted_at', 'photoCount']);
 
         return response()->json($session);
     }

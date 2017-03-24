@@ -13,6 +13,7 @@ class GameSession extends Model
     protected $fillable = ['date', 'place', 'notes', 'game_id'];
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
     protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
+    protected $appends = ['photoCount'];
 
     public function game() {
         return $this->hasOne(Game::class, 'id', 'game_id');
@@ -24,5 +25,9 @@ class GameSession extends Model
 
     public function photos() {
         return $this->hasMany(Photo::class, 'game_session_id');
+    }
+
+    public function getPhotoCountAttribute() {
+        return $this->photos->count();
     }
 }
