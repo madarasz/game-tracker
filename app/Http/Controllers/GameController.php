@@ -14,9 +14,9 @@ class GameController extends Controller
         return view('games', ['user' => $user]);
     }
 
-    public function viewGame($id) {
+    public function viewGame($id, $session = null) {
         $user = Auth::user();
-        return view('sessions', ['id' => $id, 'user' => $user]);
+        return view('sessions', ['id' => $id, 'session' => $session, 'user' => $user]);
     }
 
     /**

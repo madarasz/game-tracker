@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>Gametracker - Gatlako Team</title>
+    <title>Gametracker</title>
     {{--CSRF token--}}
     <script type="text/javascript">
         window.Laravel = {'csrfToken': '{{ csrf_token() }}' }

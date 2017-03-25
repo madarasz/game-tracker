@@ -26,6 +26,11 @@
             this.loadGame();
             this.listSessionsForGame();
             this.loadUsers();
+
+            @if ($session)
+            // load specific session
+            this.displaySession({{ $session }});
+            @endif
         },
 
         methods: {
@@ -89,6 +94,8 @@
                 axios.get('/api/game-sessions/' + id).then(function (response) {
                     viewGame.session = response.data;
                 });
+                // updating URL in address bar
+                history.replaceState(null, 'Gametracker', '/games/' + this.game.id + '/session/' + id);
             },
             // creates session
             createSession: function() {

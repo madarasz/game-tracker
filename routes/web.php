@@ -13,6 +13,7 @@
 
 Route::get('/', 'GameController@manageGames');
 Route::get('/games/{id}', 'GameController@viewGame');
+Route::get('/games/{id}/session/{session}', 'GameController@viewGame');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
