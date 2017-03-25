@@ -39,17 +39,17 @@
                         <div class="col-sm-6 text-right">
                             @if ($user)
                                 <button type="button" class="btn btn-sm btn-success" data-toggle="modal"
-                                        data-target="#modal-player" @click="modalPlayerForCreate" v-if="!session.concluded">
+                                        data-target="#modal-player" @click="modalPlayerForCreate" v-if="!parseInt(session.concluded)">
                                     Add player
                                 </button>
 
                                 <button type="button" class="btn btn-sm btn-warning" @click="concludeSession"
-                                    v-if="!session.concluded">
+                                    v-if="!parseInt(session.concluded)">
                                     <i class="fa fa-lock" aria-hidden="true"></i>
                                     Conclude
                                 </button>
                             @endif
-                            <span v-if="session.concluded" class="text-info">
+                            <span v-if="parseInt(session.concluded)" class="text-info">
                                 <i class="fa fa-lock" aria-hidden="true"></i>
                                 Concluded
                             </span>
