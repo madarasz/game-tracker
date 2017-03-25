@@ -55,8 +55,24 @@ class PointController extends Controller
                 $r2 = pow(10, $players[$u]->elo_score($session->game_id)->points / 400);
                 $e1 = $r1 / ($r1 + $r2);
                 $e2 = $r2 / ($r1 + $r2);
-                // TODO: draws
-                $s1 = $players[$i]->score > $players[$u]->score ? 1 : 0;
+
+                // decide who won
+                if ($players[$i]->score > $players[$u]->score) {
+                    $s1 = 1;
+                } else {
+                    if ($players[$i]->score == $players[$u]->score) { // draw
+                        if ($players[$i]->winner == $players[$u]->winner) {
+                            $s1 = 0.5;
+                        } elseif ($players[$i]->winner) {   // winner flag decides draw
+                            $s1 = 1;
+                        } else {
+                            $s1 = 0;
+                        }
+                    } else {
+                        $s1 = 0;
+                    }
+                }
+
                 $s2 = 1 - $s1;
                 $delta1 = (int) round($this->k * ($s1 - $e1));
                 $delta2 = (int) round($this->k * ($s2 - $e2));
@@ -83,7 +99,7 @@ class PointController extends Controller
         // reset points
         EloPoint::where('game_id', $gameid)->delete();
 
-        foreach($game->sessions() as $session) {
+        foreach($game->sessions as $session) {
             if ($session->concluded) {
                 $this->concludeSession($session->id, true);
             }
