@@ -8,6 +8,7 @@
             users: [],
             session: {},
             sessionForm: {},
+            ranking: [],
             sessionList: [],
             formSessionErrors: [],
             modalSessionTitle: '',
@@ -24,6 +25,7 @@
 
         mounted: function() {
             this.loadGame();
+            this.loadRankings();
             this.listSessionsForGame();
             this.loadUsers();
 
@@ -89,13 +91,19 @@
                     viewGame.users = response.data;
                 });
             },
+            // load rankings
+            loadRankings: function() {
+                axios.get('/api/games/' + this.id + '/ranking').then(function (response) {
+                    viewGame.ranking = response.data;
+                });
+            },
             // display session
             displaySession: function(id) {
                 axios.get('/api/game-sessions/' + id).then(function (response) {
                     viewGame.session = response.data;
                 });
                 // updating URL in address bar
-                history.replaceState(null, 'Gametracker', '/games/' + this.game.id + '/session/' + id);
+                history.replaceState(null, 'Gametracker', '/games/' + this.id + '/session/' + id);
             },
             // creates session
             createSession: function() {
@@ -218,6 +226,17 @@
                             viewGame.listSessionsForGame();
                         }
                 );
+            },
+            // conclude session, calculate
+            concludeSession: function() {
+                if (confirm('Conclude session? This will lock players and calculate rankings.')) {
+                    axios.get('/api/game-sessions/' + this.session.id + '/conclude').then(function (response) {
+                        viewGame.displaySession(viewGame.session.id);
+                        viewGame.loadRankings();
+                        viewGame.listSessionsForGame();
+                        toastr.info('Session concluded.', '', {timeOut: 1000});
+                    });
+                }
             }
         }
 

@@ -10,7 +10,7 @@ class GameSession extends Model
 
     use SoftDeletes;
     public $timestamps = true;
-    protected $fillable = ['date', 'place', 'notes', 'game_id'];
+    protected $fillable = ['date', 'place', 'notes', 'game_id', 'concluded'];
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
     protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
     protected $appends = ['photoCount'];

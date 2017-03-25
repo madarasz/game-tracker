@@ -27,3 +27,7 @@ Route::get('game-sessions/game/{gameid}', 'GameSessionController@indexForGame');
 Route::get('users', 'PlayerController@indexUsers');
 Route::get('players/session/{sessionid}', 'PlayerController@indexForSession');
 Route::get('photos/session/{sessionid}', 'PhotoController@indexForSession');
+
+Route::get('game-sessions/{id}/conclude', 'PointController@concludeSession');
+Route::get('games/{id}/ranking', 'PointController@getGameRanking');
+Route::get('games/{id}/ranking/recalculate', 'PointController@recalculateGame');

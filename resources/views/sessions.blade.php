@@ -38,11 +38,21 @@
                         </div>
                         <div class="col-sm-6 text-right">
                             @if ($user)
-                            <button type="button" class="btn btn-sm btn-success" data-toggle="modal"
-                                    data-target="#modal-player" @click="modalPlayerForCreate">
-                                Add player
-                            </button>
+                                <button type="button" class="btn btn-sm btn-success" data-toggle="modal"
+                                        data-target="#modal-player" @click="modalPlayerForCreate" v-if="!session.concluded">
+                                    Add player
+                                </button>
+
+                                <button type="button" class="btn btn-sm btn-warning" @click="concludeSession"
+                                    v-if="!session.concluded">
+                                    <i class="fa fa-lock" aria-hidden="true"></i>
+                                    Conclude
+                                </button>
                             @endif
+                            <span v-if="session.concluded" class="text-info">
+                                <i class="fa fa-lock" aria-hidden="true"></i>
+                                Concluded
+                            </span>
                         </div>
                     </div>
                     {{--Player table--}}
@@ -91,19 +101,7 @@
             {{--Game info--}}
             @include('other.game-info')
             {{--Leaderboard--}}
-            {{--<div class="card mt-3">--}}
-                {{--<div class="card-block">--}}
-                    {{--<h5 class="card-title">Leaderboard</h5>--}}
-                    {{--<p class="card-text">--}}
-                        {{--<p>--}}
-                            {{--top score: <em style="font-size: 80%">not yet developed</em>--}}
-                        {{--</p>--}}
-                        {{--<p>--}}
-                            {{--<em style="font-size: 80%">not yet developed</em>--}}
-                        {{--</p>--}}
-                    {{--</p>--}}
-                {{--</div>--}}
-            {{--</div>--}}
+            @include('other.ranking')
 
             {{--Back to games list--}}
             <div class="text-center mt-3">

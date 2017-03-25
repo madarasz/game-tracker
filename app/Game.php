@@ -22,12 +22,12 @@ class Game extends Model
         return $this->hasMany(GameSession::class, 'game_id', 'id');
     }
 
-//    public function sessionCount() {
-//        return $this->hasMany(GameSession::class)->selectRaw('game_id, count(*) AS count')->groupBy('game_id');
-//    }
-//
     public function getSessionCountAttribute() {
         return $this->sessions->count();
+    }
+
+    public function elo_ranking() {
+        return $this->hasMany(EloPoint::class, 'game_id', 'id')->orderBy('points', 'desc');
     }
 
 }
