@@ -4,9 +4,28 @@ namespace App\Http\Controllers;
 
 use App\GameSession;
 use App\Http\Requests\GameSessionRequest;
+use App\Player;
 
 class GameSessionController extends Controller
 {
+    public function cloneSession($sessionid) {
+        $session = GameSession::findOrFail($sessionid);
+
+        $newSession = $session->replicate();
+        $newSession->concluded = false;
+        $newSession->save();
+
+        foreach($session->players as $player) {
+            Player::create([
+                'game_session_id' => $newSession->id,
+                'user_id' => $player->user_id,
+                'score' => 0
+            ]);
+        }
+
+        return response()->json($newSession);
+    }
+
     /**
      * Display a listing of the resource.
      *

@@ -104,6 +104,7 @@
                 });
                 // updating URL in address bar
                 history.replaceState(null, 'Gametracker', '/games/' + this.id + '/session/' + id);
+                $(window).scrollTop(0);
             },
             // creates session
             createSession: function() {
@@ -237,7 +238,20 @@
                         toastr.info('Session concluded.', '', {timeOut: 1000});
                     });
                 }
+            },
+            // copy from existing session
+            cloneSession : function(id) {
+                if (confirm('Clone this session?')) {
+                    axios.get('/api/game-sessions/' + id + '/clone').then(function (response) {
+                        viewGame.displaySession(response.data.id);
+                        viewGame.loadRankings();
+                        viewGame.listSessionsForGame();
+                        toastr.info('Session cloned.', '', {timeOut: 1000});
+                        $(window).scrollTop(0);
+                    });
+                }
             }
+
         }
 
     });

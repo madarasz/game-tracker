@@ -9,7 +9,12 @@
     </thead>
     <tbody>
         <tr v-for="gsession in sessionList" @click="displaySession(gsession.id)">
-            <td>@{{ gsession.date }}</td>
+            <td>
+                @if ($user)
+                <i class="fa fa-clone text-primary" aria-hidden="true" @click.stop="cloneSession(gsession.id)"></i>
+                @endif
+                @{{ gsession.date }}
+            </td>
             <td>@{{ gsession.place }}</td>
             <td>
                 <i class="fa fa-lock text-info" aria-hidden="true" v-if="parseInt(gsession.concluded)"></i>
