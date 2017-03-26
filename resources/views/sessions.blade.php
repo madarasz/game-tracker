@@ -95,7 +95,8 @@
                     @include('list.sessions')
                 </div>
             </div>
-
+            {{--Ranking chart--}}
+            @include('other.ranking-chart')
         </div>
         <div class="col-sm-12 col-lg-3 pull-lg-9">
             {{--Game info--}}

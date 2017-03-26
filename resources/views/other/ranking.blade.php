@@ -1,7 +1,7 @@
 {{--Leaderboard--}}
 <div class="card mt-3">
     <div class="card-block">
-        <h5 class="card-title">Leaderboard</h5>
+        <h5 class="card-title">ELO Leaderboard</h5>
         <ol>
             <li v-for="rank in ranking">
                 @{{ rank.userName }} -

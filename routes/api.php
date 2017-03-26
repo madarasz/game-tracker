@@ -32,3 +32,4 @@ Route::get('game-sessions/{gameid}/clone', 'GameSessionController@cloneSession')
 Route::get('game-sessions/{id}/conclude', 'PointController@concludeSession');
 Route::get('games/{id}/ranking', 'PointController@getGameRanking');
 Route::get('games/{id}/ranking/recalculate', 'PointController@recalculateGame');
+Route::get('ranking/game/{gameid}', 'PointController@historyForGame');

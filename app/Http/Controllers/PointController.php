@@ -6,6 +6,7 @@ use App\EloDelta;
 use App\EloPoint;
 use App\Game;
 use App\GameSession;
+use App\Player;
 use Illuminate\Http\Request;
 
 class PointController extends Controller
@@ -111,5 +112,38 @@ class PointController extends Controller
     public function getGameRanking($id) {
         $game = Game::find($id);
         return response()->json($game->elo_ranking);
+    }
+
+    public function historyForGame($gameid) {
+        $sessionIds = GameSession::where('game_id', $gameid)->orderBy('date', 'asc')->orderBy('id','asc')->pluck('id');
+        $sessions = GameSession::where('game_id', $gameid)->orderBy('date', 'asc')->orderBy('id','asc')->get();
+        $userIds = Player::whereIn('game_session_id', $sessionIds)->groupBy('user_id')->pluck('user_id');
+
+        $history = ['history' => [], 'user_list' => $userIds];
+
+        $scores = [];
+        foreach($userIds as $userId) {
+            $scores[$userId] = 1500;
+        }
+
+        foreach($sessions as $session) {
+
+            $playerScores = [];
+            foreach($userIds as $userId) {
+                $delta = EloDelta::where('user_id', $userId)->where('game_session_id', $session->id)->first();
+                $deltaPoint = $delta ? $delta->delta : 0;
+                $scores[$userId] += $deltaPoint;
+
+                $playerScores[$userId] = $scores[$userId];
+            }
+
+            array_push($history['history'], [
+                'session_id' => $session->id,
+                'date' => $session->date,
+                'player_scores' => $playerScores
+            ]);
+        }
+
+        return response()->json($history);
     }
 }

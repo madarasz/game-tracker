@@ -1,3 +1,39 @@
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', {'packages':['corechart']});
+
+    function drawELOChart(historyData, users) {
+
+        // data header
+        var data = [['date']];
+        for (var i = 0; i < historyData.user_list.length; i++) {
+            data[0].push(users[historyData.user_list[i] - 1].name);
+        }
+
+        // data
+        for (var i = 0; i < historyData.history.length; i++) {
+            var row = [historyData.history[i].date];
+            for (var u = 0; u < historyData.user_list.length; u++) {
+                row.push(historyData.history[i].player_scores[u+1]);
+            }
+            data.push(row);
+        }
+
+        var dataTable = google.visualization.arrayToDataTable(data);
+
+        var options = {
+            curveType: 'none',
+            legend: { position: 'right' },
+            chartArea: {  width: "70%", height: "90%" },
+            vAxis: { baseline: 1500 },
+            height: 200
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('chart-elo-history'));
+
+        chart.draw(dataTable, options);
+    }
+</script>
 <script type="text/javascript">
     var viewGame = new Vue({
         el: '#game-viewer',
@@ -28,6 +64,7 @@
             this.loadRankings();
             this.listSessionsForGame();
             this.loadUsers();
+            this.loadEloHistory();
 
             @if ($session)
             // load specific session
@@ -95,6 +132,12 @@
             loadRankings: function() {
                 axios.get('/api/games/' + this.id + '/ranking').then(function (response) {
                     viewGame.ranking = response.data;
+                });
+            },
+            // loads ELO history for game and displays chart
+            loadEloHistory: function() {
+                axios.get('/api/ranking/game/' + this.id).then(function (response) {
+                    google.charts.setOnLoadCallback(drawELOChart(response.data, viewGame.users));
                 });
             },
             // display session
