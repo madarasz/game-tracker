@@ -1,39 +1,5 @@
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
-    google.charts.load('current', {'packages':['corechart']});
-
-    function drawELOChart(historyData, users) {
-
-        // data header
-        var data = [['date']];
-        for (var i = 0; i < historyData.user_list.length; i++) {
-            data[0].push(users[historyData.user_list[i] - 1].name);
-        }
-
-        // data
-        for (var i = 0; i < historyData.history.length; i++) {
-            var row = [historyData.history[i].date];
-            for (var u = 0; u < historyData.user_list.length; u++) {
-                row.push(historyData.history[i].player_scores[u+1]);
-            }
-            data.push(row);
-        }
-
-        var dataTable = google.visualization.arrayToDataTable(data);
-
-        var options = {
-            curveType: 'none',
-            legend: { position: 'right' },
-            chartArea: {  width: "70%", height: "90%" },
-            vAxis: { baseline: 1500 },
-            height: 200
-        };
-
-        var chart = new google.visualization.LineChart(document.getElementById('chart-elo-history'));
-
-        chart.draw(dataTable, options);
-    }
-</script>
+<script type="text/javascript" src="/js/ekko-lightbox.min.js"></script>
 <script type="text/javascript">
     var viewGame = new Vue({
         el: '#game-viewer',
@@ -56,7 +22,8 @@
             modalPlayerButton: '',
             playerEditMode: false,
             photoForm: { title: ''},
-            formPhotoErrors: []
+            formPhotoErrors: [],
+            eloHistory : {}
         },
 
         mounted: function() {
@@ -278,6 +245,7 @@
                         viewGame.displaySession(viewGame.session.id);
                         viewGame.loadRankings();
                         viewGame.listSessionsForGame();
+                        viewGame.loadEloHistory();
                         toastr.info('Session concluded.', '', {timeOut: 1000});
                     });
                 }
@@ -298,12 +266,61 @@
         }
 
     });
-</script>
-{{--ekko lightbox--}}
-<script type="text/javascript" src="/js/ekko-lightbox.min.js"></script>
-<script type="text/javascript">
+
+    // ELO Chart
+    google.charts.load('current', {'packages':['corechart']});
+    var chart, dataTable, chartOptions;
+
+    function drawELOChart(historyData, users) {
+
+        // data header
+        var data = [['date']];
+        for (var i = 0; i < historyData.user_list.length; i++) {
+            data[0].push(users[historyData.user_list[i] - 1].name);
+        }
+
+        // data
+        for (var i = 0; i < historyData.history.length; i++) {
+            var row = [historyData.history[i].date];
+            for (var u = 0; u < historyData.user_list.length; u++) {
+                row.push(historyData.history[i].player_scores[u+1]);
+            }
+            data.push(row);
+        }
+
+        dataTable = google.visualization.arrayToDataTable(data);
+
+        chartOptions = {
+            curveType: 'none',
+            legend: { position: 'right' },
+            chartArea: {  width: $('#chart-elo-history').width() - 180, height: "90%", left: 50 },
+            vAxis: { baseline: 1500, viewWindowMode: 'maximized' },
+            height: 200
+        };
+
+        chart = new google.visualization.LineChart(document.getElementById('chart-elo-history'));
+
+        chart.draw(dataTable, chartOptions);
+    }
+
+    //create trigger to resizeEnd event
+    $(window).resize(function() {
+        if(this.resizeTO) clearTimeout(this.resizeTO);
+        this.resizeTO = setTimeout(function() {
+            $(this).trigger('resizeEnd');
+        }, 500);
+    });
+
+    //redraw graph when window resize is completed
+    $(window).on('resizeEnd', function() {
+        chartOptions.chartArea.width = $('#chart-elo-history').width() - 180;
+        chart.draw(dataTable, chartOptions);
+    });
+
+    // EKKO Lightbox
     $(document).on('click', '[data-toggle="lightbox"]', function(event) {
         event.preventDefault();
         $(this).ekkoLightbox();
     });
+
 </script>
