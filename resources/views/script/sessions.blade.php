@@ -283,7 +283,7 @@
         for (var i = 0; i < historyData.history.length; i++) {
             var row = [historyData.history[i].date];
             for (var u = 0; u < historyData.user_list.length; u++) {
-                row.push(historyData.history[i].player_scores[u+1]);
+                row.push(historyData.history[i].player_scores[historyData.user_list[u]]);
             }
             data.push(row);
         }
