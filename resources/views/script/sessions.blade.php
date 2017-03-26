@@ -23,10 +23,15 @@
             playerEditMode: false,
             photoForm: { title: ''},
             formPhotoErrors: [],
-            eloHistory : {}
+            eloHistory : {},
+            chart: {},
+            dataTable: {},
+            chartOptions: {},
         },
 
         mounted: function() {
+            google.charts.load('current', {'packages':['corechart']});
+
             this.loadGame();
             this.loadRankings();
             this.listSessionsForGame();
@@ -104,7 +109,8 @@
             // loads ELO history for game and displays chart
             loadEloHistory: function() {
                 axios.get('/api/ranking/game/' + this.id).then(function (response) {
-                    google.charts.setOnLoadCallback(drawELOChart(response.data, viewGame.users));
+                    viewGame.eloHistory = response.data;
+                    google.charts.setOnLoadCallback(viewGame.drawELOChart);
                 });
             },
             // display session
@@ -261,47 +267,42 @@
                         $(window).scrollTop(0);
                     });
                 }
+            },
+            // draws ELO History chart
+            drawELOChart: function() {
+                // data header
+                var data = [['date']];
+                for (var i = 0; i < this.eloHistory.user_list.length; i++) {
+                    data[0].push(this.users[this.eloHistory.user_list[i] - 1].name);
+                }
+
+                // data
+                for (var i = 0; i < this.eloHistory.history.length; i++) {
+                    var row = [this.eloHistory.history[i].date];
+                    for (var u = 0; u < this.eloHistory.user_list.length; u++) {
+                        row.push(this.eloHistory.history[i].player_scores[this.eloHistory.user_list[u]]);
+                    }
+                    data.push(row);
+                }
+
+                this.dataTable = google.visualization.arrayToDataTable(data);
+
+                this.chartOptions = {
+                    curveType: 'none',
+                    legend: { position: 'right' },
+                    chartArea: {  width: $('#chart-elo-history').width() - 180, height: "90%", left: 50 },
+                    vAxis: { baseline: 1500, viewWindowMode: 'maximized' },
+                    height: 200
+                };
+
+                this.chart = new google.visualization.LineChart(document.getElementById('chart-elo-history'));
+
+                this.chart.draw(this.dataTable, this.chartOptions);
             }
 
         }
 
     });
-
-    // ELO Chart
-    google.charts.load('current', {'packages':['corechart']});
-    var chart, dataTable, chartOptions;
-
-    function drawELOChart(historyData, users) {
-
-        // data header
-        var data = [['date']];
-        for (var i = 0; i < historyData.user_list.length; i++) {
-            data[0].push(users[historyData.user_list[i] - 1].name);
-        }
-
-        // data
-        for (var i = 0; i < historyData.history.length; i++) {
-            var row = [historyData.history[i].date];
-            for (var u = 0; u < historyData.user_list.length; u++) {
-                row.push(historyData.history[i].player_scores[historyData.user_list[u]]);
-            }
-            data.push(row);
-        }
-
-        dataTable = google.visualization.arrayToDataTable(data);
-
-        chartOptions = {
-            curveType: 'none',
-            legend: { position: 'right' },
-            chartArea: {  width: $('#chart-elo-history').width() - 180, height: "90%", left: 50 },
-            vAxis: { baseline: 1500, viewWindowMode: 'maximized' },
-            height: 200
-        };
-
-        chart = new google.visualization.LineChart(document.getElementById('chart-elo-history'));
-
-        chart.draw(dataTable, chartOptions);
-    }
 
     //create trigger to resizeEnd event
     $(window).resize(function() {
@@ -313,8 +314,8 @@
 
     //redraw graph when window resize is completed
     $(window).on('resizeEnd', function() {
-        chartOptions.chartArea.width = $('#chart-elo-history').width() - 180;
-        chart.draw(dataTable, chartOptions);
+        viewGame.chartOptions.chartArea.width = $('#chart-elo-history').width() - 180;
+        viewGame.chart.draw(viewGame.dataTable, viewGame.chartOptions);
     });
 
     // EKKO Lightbox
