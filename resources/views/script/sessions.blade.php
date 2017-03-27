@@ -308,12 +308,20 @@
             },
             // mass edit of points
             pointMassEdit: function() {
-                var calls = [];
+                var calls = [], max = -9999;
+
+                // get best score
+                for (var i = 0; i < this.session.players.length; i++) {
+                    if (this.pointForm.score[i].v > max) {
+                        max = this.pointForm.score[i].v;
+                    }
+                }
 
                 // multiple calls
                 for (var i = 0; i < this.session.players.length; i++) {
                     this.session.players[i].score = this.pointForm.score[i].v;
                     this.session.players[i].user_id = this.session.players[i].user.id;
+                    this.session.players[i].winner = this.session.players[i].score == max ? 1 : 0;
                     calls.push(axios.put('/api/players/' + this.session.players[i].id, this.session.players[i]));
                 }
 
