@@ -2,5 +2,8 @@
     <div class="card-block">
         <h5>ELO history</h5>
         <div id="chart-elo-history"></div>
+        <div class="small-text" v-if="game.sessionCount == 0">
+            no concluded sessions yet
+        </div>
     </div>
 </div>

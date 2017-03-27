@@ -37,7 +37,6 @@
             this.loadRankings();
             this.listSessionsForGame();
             this.loadUsers();
-            this.loadEloHistory();
 
             @if ($session)
             // load specific session
@@ -112,6 +111,10 @@
             loadGame: function() {
                 axios.get('/api/games/' + this.id).then(function (response) {
                     viewGame.game = response.data;
+                    // elo history chart
+                    if (viewGame.game.sessionCount > 0) {
+                        viewGame.loadEloHistory();
+                    }
                 });
             },
             // list sessions for game
@@ -329,9 +332,10 @@
             // draws ELO History chart
             drawELOChart: function() {
                 // data header
-                var data = [['date']];
+                var data = [['date'], ['init']];
                 for (var i = 0; i < this.eloHistory.user_list.length; i++) {
                     data[0].push(this.users[this.eloHistory.user_list[i] - 1].name);
+                    data[1].push(1500);
                 }
 
                 // data
