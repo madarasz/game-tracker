@@ -48,7 +48,7 @@
         methods: {
             // prepare modal for create session
             modalSessionForCreate: function() {
-                this.sessionForm = { game_id: '{{ $id }}', date: ''};
+                this.sessionForm = { game_id: '{{ $id }}', date: this.defaultDate()};
                 this.formSessionErrors = [];
                 this.modalSessionTitle = 'Create session';
                 this.modalSessionButton = 'Create';
@@ -88,6 +88,24 @@
                 for (var i = 0; i < this.session.players.length; i++) {
                     this.pointForm.score[i].v = this.session.players[i].score;
                 }
+            },
+
+            // generates date string for today
+            defaultDate: function() {
+                var today = new Date(),
+                    dd = today.getDate(),
+                    mm = today.getMonth()+1, //January is 0!
+                    yyyy = today.getFullYear();
+
+                if(dd<10) {
+                    dd='0'+dd
+                }
+
+                if(mm<10) {
+                    mm='0'+mm
+                }
+
+                return yyyy + '-' + mm + '-' + dd;
             },
 
             // loads basic info about the game
@@ -130,10 +148,11 @@
                     }
 
                     viewGame.session = response.data;
+                    $(window).scrollTop(0);
                 });
+
                 // updating URL in address bar
                 history.replaceState(null, 'Gametracker', '/games/' + this.id + '/session/' + id);
-                $(window).scrollTop(0);
             },
             // creates session
             createSession: function() {
@@ -141,6 +160,7 @@
                         .then(function(response) {
                             viewGame.displaySession(response.data.id);
                             viewGame.listSessionsForGame();
+                            viewGame.game.sessionCount++;
                             $("#modal-session").modal('hide');
                             toastr.info('Session created successfully.', '', {timeOut: 1000});
                         }, function(response) {
@@ -168,6 +188,7 @@
                     axios.delete('/api/game-sessions/' + this.session.id).then(function (response) {
                         viewGame.session = {};
                         viewGame.listSessionsForGame();
+                        viewGame.game.sessionCount--;
                         toastr.info('Session deleted.', '', {timeOut: 1000});
                     });
                 }
@@ -276,6 +297,7 @@
                         viewGame.displaySession(response.data.id);
                         viewGame.loadRankings();
                         viewGame.listSessionsForGame();
+                        viewGame.game.sessionCount++;
                         toastr.info('Session cloned.', '', {timeOut: 1000});
                         $(window).scrollTop(0);
                     });
