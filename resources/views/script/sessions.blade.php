@@ -360,8 +360,41 @@
                 this.chart = new google.visualization.LineChart(document.getElementById('chart-elo-history'));
 
                 this.chart.draw(this.dataTable, this.chartOptions);
+            },
+            // recalculates ELO rankings for game
+            recalculateELO: function() {
+                if (confirm('Recalculate rankings?')) {
+                    axios.get('/api/games/' + viewGame.id + '/ranking/recalculate').then(
+                            function (response) {
+                                if (viewGame.session.id !== undefined) {
+                                    viewGame.displaySession(viewGame.session.id);
+                                }
+                                viewGame.loadRankings();
+                                viewGame.drawELOChart();
+                                toastr.info('Rankings recalculated.', '', {timeOut: 1000});
+                            }, function (response) {
+                                toastr.error('Something went wrong', '', {timeOut: 1000});
+                            }
+                    );
+                }
+            },
+            // un-concludes session
+            unconcludeSession: function() {
+                if (confirm('Reopen session? You will need to recalculate ELO after you conclude!!!')) {
+                    axios.put('/api/game-sessions/' + this.session.id, {
+                            concluded: 0,
+                            date: viewGame.session.date,
+                            place: viewGame.session.place
+                        }).then(function(response) {
+                            viewGame.displaySession(viewGame.session.id);
+                            toastr.info('Session unlocked.', '', {timeOut: 1000});
+                        }, function(response) {
+                            // error handling
+                            toastr.error('There was a problem.', '', {timeOut: 1000});
+                        }
+                    );
+                }
             }
-
         }
 
     });

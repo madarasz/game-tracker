@@ -55,7 +55,11 @@
                                 </button>
                             @endif
                             <span v-if="parseInt(session.concluded)" class="text-info">
+                                @if ($user)
+                                <i class="fa fa-lock" aria-hidden="true" @click="unconcludeSession" style="cursor: pointer"></i>
+                                @else
                                 <i class="fa fa-lock" aria-hidden="true"></i>
+                                @endif
                                 Concluded
                             </span>
                         </div>

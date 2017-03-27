@@ -11,5 +11,12 @@
         <div class="small-text" v-if="ranking.length == 0">
             no concluded sessions yet
         </div>
+        @if ($user)
+        <div class="text-center mt-3" v-if="ranking.length > 0">
+            <button type="button" class="btn btn-sm btn-danger" @click="recalculateELO">
+                Recalculate
+            </button>
+        </div>
+        @endif
     </div>
 </div>
