@@ -43,6 +43,11 @@
                                     Add player
                                 </button>
 
+                                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
+                                        data-target="#modal-points" v-if="!parseInt(session.concluded)" @click="modalPoints">
+                                    Edit points
+                                </button>
+
                                 <button type="button" class="btn btn-sm btn-warning" @click="concludeSession"
                                     v-if="!parseInt(session.concluded)">
                                     <i class="fa fa-lock" aria-hidden="true"></i>
@@ -75,6 +80,7 @@
                     @include('other.gallery')
                 </div>
             </div>
+
             {{--Sessions list--}}
             <div class="card mb-3">
                 <div class="card-block">
@@ -98,6 +104,7 @@
             {{--Ranking chart--}}
             @include('other.ranking-chart')
         </div>
+
         <div class="col-sm-12 col-lg-3 pull-lg-9">
             {{--Game info--}}
             @include('other.game-info')
@@ -121,6 +128,10 @@
 
     {{--Photo modal--}}
     @include('modal.photos')
+
+    {{--Edit points modal--}}
+    @include('modal.points')
+
 @stop
 
 @section('script')

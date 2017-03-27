@@ -10,6 +10,7 @@
             users: [],
             session: {},
             sessionForm: {},
+            pointForm: { score: []},
             ranking: [],
             sessionList: [],
             formSessionErrors: [],
@@ -81,6 +82,13 @@
                 this.playerEditMode = true;
                 $("#modal-player").modal('show');
             },
+            // prepare modal for mass point edit
+            modalPoints: function() {
+                this.pointForm.game_session_id = this.session.id;
+                for (var i = 0; i < this.session.players.length; i++) {
+                    this.pointForm.score[i].v = this.session.players[i].score;
+                }
+            },
 
             // loads basic info about the game
             loadGame: function() {
@@ -116,6 +124,11 @@
             // display session
             displaySession: function(id) {
                 axios.get('/api/game-sessions/' + id).then(function (response) {
+                    // initialize mass points edit form
+                    for (var i = 0; i < response.data.players.length; i++) {
+                        viewGame.pointForm.score.push({v: 0});
+                    }
+
                     viewGame.session = response.data;
                 });
                 // updating URL in address bar
@@ -267,6 +280,29 @@
                         $(window).scrollTop(0);
                     });
                 }
+            },
+            // mass edit of points
+            pointMassEdit: function() {
+                var calls = [];
+
+                // multiple calls
+                for (var i = 0; i < this.session.players.length; i++) {
+                    this.session.players[i].score = this.pointForm.score[i].v;
+                    this.session.players[i].user_id = this.session.players[i].user.id;
+                    calls.push(axios.put('/api/players/' + this.session.players[i].id, this.session.players[i]));
+                }
+
+                axios.all(calls).then(function() {
+                        viewGame.displaySession(viewGame.session.id);
+                        viewGame.listSessionsForGame();
+                        $("#modal-points").modal('hide');
+                        toastr.info('Player scores updated successfully.', '', {timeOut: 1000});
+                    }, function() {
+                        viewGame.displaySession(viewGame.session.id);
+                        viewGame.listSessionsForGame();
+                        toastr.error('Error. Scores should be integer values.', '', {timeOut: 1000});
+                    }
+                );
             },
             // draws ELO History chart
             drawELOChart: function() {
