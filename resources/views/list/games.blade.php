@@ -11,22 +11,23 @@
     </tr>
     </thead>
     <tbody>
-    <tr v-for="item in items" @click="navigateToGame(item.id)">
-    <td class="text-center">
-        <img :src="item.thumbnail_url" class="img-thumb"/>
-    </td>
-    <td>
-        @{{ item.title }}
-    </td>
-    <td>@{{ item.description }}</td>
-    <td class="text-center">@{{ types[item.game_type_id] }}</td>
-    <td class="text-center">@{{ item.sessionCount }}</td>
-    <td class="text-right">
-        @if ($user)
-        <button class="btn btn-primary btn-sm" @click.stop="modalForEdit($event, item)">Edit</button>
-        <button class="btn btn-danger btn-sm" @click.stop="deleteGame($event, item.id)">Delete</button>
-        @endif
-    </td>
+    <tr v-for="item in items">
+        <td class="text-center" @click="navigateToGame(item.id)">
+            <img :src="item.thumbnail_url" class="img-thumb"/>
+        </td>
+        <td @click="navigateToGame(item.id)">
+            @{{ item.title }}
+        </td>
+        <td @click="navigateToGame(item.id)">@{{ item.description }}</td>
+        <td class="text-center" @click="navigateToGame(item.id)">@{{ types[item.game_type_id] }}</td>
+        <td class="text-center" @click="navigateToGame(item.id)">@{{ item.sessionCount }}</td>
+        <td class="text-right">
+            @if ($user)
+            <button class="btn btn-primary btn-sm" @click.stop="modalForEdit(item)">Edit</button>
+            <confirm-button button-text="Delete" button-class="btn btn-sm btn-danger"
+                            @click="confirmCallback = function() { deleteGame(item.id) }; confirmText = 'Delete game?'" />
+            @endif
+        </td>
     </tr>
     </tbody>
 </table>

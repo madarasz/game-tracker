@@ -13,9 +13,8 @@
         </div>
         @if ($user)
         <div class="text-center mt-3" v-if="ranking.length > 0">
-            <button type="button" class="btn btn-sm btn-danger" @click="recalculateELO">
-                Recalculate
-            </button>
+            <confirm-button button-text="Recalculate" button-class="btn btn-sm btn-danger"
+                            @click="confirmCallback = function() { recalculateELO() }; confirmText = 'Recalculate rankings?'" />
         </div>
         @endif
     </div>

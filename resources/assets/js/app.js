@@ -17,5 +17,6 @@ gt = require('./gametracker.js');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example', require('./components/Example.vue'));
+Vue.component('confirm-button', require('./components/confirm-button.vue'));
+Vue.component('confirm-modal', require('./components/confirm-modal.vue'));
 

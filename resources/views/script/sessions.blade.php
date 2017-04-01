@@ -28,6 +28,8 @@
             chart: {},
             dataTable: {},
             chartOptions: {},
+            confirmCallback: function() {},
+            confirmText: ''
         },
 
         mounted: function() {
@@ -187,14 +189,12 @@
             },
             // delete session
             deleteSession: function() {
-                if (confirm('Delete the session?')) {
-                    axios.delete('/api/game-sessions/' + this.session.id).then(function (response) {
-                        viewGame.session = {};
-                        viewGame.listSessionsForGame();
-                        viewGame.game.sessionCount--;
-                        toastr.info('Session deleted.', '', {timeOut: 1000});
-                    });
-                }
+                axios.delete('/api/game-sessions/' + this.session.id).then(function (response) {
+                    viewGame.session = {};
+                    viewGame.listSessionsForGame();
+                    viewGame.game.sessionCount--;
+                    toastr.info('Session deleted.', '', {timeOut: 1000});
+                });
             },
             // create player
             createPlayer: function() {
@@ -226,13 +226,11 @@
             },
             // delete player
             deletePlayer: function(index) {
-                if (confirm('Delete the player?')) {
-                    axios.delete('/api/players/' + this.session.players[index].id).then(function (response) {
-                        viewGame.displaySession(viewGame.session.id);
-                        viewGame.listSessionsForGame();
-                        toastr.info('Player deleted.', '', {timeOut: 1000});
-                    });
-                }
+                axios.delete('/api/players/' + this.session.players[index].id).then(function (response) {
+                    viewGame.displaySession(viewGame.session.id);
+                    viewGame.listSessionsForGame();
+                    toastr.info('Player deleted.', '', {timeOut: 1000});
+                });
             },
             // add photo
             addPhoto: function() {
@@ -259,13 +257,11 @@
             },
             // delete photo
             deletePhoto: function(id) {
-                if (confirm('Delete the photo?')) {
-                    axios.delete('/api/photos/' + id).then(function (response) {
-                        viewGame.displaySession(viewGame.session.id);
-                        viewGame.listSessionsForGame();
-                        toastr.info('Photo deleted.', '', {timeOut: 1000});
-                    });
-                }
+                axios.delete('/api/photos/' + id).then(function (response) {
+                    viewGame.displaySession(viewGame.session.id);
+                    viewGame.listSessionsForGame();
+                    toastr.info('Photo deleted.', '', {timeOut: 1000});
+                });
             },
             // negates winner flag for player
             toggleWinner: function(index) {
@@ -283,28 +279,24 @@
             },
             // conclude session, calculate
             concludeSession: function() {
-                if (confirm('Conclude session? This will lock players and calculate rankings.')) {
-                    axios.get('/api/game-sessions/' + this.session.id + '/conclude').then(function (response) {
-                        viewGame.displaySession(viewGame.session.id);
-                        viewGame.loadRankings();
-                        viewGame.listSessionsForGame();
-                        viewGame.loadEloHistory();
-                        toastr.info('Session concluded.', '', {timeOut: 1000});
-                    });
-                }
+                axios.get('/api/game-sessions/' + this.session.id + '/conclude').then(function (response) {
+                    viewGame.displaySession(viewGame.session.id);
+                    viewGame.loadRankings();
+                    viewGame.listSessionsForGame();
+                    viewGame.loadEloHistory();
+                    toastr.info('Session concluded.', '', {timeOut: 1000});
+                });
             },
             // copy from existing session
             cloneSession : function(id) {
-                if (confirm('Clone this session?')) {
-                    axios.get('/api/game-sessions/' + id + '/clone').then(function (response) {
-                        viewGame.displaySession(response.data.id);
-                        viewGame.loadRankings();
-                        viewGame.listSessionsForGame();
-                        viewGame.game.sessionCount++;
-                        toastr.info('Session cloned.', '', {timeOut: 1000});
-                        $(window).scrollTop(0);
-                    });
-                }
+                axios.get('/api/game-sessions/' + id + '/clone').then(function (response) {
+                    viewGame.displaySession(response.data.id);
+                    viewGame.loadRankings();
+                    viewGame.listSessionsForGame();
+                    viewGame.game.sessionCount++;
+                    toastr.info('Session cloned.', '', {timeOut: 1000});
+                    $(window).scrollTop(0);
+                });
             },
             // mass edit of points
             pointMassEdit: function() {
@@ -371,24 +363,22 @@
             },
             // recalculates ELO rankings for game
             recalculateELO: function() {
-                if (confirm('Recalculate rankings?')) {
-                    axios.get('/api/games/' + viewGame.id + '/ranking/recalculate').then(
-                            function (response) {
-                                if (viewGame.session.id !== undefined) {
-                                    viewGame.displaySession(viewGame.session.id);
-                                }
-                                viewGame.loadRankings();
-                                viewGame.drawELOChart();
-                                toastr.info('Rankings recalculated.', '', {timeOut: 1000});
-                            }, function (response) {
-                                toastr.error('Something went wrong', '', {timeOut: 1000});
+                axios.get('/api/games/' + viewGame.id + '/ranking/recalculate').then(
+                        function (response) {
+                            if (viewGame.session.id !== undefined) {
+                                viewGame.displaySession(viewGame.session.id);
                             }
-                    );
-                }
+                            viewGame.loadRankings();
+                            viewGame.drawELOChart();
+                            toastr.info('Rankings recalculated.', '', {timeOut: 1000});
+                        }, function (response) {
+                            toastr.error('Something went wrong', '', {timeOut: 1000});
+                        }
+                );
             },
             // un-concludes session
             unconcludeSession: function() {
-                if (confirm('Reopen session? You will need to recalculate ELO after you conclude!!!')) {
+                if (confirm('conf')) {
                     axios.put('/api/game-sessions/' + this.session.id, {
                             concluded: 0,
                             date: viewGame.session.date,

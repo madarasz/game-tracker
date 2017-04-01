@@ -10,10 +10,11 @@
     <tbody>
         <tr v-for="gsession in sessionList" @click="displaySession(gsession.id)">
             <td>
-                @if ($user)
-                <i class="fa fa-clone text-primary" aria-hidden="true" @click.stop="cloneSession(gsession.id)"></i>
-                @endif
                 @{{ gsession.date }}
+                @if ($user)
+                    <confirm-button button-icon="fa fa-clone text-primary" button-class="no-button"
+                                    @click="confirmCallback = function() { cloneSession(gsession.id) }; confirmText = 'Clone session?'" />
+                @endif
             </td>
             <td>@{{ gsession.place }}</td>
             <td>

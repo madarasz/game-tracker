@@ -9,9 +9,8 @@
             </a>
             {{--delete button--}}
             @if ($user)
-            <button type="button" class="btn btn-sm btn-danger abs-top-left fade-in" @click.prevent="deletePhoto(photo.id)">
-                X
-            </button>
+            <confirm-button button-text="X" button-class="btn btn-sm btn-danger abs-top-left fade-in"
+                @click="confirmCallback = function() { deletePhoto(photo.id) }; confirmText = 'Delete photo?'" />
             @endif
         </div>
     </div>

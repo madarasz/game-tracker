@@ -27,9 +27,8 @@
             <button type="button" class="btn btn-sm btn-primary" @click.prevent="modalPlayerForEdit(index)" v-if="!parseInt(session.concluded)">
                 Edit
             </button>
-            <button type="button" class="btn btn-sm btn-danger" @click.prevent="deletePlayer(index)" v-if="!parseInt(session.concluded)">
-                Delete
-            </button>
+            <confirm-button button-text="Delete" button-class="btn btn-sm btn-danger" v-if="!parseInt(session.concluded)"
+                @click="confirmCallback = function() { deletePlayer(index) }; confirmText = 'Delete player?'" />
             @endif
         </td>
         <td class="text-right" v-if="parseInt(session.concluded)">

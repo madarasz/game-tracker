@@ -2,6 +2,7 @@
 
 @section('content')
     <div class="card mt-3" id="manage-games">
+        <confirm-modal :modal-body="confirmText" :callback="confirmCallback"></confirm-modal>
         <div class="card-block">
             {{--Games Header--}}
             <div class="row">

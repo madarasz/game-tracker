@@ -2,6 +2,7 @@
 
 @section('content')
     <div class="row mt-3" id="game-viewer">
+        <confirm-modal :modal-body="confirmText" :callback="confirmCallback"></confirm-modal>
         <div class="col-sm-12 col-lg-9 push-lg-3">
             {{--Session detais--}}
             <div class="card mb-3" v-if="session.date">
@@ -15,9 +16,8 @@
                             <button type="button" class="btn btn-sm btn-primary" @click.prevent="modalSessionForEdit">
                                 Edit
                             </button>
-                            <button type="button" class="btn btn-sm btn-danger" @click.prevent="deleteSession">
-                                Delete
-                            </button>
+                            <confirm-button button-text="Delete" button-class="btn btn-sm btn-danger"
+                                @click="confirmCallback = function() { deleteSession() }; confirmText = 'Delete session?'" />
                             @endif
                             <button type="button" class="close ml-1" aria-label="Close" @click.prevent="session = {}">
                                 <span aria-hidden="true">×</span>
@@ -47,12 +47,9 @@
                                         data-target="#modal-points" v-if="!parseInt(session.concluded)" @click="modalPoints">
                                     Edit points
                                 </button>
-
-                                <button type="button" class="btn btn-sm btn-warning" @click="concludeSession"
-                                    v-if="!parseInt(session.concluded)">
-                                    <i class="fa fa-lock" aria-hidden="true"></i>
-                                    Conclude
-                                </button>
+                                <confirm-button button-text="Conclude" button-class="btn btn-sm btn-warning"
+                                                button-icon="fa fa-lock" v-if="!parseInt(session.concluded)"
+                                                @click="confirmCallback = function() { concludeSession() }; confirmText = 'Conclude session? This will lock players and calculate rankings.'" />
                             @endif
                             <span v-if="parseInt(session.concluded)" class="text-info">
                                 @if ($user)

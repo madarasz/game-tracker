@@ -55,3 +55,9 @@ table.hover-row > tbody > tr:hover > td {
     padding-right: 15px;
     padding-left: 15px;
 }
+.no-button {
+    border: 0;
+    -webkit-appearance: inherit;
+    background-color: transparent;
+    cursor: pointer;
+}

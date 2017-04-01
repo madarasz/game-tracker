@@ -9,7 +9,9 @@
             game: {},
             modalTitle: '',
             modalButton: '',
-            editMode: false
+            editMode: false,
+            confirmCallback: function() {},
+            confirmText: ''
         },
 
         mounted: function() {
@@ -18,6 +20,10 @@
         },
 
         methods: {
+            // changes target function of confirm dialog
+//            changeConfirmTarget: function(func) {
+//                this.confirmCallback = func;
+//            },
             // get list of game types
             getGameTypes: function() {
                 axios.get('/api/game-types').then(function (response) {
@@ -39,7 +45,7 @@
                 this.editMode = false;
             },
             // open modal for edit game
-            modalForEdit: function(event, game) {
+            modalForEdit: function(game) {
                 manageGames.game = game;
                 this.formErrors = [];
                 this.modalTitle = 'Edit Game';
@@ -61,13 +67,11 @@
                 );
             },
             // delete game
-            deleteGame: function(event, id) {
-                if (confirm('Delete the game?')) {
-                    axios.delete('/api/games/' + id).then(function (response) {
-                        manageGames.getGames();
-                        toastr.info('Game deleted.', '', {timeOut: 1000});
-                    });
-                }
+            deleteGame: function(id) {
+                axios.delete('/api/games/' + id).then(function (response) {
+                    manageGames.getGames();
+                    toastr.info('Game deleted.', '', {timeOut: 1000});
+                });
             },
             // update game
             updateGame: function() {
