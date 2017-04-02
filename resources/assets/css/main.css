@@ -60,4 +60,5 @@ table.hover-row > tbody > tr:hover > td {
     -webkit-appearance: inherit;
     background-color: transparent;
     cursor: pointer;
+    padding: 0;
 }
