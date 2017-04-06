@@ -4,7 +4,7 @@
     <tr>
         <th style="width: 200px"></th>
         <th>title</th>
-        <th>description</th>
+        <th>leader</th>
         <th class="text-center">type</th>
         <th class="text-center">#sessions</th>
         <th></th>
@@ -18,7 +18,14 @@
         <td @click="navigateToGame(item.id)">
             @{{ item.title }}
         </td>
-        <td @click="navigateToGame(item.id)">@{{ item.description }}</td>
+        <td @click="navigateToGame(item.id)">
+            <span v-if="item.leader">
+                @{{ item.leader.userName }}&nbsp;-&nbsp;<span class="text-info">@{{ item.leader.points }}</span>
+            </span>
+            <span v-if="!item.leader" class="small-text">
+                no session yet
+            </span>
+        </td>
         <td class="text-center" @click="navigateToGame(item.id)">@{{ types[item.game_type_id] }}</td>
         <td class="text-center" @click="navigateToGame(item.id)">@{{ item.sessionCount }}</td>
         <td class="text-right">
