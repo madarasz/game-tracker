@@ -82,6 +82,9 @@
                 </div>
             </div>
 
+            {{--Ranking chart--}}
+            @include('other.ranking-chart')
+
             {{--Sessions list--}}
             <div class="card mb-3">
                 <div class="card-block">
@@ -102,8 +105,6 @@
                     @include('list.sessions')
                 </div>
             </div>
-            {{--Ranking chart--}}
-            @include('other.ranking-chart')
         </div>
 
         <div class="col-sm-12 col-lg-3 pull-lg-9">
