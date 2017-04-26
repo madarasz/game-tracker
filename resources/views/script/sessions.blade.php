@@ -304,8 +304,8 @@
 
                 // get best score
                 for (var i = 0; i < this.session.players.length; i++) {
-                    if (this.pointForm.score[i].v > max) {
-                        max = this.pointForm.score[i].v;
+                    if (parseInt(this.pointForm.score[i].v) > max) {
+                        max = parseInt(this.pointForm.score[i].v);
                     }
                 }
 
