@@ -49,7 +49,8 @@
                                 </button>
                                 <confirm-button button-text="Conclude" button-class="btn btn-sm btn-warning"
                                                 button-icon="fa fa-lock" v-if="!parseInt(session.concluded)"
-                                                @click="confirmCallback = function() { concludeSession() }; confirmText = 'Conclude session? This will lock players and calculate rankings.'" />
+                                                @click="confirmCallback = function() { concludeSession() }; confirmText = 'Conclude session? This will lock players and calculate rankings.'">
+                                </confirm-button>
                             @endif
                             <span v-if="parseInt(session.concluded)" class="text-info">
                                 @if ($user)
