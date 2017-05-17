@@ -4,8 +4,8 @@
         <h5 class="card-title">ELO Leaderboard</h5>
         <ol>
             <li v-for="rank in ranking">
-                @{{ rank.userName }} -
-                <span class="text-info">@{{ rank.points }}</span>
+                @{{ rank.userName }}
+                <span class="text-info pull-right">@{{ rank.points }}</span>
             </li>
         </ol>
         <div class="small-text" v-if="ranking.length == 0">
