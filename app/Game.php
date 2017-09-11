@@ -12,7 +12,7 @@ class Game extends Model
     protected $fillable = ['title', 'description', 'thumbnail_url', 'game_type_id'];
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
     protected $hidden = ['created_at', 'updated_at', 'deleted_at', 'sessions'];
-    protected $appends = ['sessionCount', 'leader'];
+    protected $appends = ['sessionCount', 'leader', 'activeSeason'];
 
     public function game_type() {
         return $this->hasOne(GameType::class, 'id', 'game_type_id');
@@ -32,6 +32,15 @@ class Game extends Model
 
     public function getLeaderAttribute() {
         return $this->elo_ranking()->first();
+    }
+
+    public function seasons() {
+        return $this->hasMany(Season::class, 'game_id', 'id')->orderBy('end_date', 'desc');
+    }
+
+    public function getActiveSeasonAttribute() {
+        $today = date('Y-m-d');
+        return $this->seasons()->where('start_date', '<=', $today)->where('end_date', ">=", $today)->first();
     }
 
 }

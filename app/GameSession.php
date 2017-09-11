@@ -10,7 +10,7 @@ class GameSession extends Model
 
     use SoftDeletes;
     public $timestamps = true;
-    protected $fillable = ['date', 'place', 'notes', 'game_id', 'concluded'];
+    protected $fillable = ['date', 'place', 'notes', 'game_id', 'concluded', 'season_id'];
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
     protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
     protected $appends = ['photoCount'];
@@ -29,5 +29,9 @@ class GameSession extends Model
 
     public function getPhotoCountAttribute() {
         return $this->photos->count();
+    }
+
+    public function season() {
+        return $this->hasOne(Season::class, 'id', 'season_id');
     }
 }

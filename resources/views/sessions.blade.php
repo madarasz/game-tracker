@@ -113,6 +113,8 @@
             @include('other.game-info')
             {{--Leaderboard--}}
             @include('other.ranking')
+            {{--Seasons--}}
+            @include('other.seasons')
 
             {{--Back to games list--}}
             <div class="text-center mt-3">
@@ -134,6 +136,9 @@
 
     {{--Edit points modal--}}
     @include('modal.points')
+
+    {{--Season modal--}}
+    @include('modal.seasons')
 
 @stop
 

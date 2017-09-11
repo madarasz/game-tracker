@@ -10,12 +10,16 @@
             users: [],
             session: {},
             sessionForm: {},
+            seasonForm: {},
             pointForm: { score: []},
             ranking: [],
             sessionList: [],
+            seasonList: [],
             formSessionErrors: [],
+            formSeasonErrors: [],
             modalSessionTitle: '',
             modalSessionButton: '',
+            modalSeasonTitle: '',
             sessionEditMode: false,
             playerForm: {},
             formPlayerErrors: [],
@@ -54,6 +58,12 @@
                 this.modalSessionTitle = 'Create session';
                 this.modalSessionButton = 'Create';
                 this.sessionEditMode = false;
+            },
+            // prepare modal for create season
+            modalSeasonForCreate: function() {
+                this.seasonForm = { game_id: '{{ $id }}', start_date: this.defaultDate(), end_date: this.defaultDate()};
+                this.formSeasonErrors = [];
+                this.modalSeasonTitle = 'Create season for ' + this.game.title;
             },
             // prepare modal for edit session
             modalSessionForEdit: function() {
@@ -113,6 +123,7 @@
             loadGame: function() {
                 axios.get('/api/games/' + this.id).then(function (response) {
                     viewGame.game = response.data;
+                    viewGame.seasonList = viewGame.game.seasons;
                     // elo history chart
                     if (viewGame.game.sessionCount > 0) {
                         viewGame.loadEloHistory();
@@ -392,6 +403,25 @@
                         }
                     );
                 }
+            },
+            // creates season
+            createSeason: function() {
+                axios.post('/api/game-seasons', this.seasonForm)
+                        .then(function(response) {
+                            viewGame.loadGame();
+                            $("#modal-season").modal('hide');
+                            toastr.info('Season created successfully.', '', {timeOut: 1000});
+                        }, function(response) {
+                            // error handling
+                            viewGame.formSeasonErrors = response.response.data;
+                        }
+                );
+            },
+            deleteSeason: function(id) {
+                axios.delete('/api/game-seasons/' + id).then(function (response) {
+                    viewGame.loadGame();
+                    toastr.info('Session deleted.', '', {timeOut: 1000});
+                });
             }
         }
 

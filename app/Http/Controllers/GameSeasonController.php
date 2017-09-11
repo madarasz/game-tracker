@@ -2,23 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Game;
-use App\Http\Requests\GameRequest;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\GameSeasonRequest;
+use App\Season;
+use Illuminate\Http\Request;
 
-class GameController extends Controller
+class GameSeasonController extends Controller
 {
-
-    public function manageGames() {
-        $user = Auth::user();
-        return view('games', ['user' => $user]);
-    }
-
-    public function viewGame($id, $session = null) {
-        $user = Auth::user();
-        return view('sessions', ['id' => $id, 'session' => $session, 'user' => $user]);
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -26,9 +15,7 @@ class GameController extends Controller
      */
     public function index()
     {
-        $games = Game::get();
-
-        return response()->json($games);
+        //
     }
 
     /**
@@ -38,18 +25,18 @@ class GameController extends Controller
      */
     public function create()
     {
-        // NOT USED
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param GameRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
-    public function store(GameRequest $request)
+    public function store(GameSeasonRequest $request)
     {
-        $created = Game::create($request->all());
+        $created = Season::create($request->all());
 
         return response()->json($created);
     }
@@ -62,9 +49,7 @@ class GameController extends Controller
      */
     public function show($id)
     {
-        $game = Game::where('id', $id)->with(['seasons'])->first();
-
-        return response()->json($game);
+        //
     }
 
     /**
@@ -81,15 +66,13 @@ class GameController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\GameRequest  $request
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(GameRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $edit = Game::findOrFail($id)->update($request->all());
-
-        return response()->json($edit);
+        //
     }
 
     /**
@@ -100,7 +83,8 @@ class GameController extends Controller
      */
     public function destroy($id)
     {
-        Game::find($id)->delete();
+        Season::find($id)->delete();
+
         return response()->json(['done']);
     }
 }
