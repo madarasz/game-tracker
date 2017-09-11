@@ -23,7 +23,7 @@
                 @{{ item.leader.userName }}&nbsp;-&nbsp;<span class="text-info">@{{ item.leader.points }}</span>
             </span>
             <span v-if="!item.leader" class="small-text">
-                no session yet
+                no sessions yet
             </span>
         </td>
         <td class="text-center" @click="navigateToGame(item.id)">@{{ types[item.game_type_id] }}</td>
