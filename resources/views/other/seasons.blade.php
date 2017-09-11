@@ -28,7 +28,9 @@
                     <td>
                         @{{ season.title }}
                     </td>
-                    <td class="text-center">?</td>
+                    <td class="text-center">
+                        @{{ season.sessionCount }}
+                    </td>
                     <td class="text-right">
                         @if ($user)
                             <confirm-button button-icon="fa fa-trash text-danger" button-class="no-button"

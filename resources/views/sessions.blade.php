@@ -26,6 +26,14 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
+                            <div class="pull-right">
+                                <strong>season:</strong>
+                                <span v-if="session.season">
+                                    @{{ session.season.title }}
+                                    <em>(@{{ session.season.start_date }} - @{{ session.season.end_date }})</em>
+                                </span>
+                                <span v-if="!session.season"><em>none</em></span>
+                            </div>
                             <strong>date:</strong> @{{ session.date }}<br/>
                             <strong>place:</strong> @{{ session.place }}<br/>
                             <strong>notes:</strong> @{{ session.notes }}<br/>

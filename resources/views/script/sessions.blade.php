@@ -192,6 +192,7 @@
                             $("#modal-session").modal('hide');
                             toastr.info('Session updated successfully.', '', {timeOut: 1000});
                             viewGame.listSessionsForGame();
+                            viewGame.displaySession(viewGame.session.id); // season reason
                         }, function(response) {
                             // error handling
                             viewGame.formSessionErrors = response.response.data;
@@ -411,6 +412,11 @@
                             viewGame.loadGame();
                             $("#modal-season").modal('hide');
                             toastr.info('Season created successfully.', '', {timeOut: 1000});
+                            // reload session if necessary
+                            if (typeof(viewGame.session.id) !== 'undefined') {
+                                viewGame.displaySession(viewGame.session.id);
+                            }
+                            // reload session list if necessary TODO
                         }, function(response) {
                             // error handling
                             viewGame.formSeasonErrors = response.response.data;
@@ -421,6 +427,11 @@
                 axios.delete('/api/game-seasons/' + id).then(function (response) {
                     viewGame.loadGame();
                     toastr.info('Session deleted.', '', {timeOut: 1000});
+                    // reload session if necessary
+                    if (typeof(viewGame.session.id) !== 'undefined') {
+                        viewGame.displaySession(viewGame.session.id);
+                    }
+                    // reload session list if necessary TODO
                 });
             }
         }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\GameSession;
 use App\Http\Requests\GameSessionRequest;
 use App\Player;
+use App\Season;
 
 class GameSessionController extends Controller
 {
@@ -36,10 +37,15 @@ class GameSessionController extends Controller
         //
     }
 
-    public function indexForGame($gameid)
+    public function indexForGame($gameid, $seasonid = null)
     {
-        $sessions = GameSession::where('game_id', $gameid)
-            ->with([
+        $sessions = GameSession::where('game_id', $gameid);
+
+        if ($seasonid) {
+            $sessions = $seasonid->where('season_id', $seasonid);
+        }
+
+        $sessions = $sessions->with([
                 'players' => function($q) {
                     $q->select('user_id', 'game_session_id', 'score', 'winner')->orderBy('score','desc');
                 },
@@ -69,7 +75,10 @@ class GameSessionController extends Controller
     {
         $created = GameSession::create($request->all());
 
-        return response()->json($created);
+        // set season
+        $this->setSeason($created);
+
+        return $this->show($created->id);
     }
 
     /**
@@ -82,7 +91,7 @@ class GameSessionController extends Controller
     {
         $session = GameSession::with(['game', 'players' => function($query) {
             $query->orderBy('score', 'desc');
-        }, 'players.user', 'photos'])->findOrFail($id);
+        }, 'players.user', 'photos', 'season'])->findOrFail($id);
         $session->setHidden(['game_id', 'created_at', 'updated_at', 'deleted_at', 'photoCount']);
 
         return response()->json($session);
@@ -108,9 +117,13 @@ class GameSessionController extends Controller
      */
     public function update(GameSessionRequest $request, $id)
     {
-        $session = GameSession::findOrFail($id)->update($request->all());
+        $session = GameSession::findOrFail($id);
+        $session->update($request->all());
 
-        return response()->json($session);
+        // set season
+        $this->setSeason($session);
+
+        return $this->show($session->id);
     }
 
     /**
@@ -124,5 +137,14 @@ class GameSessionController extends Controller
         GameSession::find($id)->delete();
 
         return response()->json(['done']);
+    }
+
+    private function setSeason(&$session) {
+        $season = Season::where('start_date', '<=', $session->date)->where('end_date', '>=', $session->date)->first();
+        if ($season) {
+            $session->update(['season_id' => $season->id]);
+        } else {
+            $session->update(['season_id' => null]);
+        }
     }
 }

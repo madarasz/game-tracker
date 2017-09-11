@@ -12,7 +12,7 @@ class GameSession extends Model
     public $timestamps = true;
     protected $fillable = ['date', 'place', 'notes', 'game_id', 'concluded', 'season_id'];
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
-    protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
+    protected $hidden = ['created_at', 'updated_at', 'deleted_at', 'season_id'];
     protected $appends = ['photoCount'];
 
     public function game() {
