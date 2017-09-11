@@ -41,8 +41,12 @@ class GameSessionController extends Controller
     {
         $sessions = GameSession::where('game_id', $gameid);
 
-        if ($seasonid) {
-            $sessions = $seasonid->where('season_id', $seasonid);
+        if ($seasonid != null) {
+            if (intval($seasonid) > 0) {
+                $sessions = $sessions->where('season_id', $seasonid);
+            } else {
+                $sessions = $sessions->whereNull('season_id');
+            }
         }
 
         $sessions = $sessions->with([

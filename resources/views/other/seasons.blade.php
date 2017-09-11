@@ -24,9 +24,9 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="season in seasonList">
+                <tr v-for="season in seasonList" @click="displaySeason(season.id)">
                     <td>
-                        @{{ season.title }}
+                        <strong>@{{ season.title }}</strong>
                     </td>
                     <td class="text-center">
                         @{{ season.sessionCount }}
@@ -37,6 +37,15 @@
                                 @click="confirmCallback = function() { deleteSeason(season.id) }; confirmText = 'Delete season?'" />
                         @endif
                     </td>
+                </tr>
+                <tr v-if="game.sessionsWithoutSeason > 0" @click="displaySeason(0)">
+                    <td>
+                        none
+                    </td>
+                    <td class="text-center">
+                        @{{ game.sessionsWithoutSeason }}
+                    </td>
+                    <td></td>
                 </tr>
             </tbody>
         </table>

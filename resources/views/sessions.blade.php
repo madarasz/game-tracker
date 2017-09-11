@@ -99,7 +99,10 @@
                 <div class="card-block">
                     <div class="row">
                         <div class="col-sm-6">
-                            <h4 class="card-title page-header">Game sessions</h4>
+                            <h4 class="card-title page-header">
+                                Game sessions<br/>
+                                @include('other.season-string')
+                            </h4>
                         </div>
                         <div class="col-sm-6 text-right">
                             @if ($user)

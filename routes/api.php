@@ -25,6 +25,7 @@ Route::resource('players', 'PlayerController');
 Route::resource('photos', 'PhotoController');
 
 Route::get('game-sessions/game/{gameid}', 'GameSessionController@indexForGame');
+Route::get('game-sessions/game/{gameid}/{seasonid}', 'GameSessionController@indexForGame');
 Route::get('users', 'PlayerController@indexUsers');
 Route::get('players/session/{sessionid}', 'PlayerController@indexForSession');
 Route::get('photos/session/{sessionid}', 'PhotoController@indexForSession');

@@ -12,7 +12,7 @@ class Game extends Model
     protected $fillable = ['title', 'description', 'thumbnail_url', 'game_type_id'];
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
     protected $hidden = ['created_at', 'updated_at', 'deleted_at', 'sessions'];
-    protected $appends = ['sessionCount', 'leader', 'activeSeason'];
+    protected $appends = ['sessionCount', 'leader', 'activeSeason', 'sessionsWithoutSeason'];
 
     public function game_type() {
         return $this->hasOne(GameType::class, 'id', 'game_type_id');
@@ -41,6 +41,10 @@ class Game extends Model
     public function getActiveSeasonAttribute() {
         $today = date('Y-m-d');
         return $this->seasons()->where('start_date', '<=', $today)->where('end_date', ">=", $today)->first();
+    }
+
+    public function getSessionsWithoutSeasonAttribute() {
+        return $this->sessions()->whereNull('season_id')->count();
     }
 
 }

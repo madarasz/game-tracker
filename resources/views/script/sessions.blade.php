@@ -15,6 +15,7 @@
             ranking: [],
             sessionList: [],
             seasonList: [],
+            requestedSeasonId: null,
             formSessionErrors: [],
             formSeasonErrors: [],
             modalSessionTitle: '',
@@ -40,8 +41,6 @@
             google.charts.load('current', {'packages':['corechart']});
 
             this.loadGame();
-            this.loadRankings();
-            this.listSessionsForGame();
             this.loadUsers();
 
             @if ($session)
@@ -124,15 +123,23 @@
                 axios.get('/api/games/' + this.id).then(function (response) {
                     viewGame.game = response.data;
                     viewGame.seasonList = viewGame.game.seasons;
+                    // decide on which season to request
+                    if (viewGame.game.activeSeason && viewGame.requestedSeasonId == null) {
+                        viewGame.requestedSeasonId = viewGame.game.activeSeason.id;
+                    } else {
+                        viewGame.requestedSeasonId = 0;
+                    }
                     // elo history chart
                     if (viewGame.game.sessionCount > 0) {
                         viewGame.loadEloHistory();
                     }
+                    viewGame.loadRankings();
+                    viewGame.listSessionsForGame();
                 });
             },
             // list sessions for game
             listSessionsForGame: function() {
-                axios.get('/api/game-sessions/game/' + this.id).then(function (response) {
+                axios.get('/api/game-sessions/game/' + this.id + '/' + this.requestedSeasonId).then(function (response) {
                     viewGame.sessionList = response.data;
                 });
             },
@@ -433,6 +440,10 @@
                     }
                     // reload session list if necessary TODO
                 });
+            },
+            displaySeason: function(id) {
+                viewGame.requestedSeasonId = id;
+                viewGame.listSessionsForGame();
             }
         }
 
