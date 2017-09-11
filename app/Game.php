@@ -26,12 +26,15 @@ class Game extends Model
         return $this->sessions->count();
     }
 
-    public function elo_ranking() {
-        return $this->hasMany(EloPoint::class, 'game_id', 'id')->orderBy('points', 'desc');
+    public function elo_ranking($seasonid) {
+        return EloPoint::where('game_id', $this->id)->where('season_id', $seasonid)->orderBy('points', 'desc')->get();
     }
 
     public function getLeaderAttribute() {
-        return $this->elo_ranking()->first();
+        if ($this->getActiveSeasonAttribute()) {
+            return $this->elo_ranking($this->getActiveSeasonAttribute()->id)->first();
+        }
+        return $this->elo_ranking(null)->first(); // TODO
     }
 
     public function seasons() {

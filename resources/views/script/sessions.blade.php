@@ -151,13 +151,13 @@
             },
             // load rankings
             loadRankings: function() {
-                axios.get('/api/games/' + this.id + '/ranking').then(function (response) {
+                axios.get('/api/games/' + this.id + '/' + this.requestedSeasonId + '/ranking').then(function (response) {
                     viewGame.ranking = response.data;
                 });
             },
             // loads ELO history for game and displays chart
             loadEloHistory: function() {
-                axios.get('/api/ranking/game/' + this.id).then(function (response) {
+                axios.get('/api/ranking/game/' + this.id + '/' + this.requestedSeasonId).then(function (response) {
                     viewGame.eloHistory = response.data;
                     google.charts.setOnLoadCallback(viewGame.drawELOChart);
                 });
@@ -444,6 +444,8 @@
             displaySeason: function(id) {
                 viewGame.requestedSeasonId = id;
                 viewGame.listSessionsForGame();
+                viewGame.loadEloHistory();
+                viewGame.loadRankings();
             }
         }
 

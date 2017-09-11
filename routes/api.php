@@ -32,6 +32,6 @@ Route::get('photos/session/{sessionid}', 'PhotoController@indexForSession');
 Route::get('game-sessions/{gameid}/clone', 'GameSessionController@cloneSession');
 
 Route::get('game-sessions/{id}/conclude', 'PointController@concludeSession');
-Route::get('games/{id}/ranking', 'PointController@getGameRanking');
+Route::get('games/{id}/{seasonid}/ranking', 'PointController@getGameRanking');
 Route::get('games/{id}/ranking/recalculate', 'PointController@recalculateGame');
-Route::get('ranking/game/{gameid}', 'PointController@historyForGame');
+Route::get('ranking/game/{gameid}/{seasonid}', 'PointController@historyForGame');

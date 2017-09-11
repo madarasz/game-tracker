@@ -109,14 +109,26 @@ class PointController extends Controller
         return $this->getGameRanking($gameid);
     }
 
-    public function getGameRanking($id) {
+    public function getGameRanking($id, $seasonid = null) {
+        if ($seasonid == 0) {
+            $seasonid = null;
+        }
+
         $game = Game::find($id);
-        return response()->json($game->elo_ranking);
+        return response()->json($game->elo_ranking($seasonid));
     }
 
-    public function historyForGame($gameid) {
-        $sessionIds = GameSession::where('game_id', $gameid)->orderBy('date', 'asc')->orderBy('id','asc')->pluck('id');
-        $sessions = GameSession::where('game_id', $gameid)->orderBy('date', 'asc')->orderBy('id','asc')->get();
+    public function historyForGame($gameid, $seasonid) {
+        if ($seasonid == 0) {
+            $seasonid = null;
+        }
+
+        $sessionIds = GameSession::where('season_id', $seasonid)->where('game_id', $gameid)
+            ->orderBy('date', 'asc')->orderBy('id','asc')->pluck('id');
+        $sessions = GameSession::where('season_id', $seasonid)->where('game_id', $gameid)
+            ->orderBy('date', 'asc')->orderBy('id','asc')->get();
+
+
         $userIds = Player::whereIn('game_session_id', $sessionIds)->groupBy('user_id')->pluck('user_id');
 
         $history = ['history' => [], 'user_list' => $userIds];
