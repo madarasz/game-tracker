@@ -20,8 +20,8 @@ class Player extends Model
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
-    public function elo_score($game_id) {
-        return EloPoint::where('user_id', $this->user_id)->where('game_id', $game_id)->first();
+    public function elo_score($game_id, $season_id) {
+        return EloPoint::where('user_id', $this->user_id)->where('season_id', $season_id)->where('game_id', $game_id)->first();
     }
 
     public function elo_delta() {

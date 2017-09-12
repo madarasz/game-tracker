@@ -382,7 +382,7 @@
             },
             // recalculates ELO rankings for game
             recalculateELO: function() {
-                axios.get('/api/games/' + viewGame.id + '/ranking/recalculate').then(
+                axios.get('/api/games/' + viewGame.id + '/' + this.requestedSeasonId + '/ranking/recalculate').then(
                         function (response) {
                             if (viewGame.session.id !== undefined) {
                                 viewGame.displaySession(viewGame.session.id);
@@ -423,7 +423,6 @@
                             if (typeof(viewGame.session.id) !== 'undefined') {
                                 viewGame.displaySession(viewGame.session.id);
                             }
-                            // reload session list if necessary TODO
                         }, function(response) {
                             // error handling
                             viewGame.formSeasonErrors = response.response.data;
@@ -438,7 +437,8 @@
                     if (typeof(viewGame.session.id) !== 'undefined') {
                         viewGame.displaySession(viewGame.session.id);
                     }
-                    // reload session list if necessary TODO
+                    // reload sessions, ranking, chart
+                    viewGame.displaySeason(0);
                 });
             },
             displaySeason: function(id) {

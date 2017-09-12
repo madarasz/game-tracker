@@ -27,11 +27,12 @@ class PointController extends Controller
 
         foreach ($players as $player) {
             // create default score if player hasn't played game yet
-            if (!$player->elo_score($session->game_id)) {
+            if (!$player->elo_score($session->game_id, $session->season_id)) {
                 EloPoint::create([
                     'game_id' => $session->game_id,
                     'user_id' => $player->user_id,
-                    'points' => 1500
+                    'points' => 1500,
+                    'season_id' => $session->season_id
                 ]);
             }
             // create delta object, or set it to 0
@@ -52,8 +53,8 @@ class PointController extends Controller
             for ($u = $i + 1; $u < count($players); $u++) {
 
                 // calculate elo delta
-                $r1 = pow(10, $players[$i]->elo_score($session->game_id)->points / 400);
-                $r2 = pow(10, $players[$u]->elo_score($session->game_id)->points / 400);
+                $r1 = pow(10, $players[$i]->elo_score($session->game_id, $session->season_id)->points / 400);
+                $r2 = pow(10, $players[$u]->elo_score($session->game_id, $session->season_id)->points / 400);
                 $e1 = $r1 / ($r1 + $r2);
                 $e2 = $r2 / ($r1 + $r2);
 
@@ -86,27 +87,30 @@ class PointController extends Controller
 
         // update elo rankings per player
         foreach ($players as $player) {
-            $player->elo_score($session->game_id)
-                ->update(['points' => $player->elo_score($session->game_id)->points + $player->elo_delta()->delta]);
+            $player->elo_score($session->game_id, $session->season_id)
+                ->update(['points' => $player->elo_score($session->game_id, $session->season_id)->points + $player->elo_delta()->delta]);
         }
 
         $session->update(['concluded' => true]);
         return response()->json($session);
     }
 
-    public function recalculateGame($gameid) {
+    public function recalculateGame($gameid, $seasonid) {
         $game = Game::findOrFail($gameid);
+        if ($seasonid == 0) {
+            $seasonid = null;
+        }
 
         // reset points
-        EloPoint::where('game_id', $gameid)->delete();
+        EloPoint::where('game_id', $gameid)->where('season_id', $seasonid)->delete();
 
         foreach($game->sessions as $session) {
-            if ($session->concluded) {
+            if (intval($session->season_id) == intval($seasonid) && $session->concluded) {
                 $this->concludeSession($session->id, true);
             }
         }
 
-        return $this->getGameRanking($gameid);
+        return $this->getGameRanking($gameid, $seasonid);
     }
 
     public function getGameRanking($id, $seasonid = null) {

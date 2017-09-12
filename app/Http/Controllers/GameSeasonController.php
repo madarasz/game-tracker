@@ -55,6 +55,10 @@ class GameSeasonController extends Controller
         GameSession::where('date', '>=', $created->start_date)->where('date', '<=', $created->end_date)->
             update(['season_id' => $created->id]);
 
+        // recalculate ELO for new and 'none' season
+        App('App\Http\Controllers\PointController')->recalculateGame($created->game_id, 0);
+        App('App\Http\Controllers\PointController')->recalculateGame($created->game_id, $created->id);
+
         return response()->json($created);
     }
 
@@ -104,6 +108,9 @@ class GameSeasonController extends Controller
 
         // reset sessions
         GameSession::where('season_id', $season->id)->update(['season_id' => null]);
+
+        // recalculate ELO for 'none' season
+        App('App\Http\Controllers\PointController')->recalculateGame($season->game_id, null);
 
         // delete season
         $season->delete();
