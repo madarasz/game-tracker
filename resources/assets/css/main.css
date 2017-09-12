@@ -62,3 +62,7 @@ table.hover-row > tbody > tr:hover > td {
     cursor: pointer;
     padding: 0;
 }
+
+.row-highlight {
+    background-color: paleturquoise !important;
+}

@@ -24,8 +24,9 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="season in seasonList" @click="displaySeason(season.id)">
+                <tr v-for="season in seasonList" @click="displaySeason(season.id)" v-bind:class="{'row-highlight': season.id == requestedSeasonId}">
                     <td>
+                        <i class="fa fa-eye" aria-hidden="true" v-if="season.id == requestedSeasonId"></i>
                         <strong>@{{ season.title }}</strong>
                     </td>
                     <td class="text-center">
@@ -38,8 +39,9 @@
                         @endif
                     </td>
                 </tr>
-                <tr v-if="game.sessionsWithoutSeason > 0" @click="displaySeason(0)">
+                <tr v-if="game.sessionsWithoutSeason > 0" @click="displaySeason(0)" v-bind:class="{'row-highlight': requestedSeasonId == 0}">
                     <td>
+                        <i class="fa fa-eye" aria-hidden="true" v-if="requestedSeasonId == 0"></i>
                         none
                     </td>
                     <td class="text-center">
