@@ -53,7 +53,7 @@ class GameSeasonController extends Controller
 
         // assign sessions to season
         GameSession::where('date', '>=', $created->start_date)->where('date', '<=', $created->end_date)->
-            update(['season_id' => $created->id]);
+            where('game_id', $created->game_id)->update(['season_id' => $created->id]);
 
         // recalculate ELO for new and 'none' season
         App('App\Http\Controllers\PointController')->recalculateGame($created->game_id, 0);
