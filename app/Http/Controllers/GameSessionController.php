@@ -13,6 +13,7 @@ class GameSessionController extends Controller
         $session = GameSession::findOrFail($sessionid);
 
         $newSession = $session->replicate();
+        $this->setSeason($newSession);
         $newSession->concluded = false;
         $newSession->save();
 
@@ -144,7 +145,8 @@ class GameSessionController extends Controller
     }
 
     private function setSeason(&$session) {
-        $season = Season::where('start_date', '<=', $session->date)->where('end_date', '>=', $session->date)->first();
+        $season = Season::where('game_id', $session->game_id)
+            ->where('start_date', '<=', $session->date)->where('end_date', '>=', $session->date)->first();
         if ($season) {
             $session->update(['season_id' => $season->id]);
         } else {
