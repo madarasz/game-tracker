@@ -21,9 +21,9 @@
         <td>@{{ player.notes }}</td>
         <td class="text-right">
             @if ($user)
-            <button type="button" class="btn btn-sm btn-info" @click.prevent="toggleWinner(index)" v-if="!parseInt(session.concluded)">
-                <i class="fa fa-trophy" aria-hidden="true"></i>
-            </button>
+            {{--<button type="button" class="btn btn-sm btn-info" @click.prevent="toggleWinner(index)" v-if="!parseInt(session.concluded)">--}}
+                {{--<i class="fa fa-trophy" aria-hidden="true"></i>--}}
+            {{--</button>--}}
             <button type="button" class="btn btn-sm btn-primary" @click.prevent="modalPlayerForEdit(index)" v-if="!parseInt(session.concluded)">
                 Edit
             </button>

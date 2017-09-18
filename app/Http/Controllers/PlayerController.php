@@ -50,6 +50,8 @@ class PlayerController extends Controller
     {
         $created = Player::create($request->all());
 
+        $this->updateWinnerForSessoin($created);
+
         return response()->json($created);
     }
 
@@ -84,7 +86,10 @@ class PlayerController extends Controller
      */
     public function update(PlayerRequest $request, $id)
     {
-        $player = Player::findOrFail($id)->update($request->all());
+        $player = Player::findOrFail($id);
+        $player->update($request->all());
+
+        $this->updateWinnerForSessoin($player);
 
         return response()->json($player);
     }
@@ -100,5 +105,11 @@ class PlayerController extends Controller
         Player::find($id)->delete();
 
         return response()->json(['done']);
+    }
+
+    public function updateWinnerForSessoin($player) {
+        $top_score = Player::where('game_session_id', $player->game_session_id)->max('score');
+        Player::where('game_session_id', $player->game_session_id)->update(['winner' => false]);
+        Player::where('game_session_id', $player->game_session_id)->where('score', $top_score)->update(['winner' => true]);
     }
 }
