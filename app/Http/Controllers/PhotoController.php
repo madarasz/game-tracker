@@ -86,37 +86,61 @@ class PhotoController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Rotates image 90 degrees clockwise or counter-clockwise.
+     * @param $request
+     * @param $id
+     * @param $dir 'cw' or 'ccw' for clockwise or counter-clockwise
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function show($id)
-    {
-        //
-    }
+    public function rotate(PhotoRequest $request, $id, $dir) {
+        $photo = Photo::findOrFail($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+        // new file name: image.jpg > rot1_image.jpg > rot2_image.jpg > rot3_image.jpg > image.jpg
+        if (preg_match('/rot(\d)/', $photo->filename, $matches)) {
+            $rotnum = intval($matches[1]);
+            $filename = substr($photo->filename, 5);
+        } else {
+            $rotnum = 0;
+            $filename = $photo->filename;
+        }
+        // calculate rotation, new rotation number
+        $degrees = 0;
+        if ($dir == 'cw') {
+            $rotnum++;
+            $degrees = -90;
+        } elseif ($dir === 'ccw') {
+            $rotnum--;
+            if ($rotnum < 0) {
+                $rotnum = $rotnum + 4;
+            }
+            $degrees = 90;
+        }
+        $rotnum = $rotnum % 4;
+        // calculate new file name
+        if ($rotnum) {
+            $newFilename = 'rot'.$rotnum.'_'.$filename;
+        } else {
+            $newFilename = $filename;
+        }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\PhotoRequest  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(PhotoRequest $request, $id)
-    {
-        //
+        // rotate image
+        $img = Image::make(public_path('img/photos/'.$photo->filename));
+        $img->rotate($degrees);
+        $img->save();
+        // rotate thumbnail
+        $thumb = Image::make(public_path('img/photos/thumb_'.$photo->filename));
+        $thumb->rotate($degrees);
+        $thumb->save();
+
+        // rename image
+        rename(public_path('img/photos/'.$photo->filename), public_path('img/photos/'.$newFilename));
+        // rename thumbnail
+        rename(public_path('img/photos/thumb_'.$photo->filename), public_path('img/photos/thumb_'.$newFilename));
+        // update DB
+        $photo->update(['filename' => $newFilename]);
+
+        // redirecting to tournament
+        return response()->json('Photo rotated');
     }
 
     /**

@@ -282,6 +282,12 @@
                     toastr.info('Photo deleted.', '', {timeOut: 1000});
                 });
             },
+            // rotate photo
+            rotatePhoto: function(id, dir) {
+                axios.get('/api/photos/' + id + '/rotate/' + dir).then(function (response) {
+                    viewGame.displaySession(viewGame.session.id);
+                });
+            },
             // negates winner flag for player
             toggleWinner: function(index) {
                 axios.put('/api/players/' + this.session.players[index].id,

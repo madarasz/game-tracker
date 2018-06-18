@@ -29,6 +29,7 @@ Route::get('game-sessions/game/{gameid}/{seasonid}', 'GameSessionController@inde
 Route::get('users', 'PlayerController@indexUsers');
 Route::get('players/session/{sessionid}', 'PlayerController@indexForSession');
 Route::get('photos/session/{sessionid}', 'PhotoController@indexForSession');
+Route::get('photos/{id}/rotate/{dir}', 'PhotoController@rotate');
 Route::get('game-sessions/{gameid}/clone', 'GameSessionController@cloneSession');
 
 Route::get('game-sessions/{id}/conclude', 'PointController@concludeSession');

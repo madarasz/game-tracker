@@ -7,10 +7,19 @@
                data-gallery="gallery" :data-footer="photo.title">
                 <img :src="photo.thumbnail_url" />
             </a>
-            {{--delete button--}}
             @if ($user)
-            <confirm-button button-text="X" button-class="btn btn-sm btn-danger abs-top-left fade-in"
-                @click="confirmCallback = function() { deletePhoto(photo.id) }; confirmText = 'Delete photo?'" />
+                <div class="abs-top-left">
+                    {{--rotate buttons--}}
+                    <button class="btn btn-sm btn-primary fade-in" @click="rotatePhoto(photo.id, 'ccw')">
+                        <i class="fa fa-undo" title="rotate"></i>
+                    </button>
+                    <button class="btn btn-sm btn-primary fade-in" @click="rotatePhoto(photo.id, 'cw')">
+                        <i class="fa fa-repeat" title="rotate"></i>
+                    </button>
+                    {{--delete button--}}
+                    <confirm-button button-text="X" button-class="btn btn-sm btn-danger fade-in"
+                    @click="confirmCallback = function() { deletePhoto(photo.id) }; confirmText = 'Delete photo?'" />
+                </div>
             @endif
         </div>
     </div>
