@@ -14,3 +14,4 @@ Homestead.yaml
 .live.env
 /public/img/photos
 composer.phar
+.rnd

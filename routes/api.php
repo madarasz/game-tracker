@@ -36,3 +36,10 @@ Route::get('game-sessions/{id}/conclude', 'PointController@concludeSession');
 Route::get('games/{id}/{seasonid}/ranking', 'PointController@getGameRanking');
 Route::get('games/{id}/{seasonid}/ranking/recalculate', 'PointController@recalculateGame');
 Route::get('ranking/game/{gameid}/{seasonid}', 'PointController@historyForGame');
+
+Route::post('/register', 'AuthController@register');
+Route::post('/login', 'AuthController@login');
+
+Route::middleware('auth:api')->group(function () {
+    Route::post('/logout', 'AuthController@logout');
+});
