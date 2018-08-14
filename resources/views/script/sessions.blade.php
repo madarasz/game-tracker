@@ -76,6 +76,7 @@
             // prepare modal for create player
             modalPlayerForCreate: function() {
                 this.playerForm = { game_session_id : this.session.id};
+                this.playerForm.score = 0;
                 this.formPlayerErrors = [];
                 this.modalPlayerTitle = 'Add player';
                 this.modalPlayerButton = 'Add';
