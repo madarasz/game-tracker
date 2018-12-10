@@ -57,7 +57,7 @@ class PhotoController extends Controller
 
             // resizing image
             $img = Image::make(storage_path('app/public/img/photos/') . $filename);
-            $img->resize(2048, 2048, function ($constraint) {
+            $img->resize(1024, 1024, function ($constraint) {
                 $constraint->aspectRatio();
                 $constraint->upsize();
             });
