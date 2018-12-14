@@ -24,6 +24,17 @@
                         </div>
                     </div>
 
+                    {{--Faction--}}
+                    <div class="form-group row" v-if="factionList.length > 0">
+                        <label for="user_id" class="col-sm-3 col-form-label">Faction:</label>
+                        <div class="col-sm-9">
+                            <select v-model="playerForm.faction_id" class="form-control" name="faction_id" @change="playerFactionChanged">
+                                <option v-for="faction in factionList" :value="faction.id">@{{ faction.name }}</option>
+                            </select>
+                            <span v-if="formPlayerErrors['faction_id']" class="error text-danger">@{{ formPlayerErrors['faction_id'].toString() }}</span>
+                        </div>
+                    </div>
+
                     {{--Score--}}
                     <div class="form-group row">
                         <label for="place" class="col-sm-3 col-form-label">Score:</label>

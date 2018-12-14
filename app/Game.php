@@ -41,6 +41,10 @@ class Game extends Model
         return $this->hasMany(Season::class, 'game_id', 'id')->orderBy('end_date', 'desc');
     }
 
+    public function factions() {
+        return $this->hasMany(GameFaction::class, 'game_id', 'id');
+    }
+
     public function getActiveSeasonAttribute() {
         $today = date('Y-m-d');
         return $this->seasons()->where('start_date', '<=', $today)->where('end_date', ">=", $today)->first();

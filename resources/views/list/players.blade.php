@@ -2,6 +2,7 @@
     <thead>
     <tr>
         <th></th>
+        <th></th>
         <th>player</th>
         <th class="text-right">score</th>
         <th>notes</th>
@@ -11,6 +12,12 @@
     </thead>
     <tbody>
     <tr v-for="(player, index) in session.players">
+        <td style="padding: 0.5rem" class="text-right">
+            <div v-if="player.faction_id != null">
+                <span v-if="getFactionById(player.faction_id).iconFile == null" class="small-text">@{{ getFactionById(player.faction_id).name }}</span>
+                <img v-if="getFactionById(player.faction_id).iconFile != null" :src="getFactionById(player.faction_id).iconFile" :alt="getFactionById(player.faction_id).name" style="max-width: 100%; max-height: 2rem" />
+            </div>
+        </td>
         <td style="width: 1%">
             <i class="fa fa-trophy" aria-hidden="true" v-if="parseInt(player.winner)"></i>
         </td>

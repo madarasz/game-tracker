@@ -129,6 +129,8 @@
             @include('other.ranking')
             {{--Seasons--}}
             @include('other.seasons')
+            {{--Factions--}}
+            @include('other.factions')
 
             {{--Back to games list--}}
             <div class="text-center mt-3">
@@ -153,6 +155,9 @@
 
     {{--Season modal--}}
     @include('modal.seasons')
+
+    {{--Faction modal--}}
+    @include('modal.factions')
 
 @stop
 
