@@ -14,7 +14,7 @@
             <tbody>
                 <tr v-for="(faction, index) in factionList">
                     <td>@{{ faction.playerNumber}}</td>
-                    <td style="padding: 0.25rem">
+                    <td style="padding: 0.25rem" class="text-center">
                         <span v-if="faction.iconFile == null">@{{ faction.name }}</span>
                         <img v-if="faction.iconFile != null" :src="faction.iconFile" :alt="faction.name" style="max-width: 100%; max-height: 2rem" />
                     </td>
