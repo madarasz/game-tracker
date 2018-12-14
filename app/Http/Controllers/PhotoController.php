@@ -80,7 +80,7 @@ class PhotoController extends Controller
 
             // saving filename in DB
             Photo::findOrFail($created->id)->update(['filename' => $filename]);
-
+            $created = Photo::findOrFail($created->id);       
             return response()->json($created);
         }
     }

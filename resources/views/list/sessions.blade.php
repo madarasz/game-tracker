@@ -8,7 +8,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr v-for="gsession in sessionList" @click="displaySession(gsession.id)">
+        <tr v-for="gsession in sessionList" @click="displaySession(gsession.id)" :class="gsession.id == session.id ? 'row-highlight' : ''">
             <td>
                 @{{ gsession.date }}
                 @if ($user)

@@ -8,7 +8,7 @@ class Player extends Model
 {
 
     public $timestamps = false;
-    protected $fillable = ['game_session_id', 'user_id', 'notes', 'score', 'winner'];
+    protected $fillable = ['game_session_id', 'user_id', 'notes', 'score', 'winner', 'faction_id'];
     protected $hidden = ['user_id', 'game_session_id'];
     protected $appends = ['eloDelta'];
 
@@ -18,6 +18,10 @@ class Player extends Model
 
     public function user() {
         return $this->hasOne(User::class, 'id', 'user_id');
+    }
+
+    public function faction() {
+        return $this->hasOne(GameFaction::class, 'id', 'faction_id');
     }
 
     public function elo_score($game_id, $season_id) {

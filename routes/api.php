@@ -23,6 +23,7 @@ Route::resource('game-sessions', 'GameSessionController');
 Route::resource('game-seasons', 'GameSeasonController');
 Route::resource('players', 'PlayerController');
 Route::resource('photos', 'PhotoController');
+Route::resource('game-factions', 'GameFactionController');
 
 Route::get('game-sessions/game/{gameid}', 'GameSessionController@indexForGame');
 Route::get('game-sessions/game/{gameid}/{seasonid}', 'GameSessionController@indexForGame');
@@ -31,6 +32,7 @@ Route::get('players/session/{sessionid}', 'PlayerController@indexForSession');
 Route::get('photos/session/{sessionid}', 'PhotoController@indexForSession');
 Route::get('photos/{id}/rotate/{dir}', 'PhotoController@rotate');
 Route::get('game-sessions/{gameid}/clone', 'GameSessionController@cloneSession');
+Route::get('game-factions/game/{gameid}', 'GameFactionController@listForGame');
 
 Route::get('game-sessions/{id}/conclude', 'PointController@concludeSession');
 Route::get('games/{id}/{seasonid}/ranking', 'PointController@getGameRanking');

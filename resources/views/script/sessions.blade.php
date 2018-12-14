@@ -11,17 +11,22 @@
             session: {},
             sessionForm: {},
             seasonForm: {},
+            factionForm: {},
             pointForm: { score: []},
             ranking: [],
             sessionList: [],
             seasonList: [],
+            factionList: [],
             requestedSeasonId: null,
             formSessionErrors: [],
             formSeasonErrors: [],
             modalSessionTitle: '',
             modalSessionButton: '',
             modalSeasonTitle: '',
+            modalFactionTitle: '',
+            modalFactionButton: '',
             sessionEditMode: false,
+            factionEditMode: false,
             playerForm: {},
             formPlayerErrors: [],
             modalPlayerTitle: '',
@@ -43,9 +48,9 @@
             this.loadGame();
             this.loadUsers();
 
-            @if ($session)
             // load specific session
-            this.displaySession({{ $session }});
+            @if ($session)
+                this.displaySession({{ $session }});
             @endif
         },
 
@@ -64,6 +69,22 @@
                 this.formSeasonErrors = [];
                 this.modalSeasonTitle = 'Create season for ' + this.game.title;
             },
+            // prepare modal for create faction
+            modalFactionForCreate: function() {
+                this.factionForm = { game_id : '{{ $id }}', iconFile: null, photo_id: null };
+                this.formFactionErrors = [];
+                this.modalFactionTitle = 'Create faction for ' + this.game.title;
+                this.modalFactionButton = 'Create';
+                this.factionEditMode = false;
+            },
+            // prepare modal for edit faction
+            modalFactionForEdit: function(index) {
+                this.factionForm = this.factionList[index];
+                this.modalFactionTitle = 'Edit faction';
+                this.modalFactionButton = 'Save';
+                this.factionEditMode = true;
+                $("#modal-faction").modal('show');
+            },
             // prepare modal for edit session
             modalSessionForEdit: function() {
                 this.sessionForm = this.session;
@@ -76,6 +97,7 @@
             // prepare modal for create player
             modalPlayerForCreate: function() {
                 this.playerForm = { game_session_id : this.session.id};
+                this.playerForm.score = 0;
                 this.formPlayerErrors = [];
                 this.modalPlayerTitle = 'Add player';
                 this.modalPlayerButton = 'Add';
@@ -123,10 +145,11 @@
                 axios.get('/api/games/' + this.id).then(function (response) {
                     viewGame.game = response.data;
                     viewGame.seasonList = viewGame.game.seasons;
+                    viewGame.factionList = viewGame.game.factions;
                     // decide on which season to request
                     if (viewGame.game.activeSeason && viewGame.requestedSeasonId == null) {
                         viewGame.requestedSeasonId = viewGame.game.activeSeason.id;
-                    } else {
+                    } else if (viewGame.requestedSeasonId == null) {
                         viewGame.requestedSeasonId = 0;
                     }
                     // elo history chart
@@ -252,18 +275,26 @@
                 });
             },
             // add photo
-            addPhoto: function() {
+            addPhoto: function(uploadForSession = true) {
                 // sending files is complicated
                 var fdata = new FormData();
-                fdata.append('photo', document.getElementById('photoInput').files[0]);
-                fdata.append('game_session_id', this.photoForm.game_session_id);
-                fdata.append('title', this.photoForm.title);
+                var photoInputID = uploadForSession ? 'photoInput' : 'logoInput';
+                fdata.append('photo', document.getElementById(photoInputID).files[0]);
+                if (uploadForSession) {
+                    fdata.append('game_session_id', this.photoForm.game_session_id);
+                    fdata.append('title', this.photoForm.title);
+                }
 
                 axios.post('/api/photos', fdata, {headers: {'Content-Type': "multipart/form-data; charset=utf-8; boundary=" + Math.random().toString().substr(2)}})
                         .then(function(response) {
-                            viewGame.displaySession(viewGame.session.id);
-                            viewGame.listSessionsForGame();
-                            $("#modal-photo").modal('hide');
+                            if (uploadForSession) {
+                                viewGame.displaySession(viewGame.session.id);
+                                viewGame.listSessionsForGame();
+                                $("#modal-photo").modal('hide');
+                            } else {
+                                viewGame.factionForm.iconFile = response.data.url;
+                                viewGame.factionForm.photo_id = response.data.id;
+                            }
                             toastr.info('Photo added successfully.', '', {timeOut: 1000});
 
                             // clear form
@@ -271,6 +302,7 @@
                         }, function(response) {
                             // error handling
                             viewGame.formPhotoErrors = response.response.data;
+                            toastr.error('Problem uploading image.', '', {timeOut: 1000});
                         }
                 );
             },
@@ -435,6 +467,7 @@
                         }
                 );
             },
+            // deletes season
             deleteSeason: function(id) {
                 axios.delete('/api/game-seasons/' + id).then(function (response) {
                     viewGame.loadGame();
@@ -447,11 +480,64 @@
                     viewGame.displaySeason(0);
                 });
             },
+            // displays season
             displaySeason: function(id) {
                 viewGame.requestedSeasonId = id;
                 viewGame.listSessionsForGame();
                 viewGame.loadEloHistory();
                 viewGame.loadRankings();
+            },
+            // returns faction having ID
+            getFactionById: function(id) {
+                return this.factionList.filter(fac => fac.id == id)[0];
+            },
+            // creates faction
+            createFaction: function() {
+                axios.post('/api/game-factions', this.factionForm)
+                        .then(function(response) {
+                            viewGame.loadGame();
+                            $("#modal-faction").modal('hide');
+                            toastr.info('Faction created successfully.', '', {timeOut: 1000});
+                        }, function(response) {
+                            // error handling
+                            toastr.error('Problem with creating faction.', '', {timeOut: 1000});
+                        }
+                );
+            },
+            // updates faction
+            updateFaction: function() {
+                axios.put('/api/game-factions/' + this.factionForm.id, this.factionForm)
+                        .then(function(response) {
+                            viewGame.loadGame();
+                            $("#modal-faction").modal('hide');
+                            toastr.info('Faction updated successfully.', '', {timeOut: 1000});
+                        }, function(response) {
+                            // error handling
+                            toastr.error('Problem with updating faction.', '', {timeOut: 1000});
+                        }
+                );
+            },
+            // deletes faction
+            deleteFaction: function(id) {
+                axios.delete('/api/game-factions/' + id)
+                    .then(function (response) {
+                        viewGame.loadGame();
+                        toastr.info('Faction deleted.', '', {timeOut: 1000});
+                    }, function(response) {
+                        toastr.error('Problem with deleting faction.', '', {timeOut: 1000});
+                    }
+                );
+            },
+            // removes faction icon
+            removeFactionPhoto: function() {
+                this.factionForm.iconFile = null;
+                this.factionForm.photo_id = null;
+            },
+            // faction changed on player form
+            playerFactionChanged:function() {
+                if (this.playerForm.notes == null) {
+                    this.playerForm.notes = this.getFactionById(this.playerForm.faction_id).name;
+                }
             }
         }
 
