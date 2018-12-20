@@ -16,7 +16,8 @@
             awards: [
                 'landlord', 'banker', 'scientist', 'global warmer', 'miner',
                 'celebrity', 'industrialist', 'estate dealer', 'estate dealer', 'benefactor', // + desert settler
-                'cultivator', 'magnate', 'space baron', 'excentric', 'contractor'
+                'cultivator', 'magnate', 'space baron', 'excentric', 'contractor',
+                'venus'
             ],
             chosenBoard: "",
             chosenCorporations: [],
