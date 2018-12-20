@@ -14,6 +14,7 @@
 Route::get('/', 'GameController@manageGames');
 Route::get('/games/{id}', 'GameController@viewGame');
 Route::get('/games/{id}/session/{session}', 'GameController@viewGame');
+Route::get('/random-mars', 'PageController@marsRandomizer');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
