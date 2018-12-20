@@ -2,9 +2,6 @@
 
 @section('content')
     <div class="row mt-3" id="game-viewer">
-        <passport-clients></passport-clients>
-        <passport-authorized-clients></passport-authorized-clients>
-        <passport-personal-access-tokens></passport-personal-access-tokens>
         <confirm-modal :modal-body="confirmText" :callback="confirmCallback"></confirm-modal>
         <div class="col-sm-12 col-lg-9 push-lg-3">
             {{--Session detais--}}

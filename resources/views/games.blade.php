@@ -3,9 +3,6 @@
 @section('content')
     <div class="card mt-3" id="manage-games">
         <confirm-modal :modal-body="confirmText" :callback="confirmCallback"></confirm-modal>
-        <passport-clients></passport-clients>
-        <passport-authorized-clients></passport-authorized-clients>
-        <passport-personal-access-tokens></passport-personal-access-tokens>
         <div class="card-block">
             {{--Games Header--}}
             <div class="row">
