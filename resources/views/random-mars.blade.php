@@ -22,7 +22,7 @@
         </div>
         {{--Results--}}
         <div class="row mt-3" v-if="showResults">
-            <div class="col-sm-6 col-lg-3 mb-3">
+            <div class="col-sm-6 mb-3">
                 <div class="card">
                     <div class="card-block">    
                         <h5 class="card-title">Board</h5>
@@ -39,7 +39,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-lg-3 mb-3">
+            <div class="col-sm-6 mb-3">
                 <div class="card">
                     <div class="card-block">    
                         <h5 class="card-title">Corporations</h5>
@@ -56,7 +56,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-lg-3 mb-3">
+            <div class="col-sm-6 mb-3">
                 <div class="card">
                     <div class="card-block">    
                         <h5 class="card-title">Milestones</h5>
@@ -94,7 +94,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-lg-3 mb-3">
+            <div class="col-sm-6 mb-3">
                 <div class="card">
                     <div class="card-block">    
                         <h5 class="card-title">Colonies</h5>
