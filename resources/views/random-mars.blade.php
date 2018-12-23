@@ -10,12 +10,12 @@
                     
                         <h4 class="card-title page-header">Terraforming Mars randomizer</h4>
                         <div>
-                            Player number:
-                            <select v-model="playerNumber">
-                                <option v-for="n in 4" :value="n+1">@{{ n+1 }}</option>
-                            </select>
-                            <br />
-                            <a class="btn btn-sm btn-primary text-white" @click="randomise">Randomize</a>
+                            <h5>Player number:
+                                <select v-model="playerNumber">
+                                    <option v-for="n in 4" :value="n+1">@{{ n+1 }}</option>
+                                </select>
+                            </h5>
+                            <a class="btn btn-primary text-white mt-3" @click="randomise">Randomize</a>
                         </div>
                     </div>
                 </div>
@@ -47,16 +47,36 @@
                 <div class="card">
                     <div class="card-block">    
                         <h5 class="card-title">Corporations</h5>
+                        <div class="random-mars-flex">
+                            <div class="random-mars-flex-content" v-for="(corporation, index) in chosenCorporations">
+                                <div class="random-mars-flex mb-3">
+                                    <div class="random-mars-flex-content" style="width:100%">
+                                        <img :src="corporation.icon" style="max-width: 200px; max-height: 120px" />
+                                        <a @click="randomCorp(index)"><i class="fa fa-refresh"></i></a>
+                                    </div>
+                                    <div class="random-mars-flex-content" style="width:100%">
+                                        <em>@{{ corporation.name }}</em>
+                                    </div>
+                                </div>
+                                    
+                                    
+                            </div>
+                        </div>
+                        <!--
                         <table style="width: 100%">
                             <tr v-for="(corporation, index) in chosenCorporations" :style="index > 0 ? 'border-top: 1px solid black;' : ''">
-                                <td>
-                                    <em>@{{ corporation }}</em>
+                                <td class="text-center">
+                                    <img :src="corporation.icon" style="max-width: 200px; max-height: 120px" />
+                                    <div>
+                                        <em>@{{ corporation.name }}</em>
+                                    </div>
                                 </td>
                                 <td class="text-right">
                                     <a @click="randomCorp(index)"><i class="fa fa-refresh"></i></a>
                                 </td>
                             </tr>
                         </table>
+-->
                     </div>
                 </div>
             </div>

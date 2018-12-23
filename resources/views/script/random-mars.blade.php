@@ -28,7 +28,7 @@
         },
         mounted: function() {
             axios.get('/api/games/7').then(function (response) {
-                randomMars.corporations = response.data.factions.map(obj => obj.name);
+                randomMars.corporations = response.data.factions.map(obj => ({name: obj.name, icon: obj.iconFile}));
             });
         },
         methods: {
