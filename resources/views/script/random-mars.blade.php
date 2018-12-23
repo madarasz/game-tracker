@@ -14,8 +14,8 @@
                 'floaters'
             ],
             awards: [
-                'landlord', 'banker', 'scientist', 'global warmer', 'miner',
-                'celebrity', 'industrialist', 'estate dealer', 'estate dealer', 'benefactor', // + desert settler
+                'landlord', 'banker', 'scientist', 'thermalist', 'miner',
+                'celebrity', 'industrialist', 'estate dealer', 'benefactor', // + desert settler
                 'cultivator', 'magnate', 'space baron', 'excentric', 'contractor',
                 'venus'
             ],
@@ -32,6 +32,9 @@
             });
         },
         methods: {
+            filename: function(name) {
+                return name.toLowerCase().replace(/ /g,"-");
+            },
             randomise: function() {
                 this.randomBoard();
                 this.randomCorps();
