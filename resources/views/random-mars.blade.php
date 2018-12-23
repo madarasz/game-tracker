@@ -55,7 +55,7 @@
                                         <a @click="randomCorp(index)"><i class="fa fa-refresh"></i></a>
                                     </div>
                                     <div class="random-mars-flex-content" style="width:100%">
-                                        <em>@{{ corporation.name }}</em>
+                                        <em>@{{ corporation.name.match(/\(([^)]+)\)/)[1] }}</em>
                                     </div>
                                 </div>
                                     
