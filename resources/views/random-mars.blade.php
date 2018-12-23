@@ -51,7 +51,7 @@
                             <div class="random-mars-flex-content" v-for="(corporation, index) in chosenCorporations">
                                 <div class="random-mars-flex mb-3">
                                     <div class="random-mars-flex-content" style="width:100%">
-                                        <img :src="corporation.icon" style="max-width: 200px; max-height: 120px" />
+                                        <img :src="corporation.icon" style="max-width: 200px; max-height: 120px; width: 90%" />
                                         <a @click="randomCorp(index)"><i class="fa fa-refresh"></i></a>
                                     </div>
                                     <div class="random-mars-flex-content" style="width:100%">
