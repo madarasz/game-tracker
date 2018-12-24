@@ -57,26 +57,9 @@
                                     <div class="random-mars-flex-content" style="width:100%">
                                         <em>@{{ corporation.name.match(/\(([^)]+)\)/)[1] }}</em>
                                     </div>
-                                </div>
-                                    
-                                    
+                                </div>                             
                             </div>
                         </div>
-                        <!--
-                        <table style="width: 100%">
-                            <tr v-for="(corporation, index) in chosenCorporations" :style="index > 0 ? 'border-top: 1px solid black;' : ''">
-                                <td class="text-center">
-                                    <img :src="corporation.icon" style="max-width: 200px; max-height: 120px" />
-                                    <div>
-                                        <em>@{{ corporation.name }}</em>
-                                    </div>
-                                </td>
-                                <td class="text-right">
-                                    <a @click="randomCorp(index)"><i class="fa fa-refresh"></i></a>
-                                </td>
-                            </tr>
-                        </table>
--->
                     </div>
                 </div>
             </div>
