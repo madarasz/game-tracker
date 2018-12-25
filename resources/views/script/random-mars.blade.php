@@ -37,7 +37,12 @@
             // checks for state in URL
             var state = window.location.href.match(/r=(.*)/);
             if (state != null) {
-                this.decodeValues(state[1]);
+                if (state[1].indexOf('&') > 1) {
+                    state = state[1].substr(0, state[1].indexOf('&'));
+                } else {
+                    state = state[1];
+                }
+                this.decodeValues(state);
             }
         },
         computed: {
