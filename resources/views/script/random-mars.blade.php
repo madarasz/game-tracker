@@ -140,6 +140,7 @@
                     this.encodeArray(this.corporationMapping) + this.encodeArray(this.milestoneMapping) +
                     this.encodeArray(this.awardMapping) + this.encodeArray(this.colonyMapping);
                 history.replaceState('', 'Mars Randomizer', url);
+                this.copiedMessage = false;
             },
             // decodes an array from base64
             decodeArray: function(bmap) {
