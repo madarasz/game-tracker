@@ -2,8 +2,10 @@
     var randomMars = new Vue({
         el: '#random-mars',
         data: {
+            b64: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
             playerNumber: 2,
             showResults: false,
+            copiedMessage: false,
             // arrays to randomize from
             corporations: [], // from API
             boards: ['base game', 'Hellas', 'Elysium'],
@@ -32,6 +34,11 @@
             axios.get('/api/games/7').then(function (response) {
                 randomMars.corporations = response.data.factions.map(obj => ({name: obj.name, icon: obj.iconFile}));
             });
+            // checks for state in URL
+            var state = window.location.href.match(/r=(.*)/);
+            if (state != null) {
+                this.decodeValues(state[1]);
+            }
         },
         computed: {
             chosenBoard: function() {
@@ -48,6 +55,15 @@
             },
             chosenAwards: function() {
                 return this.awardMapping.map(i => this.awards[i]);
+            },
+            corporationNum: function() {
+                return this.playerNumber + 2;
+            },
+            milestoneNum: function() {
+                return this.chosenBoard == 'Hellas' ? 5 : 6;
+            },
+            awardNum: function() {
+                return this.chosenBoard == 'Elysium' ? 5 : 6;
             }
         },
         methods: {
@@ -55,15 +71,19 @@
                 return name.toLowerCase().replace(/ /g,"-");
             },
             randomise: function() {
-                this.randomBoard();
+                this.randomBoard(false);
                 this.randomCorps();
                 this.randomColonies();
                 this.showResults = true;
+                this.encodeValues();
             },
-            randomBoard: function() {
+            randomBoard: function(encode = true) {
                 this.boardMapping = Math.floor(Math.random() * this.boards.length);
                 this.randomMilestones();
                 this.randomAwards();
+                if (encode) {
+                    this.encodeValues();
+                }
             },
             // returns array of X elements from [0, 1, ..., n-1] array
             randomElements: function(x, n) {
@@ -87,27 +107,68 @@
             },
             randomCorp: function(index) {
                 Vue.set(this.corporationMapping, index, this.randomOneElement(this.corporationMapping, this.corporations.length));
+                this.encodeValues();
             },
             randomColonies: function() {
                 this.colonyMapping = this.randomElements(this.playerNumber+2, this.colonies.length);
             },
             randomColony: function(index) {
                 Vue.set(this.colonyMapping, index, this.randomOneElement(this.colonyMapping, this.colonies.length));
+                this.encodeValues();
             },
             randomMilestones: function() {
-                var len = this.chosenBoard == 'Hellas' ? 5 : 6;
-                this.milestoneMapping = this.randomElements(len, this.milestones.length);
+                this.milestoneMapping = this.randomElements(this.milestoneNum, this.milestones.length);
             },
             randomMilestone: function(index) {
                 Vue.set(this.milestoneMapping, index, this.randomOneElement(this.milestoneMapping, this.milestones.length));
+                this.encodeValues();
             },
             randomAwards: function() {
-                var len = this.chosenBoard == 'Elysium' ? 5 : 6;
-                this.awardMapping = this.randomElements(len, this.awards.length);
+                this.awardMapping = this.randomElements(this.awardNum, this.awards.length);
             },
             randomAward: function(index) {
-                Vue.set(this.awardMapping, index, this.randomOneElement(this.awardMapping, this.awards.length))
+                Vue.set(this.awardMapping, index, this.randomOneElement(this.awardMapping, this.awards.length));
+                this.encodeValues();
             },
+            // encodes an array to base64
+            encodeArray: function(mapping) {
+                return mapping.map(i => this.b64[i]).join('');
+            },
+            // encodes mapping arrays to URL
+            encodeValues: function() {
+                var url = '/random-mars?r=' + this.playerNumber + this.boardMapping + 
+                    this.encodeArray(this.corporationMapping) + this.encodeArray(this.milestoneMapping) +
+                    this.encodeArray(this.awardMapping) + this.encodeArray(this.colonyMapping);
+                history.replaceState('', 'Mars Randomizer', url);
+            },
+            // decodes an array from base64
+            decodeArray: function(bmap) {
+                var result = [];
+                for (var i = 0; i < bmap.length; i++) {
+                    result.push(this.b64.indexOf(bmap[i]));
+                }
+                return result;
+            },
+            // decodes mapping arrays fro URL
+            decodeValues: function(state) {
+                this.playerNumber = parseInt(state[0]);
+                this.boardMapping = parseInt(state[1]);      
+                this.corporationMapping = this.decodeArray(state.substring(2, 2+this.corporationNum));
+                this.milestoneMapping = this.decodeArray(state.substring(2+this.corporationNum, 2+this.corporationNum+this.milestoneNum));
+                this.awardMapping = this.decodeArray(state.substring(2+this.corporationNum+this.milestoneNum, 2+this.corporationNum+this.milestoneNum+this.awardNum));
+                this.colonyMapping = this.decodeArray(state.substring(2+this.corporationNum+this.milestoneNum+this.awardNum));
+                this.showResults = true;
+            },
+            // copies URL to clipboard
+            copyUrl: function() {
+                const el = document.createElement('textarea');
+                el.value = location.href;
+                document.body.appendChild(el);
+                el.select();
+                document.execCommand('copy');
+                document.body.removeChild(el);
+                this.copiedMessage = true;
+            }
         }
     })
 </script>

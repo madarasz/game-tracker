@@ -15,7 +15,11 @@
                                     <option v-for="n in 4" :value="n+1">@{{ n+1 }}</option>
                                 </select>
                             </h5>
-                            <a class="btn btn-primary text-white mt-3" @click="randomise">Randomize</a>
+                            <div class="pt-3" style="line-height: normal">
+                                <a class="btn btn-primary text-white" @click="randomise">Randomize</a>
+                                <a v-if="showResults" class="btn btn-success text-white" @click="copyUrl">Copy URL</a>
+                                <small v-if="copiedMessage" style="vertical-align: middle; line-height: normal"><em>copied!</em></small>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -51,10 +55,10 @@
                             <div class="random-mars-flex-content" v-for="(corporation, index) in chosenCorporations">
                                 <div class="random-mars-flex mb-3">
                                     <div class="random-mars-flex-content" style="width:100%">
-                                        <img :src="corporation.icon" style="max-width: 200px; max-height: 120px; width: 90%" />
+                                        <img v-if="corporation" :src="corporation.icon" style="max-width: 200px; max-height: 120px; width: 90%" />
                                         <a @click="randomCorp(index)"><i class="fa fa-refresh"></i></a>
                                     </div>
-                                    <div class="random-mars-flex-content" style="width:100%">
+                                    <div v-if="corporation" class="random-mars-flex-content" style="width:100%">
                                         <em>@{{ corporation.name.match(/\(([^)]+)\)/)[1] }}</em>
                                     </div>
                                 </div>                             
