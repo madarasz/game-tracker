@@ -16,7 +16,10 @@
                     <td>@{{ faction.playerNumber}}</td>
                     <td style="padding: 0.25rem" class="text-center">
                         <span v-if="faction.iconFile == null">@{{ faction.name }}</span>
-                        <img v-if="faction.iconFile != null" :src="faction.iconFile" :alt="faction.name" style="max-width: 100%; max-height: 2rem" />
+                        <img v-if="faction.iconFile != null && faction.factionFile == null" :src="faction.iconFile" :alt="faction.name" style="max-width: 100%; max-height: 2rem" />
+                        <a v-if="faction.iconFile != null && faction.factionFile != null" :href="faction.factionFile" data-toggle="lightbox" data-gallery="gallery-faction-list">
+                            <img :src="faction.iconFile" :alt="faction.name" style="max-width: 100%; max-height: 2rem" />
+                        </a>
                     </td>
                     <td class="text-right" style="padding: 0.25rem">
                         @if ($user)

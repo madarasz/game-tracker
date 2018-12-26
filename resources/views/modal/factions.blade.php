@@ -21,7 +21,7 @@
                         </div>
                     </div>
 
-                    {{--Picture--}}
+                    {{--Logo--}}
                     <div class="form-group row">
                         <label for="name" class="col-sm-3 col-form-label">Logo:</label>
                         {{--without logo--}}
@@ -29,13 +29,34 @@
                             <input type="file" name="photo" class="form-control" id="logoInput"/>
                         </div>
                         <div class="col-sm-3" v-if="factionForm.iconFile == null">
-                            <a class="btn btn-sm btn-primary text-white" @click="addPhoto(false)">Upload</a>
+                            <a class="btn btn-sm btn-primary text-white" @click="addPhoto(false, 'logoInput')">Upload</a>
                         </div>
                         {{--with logo--}}
                         <div class="col-sm-7" v-if="factionForm.iconFile != null">
                             <img :src="factionForm.iconFile" style="max-width: 100%"/>
                         </div>
                         <div class="col-sm-2" v-if="factionForm.iconFile != null">
+                            <a class="btn btn-sm btn-danger text-white" @click.prevent="removeFactionIcon">
+                                <i class="fa fa-trash" aria-hidden="true"></i> 
+                            </a>
+                        </div>
+                    </div>
+
+                    {{--Faction photo--}}
+                    <div class="form-group row">
+                        <label for="name" class="col-sm-3 col-form-label">Photo:</label>
+                        {{--without photo--}}
+                        <div class="col-sm-6" v-if="factionForm.factionFile == null">
+                            <input type="file" name="photoBig" class="form-control" id="factionPhotoInput"/>
+                        </div>
+                        <div class="col-sm-3" v-if="factionForm.factionFile == null">
+                            <a class="btn btn-sm btn-primary text-white" @click="addPhoto(false, 'factionPhotoInput')">Upload</a>
+                        </div>
+                        {{--with photo--}}
+                        <div class="col-sm-7" v-if="factionForm.factionFile != null">
+                            <img :src="factionForm.factionFile" style="max-width: 100%"/>
+                        </div>
+                        <div class="col-sm-2" v-if="factionForm.factionFile != null">
                             <a class="btn btn-sm btn-danger text-white" @click.prevent="removeFactionPhoto">
                                 <i class="fa fa-trash" aria-hidden="true"></i> 
                             </a>

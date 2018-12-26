@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGameFactionsTable extends Migration
+class AddBigPhotoToGameFactionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class CreateGameFactionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('game_factions', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('game_id');
-            $table->string('name');
-            $table->integer('photo_id')->nullable();
+        Schema::table('game_factions', function (Blueprint $table) {
+            $table->integer('big_photo_id')->nullable();
         });
     }
 
@@ -28,6 +25,8 @@ class CreateGameFactionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('game_factions');
+        Schema::table('game_factions', function (Blueprint $table) {
+            $table->dropColumn('big_photo_id');
+        });
     }
 }

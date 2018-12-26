@@ -275,10 +275,9 @@
                 });
             },
             // add photo
-            addPhoto: function(uploadForSession = true) {
+            addPhoto: function(uploadForSession = true, photoInputID = 'photoInput') {
                 // sending files is complicated
                 var fdata = new FormData();
-                var photoInputID = uploadForSession ? 'photoInput' : 'logoInput';
                 fdata.append('photo', document.getElementById(photoInputID).files[0]);
                 if (uploadForSession) {
                     fdata.append('game_session_id', this.photoForm.game_session_id);
@@ -292,8 +291,13 @@
                                 viewGame.listSessionsForGame();
                                 $("#modal-photo").modal('hide');
                             } else {
-                                viewGame.factionForm.iconFile = response.data.url;
-                                viewGame.factionForm.photo_id = response.data.id;
+                                if (photoInputID == 'logoInput') {
+                                    viewGame.factionForm.iconFile = response.data.url;
+                                    viewGame.factionForm.photo_id = response.data.id;
+                                } else {
+                                    viewGame.factionForm.factionFile = response.data.url;
+                                    viewGame.factionForm.big_photo_id = response.data.id;
+                                }
                             }
                             toastr.info('Photo added successfully.', '', {timeOut: 1000});
 
@@ -529,9 +533,14 @@
                 );
             },
             // removes faction icon
-            removeFactionPhoto: function() {
+            removeFactionIcon: function() {
                 this.factionForm.iconFile = null;
                 this.factionForm.photo_id = null;
+            },
+            // removes faction photo
+            removeFactionPhoto: function() {
+                this.factionForm.factionFile = null;
+                this.factionForm.big_photo_id = null;
             },
             // faction changed on player form
             playerFactionChanged:function() {

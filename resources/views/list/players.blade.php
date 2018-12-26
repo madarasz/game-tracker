@@ -14,8 +14,14 @@
     <tr v-for="(player, index) in session.players">
         <td style="padding: 0.5rem" class="text-right">
             <div v-if="player.faction_id != null">
+                {{--Text--}}
                 <span v-if="getFactionById(player.faction_id).iconFile == null" class="small-text">@{{ getFactionById(player.faction_id).name }}</span>
-                <img v-if="getFactionById(player.faction_id).iconFile != null" :src="getFactionById(player.faction_id).iconFile" :alt="getFactionById(player.faction_id).name" style="max-width: 100%; max-height: 2rem" />
+                {{--Photo and logo--}}
+                <a v-if="getFactionById(player.faction_id).iconFile != null && getFactionById(player.faction_id).factionFile != null" :href="getFactionById(player.faction_id).factionFile" data-toggle="lightbox" data-gallery="gallery-factions">
+                    <img :src="getFactionById(player.faction_id).iconFile" :alt="getFactionById(player.faction_id).name" style="max-width: 100%; max-height: 2rem" />
+                </a>
+                {{--Logo only--}}
+                <img v-if="getFactionById(player.faction_id).iconFile != null && getFactionById(player.faction_id).factionFile == null" :src="getFactionById(player.faction_id).iconFile" :alt="getFactionById(player.faction_id).name" style="max-width: 100%; max-height: 2rem" />
             </div>
         </td>
         <td style="width: 1%">
