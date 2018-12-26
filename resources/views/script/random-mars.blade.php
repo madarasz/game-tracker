@@ -1,3 +1,4 @@
+<script type="text/javascript" src="/js/ekko-lightbox.min.js"></script>
 <script type="text/javascript">
     var randomMars = new Vue({
         el: '#random-mars',
@@ -32,7 +33,7 @@
         mounted: function() {
             // get Mars Corporations from API
             axios.get('/api/games/7').then(function (response) {
-                randomMars.corporations = response.data.factions.map(obj => ({name: obj.name, icon: obj.iconFile}));
+                randomMars.corporations = response.data.factions.map(obj => ({name: obj.name, icon: obj.iconFile, photo: obj.factionFile}));
             });
             // checks for state in URL
             var state = window.location.href.match(/r=(.*)/);
@@ -177,4 +178,10 @@
             }
         }
     })
+
+    // EKKO Lightbox
+    $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+        event.preventDefault();
+        $(this).ekkoLightbox();
+    });
 </script>

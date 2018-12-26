@@ -55,7 +55,10 @@
                             <div class="random-mars-flex-content" v-for="(corporation, index) in chosenCorporations">
                                 <div class="random-mars-flex mb-3">
                                     <div class="random-mars-flex-content" style="width:100%">
-                                        <img v-if="corporation" :src="corporation.icon" style="max-width: 200px; max-height: 120px; width: 90%" />
+                                        <img v-if="corporation && corporation.photo == null" :src="corporation.icon" style="max-width: 200px; max-height: 120px; width: 90%" />
+                                        <a v-if="corporation && corporation.icon != null && corporation.photo != null" :href="corporation.photo" data-toggle="lightbox" data-gallery="gallery-faction-list">
+                                            <img :src="corporation.icon" style="max-width: 200px; max-height: 120px; width: 90%" />
+                                        </a>
                                         <a @click="randomCorp(index)"><i class="fa fa-refresh"></i></a>
                                     </div>
                                     <div v-if="corporation" class="random-mars-flex-content" style="width:100%">
