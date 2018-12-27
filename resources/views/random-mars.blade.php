@@ -102,16 +102,14 @@
                 <div class="card">
                     <div class="card-block">    
                         <h5 class="card-title">Colonies</h5>
-                        <table style="width: 100%">
-                            <tr v-for="(colony, index) in chosenColonies" :style="index > 0 ? 'border-top: 1px solid black;' : ''">
-                                <td>
-                                    <em>@{{ colony }}</em>
-                                </td>
-                                <td class="text-right">
-                                    <a @click="randomColony(index)"><i class="fa fa-refresh"></i></a>
-                                </td>
-                            </tr>
-                        </table>
+                        <div class="random-mars-flex">
+                            <div class="random-mars-flex-content" v-for="(colony, index) in chosenColonies">
+                            <a :href="'/img/random-mars/colonies/'+filename(colony)+'.png'" data-toggle="lightbox" data-gallery="gallery-colony-list">
+                                <img :src="'/img/random-mars/colonies/'+filename(colony)+'.png'" :alt="colony" />
+                            </a>
+                                <a @click="randomColony(index)"><i class="fa fa-refresh"></i></a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
