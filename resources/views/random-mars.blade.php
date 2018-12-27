@@ -6,8 +6,7 @@
         <div class="row">
             <div class="col-sm-12 text-center">
                 <div class="card">
-                    <div class="card-block">   
-                    
+                    <div class="card-block">               
                         <h4 class="card-title page-header">Terraforming Mars randomizer</h4>
                         <div>
                             <h5>Player number:
@@ -34,7 +33,9 @@
                         <table class="random-mars vmiddle">
                             <tr>
                                 <td class="text-center">
-                                    <img :src="'/img/random-mars/boards/'+filename(chosenBoard)+'.jpg'" :alt="chosenBoard" style="max-width: 50%"/>
+                                    <a :href="'/img/random-mars/boards/'+filename(chosenBoard)+'-big.jpg'" data-toggle="lightbox" data-gallery="gallery-board-list">
+                                        <img :src="'/img/random-mars/boards/'+filename(chosenBoard)+'.jpg'" :alt="chosenBoard" style="max-width: 50%"/>
+                                    </a>
                                     <div>
                                         <em>@{{ chosenBoard }}</em>
                                     </div>
