@@ -77,23 +77,43 @@
                         <h5 class="card-title">Milestones</h5>
                         <div class="random-mars-flex">
                             <div v-if="chosenBoard == 'Hellas'" class="random-mars-flex-content">
-                                <img src="/img/random-mars/milestones/polar-explorer.png" alt="polar explorer" />
-                                <i class="fa fa-anchor text-primary"></i>
+                                <div>
+                                    <img src="/img/random-mars/milestones/polar-explorer.png" alt="polar explorer" />
+                                </div>
+                                <div class="one-char-width">
+                                    <i class="fa fa-check text-success" title="already on board"></i>
+                                    <i class="fa fa-anchor text-primary" title="this milestone is always played on Hellas"></i>
+                                </div>
                             </div>
                             <div class="random-mars-flex-content" v-for="(milestone, index) in chosenMilestones">
-                                <img :src="'/img/random-mars/milestones/'+filename(milestone)+'.png'" :alt="milestone" />
-                                <a @click="randomMilestone(index)"><i class="fa fa-refresh"></i></a>
+                                <div>
+                                    <img :src="'/img/random-mars/milestones/'+filename(milestone)+'.png'" :alt="milestone" />
+                                </div>
+                                <div class="one-char-width">
+                                    <i v-if="milestonesOnBoard[boardMapping].includes(milestone)" class="fa fa-check text-success" title="already on board"></i>
+                                    <a @click="randomMilestone(index)"><i class="fa fa-refresh"></i></a>
+                                </div>
                             </div>
                         </div>
                         <h5 class="card-title mt-3">Awards</h5>
                         <div class="random-mars-flex">
                             <div v-if="chosenBoard == 'Elysium'" class="random-mars-flex-content">
-                                <img src="/img/random-mars/awards/desert-settler.png" alt="desert settler" />
-                                <i class="fa fa-anchor text-primary"></i>
+                                <div>
+                                    <img src="/img/random-mars/awards/desert-settler.png" alt="desert settler" />
+                                </div>
+                                <div class="one-char-width">
+                                    <i class="fa fa-check text-success" title="already on board"></i>
+                                    <i class="fa fa-anchor text-primary" title="this award is always played on Elysium"></i>
+                                </div>
                             </div>
                             <div class="random-mars-flex-content" v-for="(award, index) in chosenAwards">
-                                <img :src="'/img/random-mars/awards/'+filename(award)+'.png'" :alt="award" />
-                                <a @click="randomAward(index)"><i class="fa fa-refresh"></i></a>
+                                <div>
+                                    <img :src="'/img/random-mars/awards/'+filename(award)+'.png'" :alt="award" />
+                                </div>
+                                <div class="one-char-width">
+                                <i v-if="awardsOnBoard[boardMapping].includes(award)" class="fa fa-check text-success" title="already on board"></i>
+                                    <a @click="randomAward(index)"><i class="fa fa-refresh"></i></a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -105,10 +125,10 @@
                         <h5 class="card-title">Colonies</h5>
                         <div class="random-mars-flex">
                             <div class="random-mars-flex-content" v-for="(colony, index) in chosenColonies">
-                            <a :href="'/img/random-mars/colonies/'+filename(colony)+'.png'" data-toggle="lightbox" data-gallery="gallery-colony-list">
-                                <img :src="'/img/random-mars/colonies/'+filename(colony)+'.png'" :alt="colony" />
-                            </a>
-                                <a @click="randomColony(index)"><i class="fa fa-refresh"></i></a>
+                                <a :href="'/img/random-mars/colonies/'+filename(colony)+'.png'" data-toggle="lightbox" data-gallery="gallery-colony-list">
+                                    <img :src="'/img/random-mars/colonies/'+filename(colony)+'.png'" :alt="colony" />
+                                </a>
+                                <a @click="randomColony(index)" class="one-char-width"><i class="fa fa-refresh"></i></a>
                             </div>
                         </div>
                     </div>

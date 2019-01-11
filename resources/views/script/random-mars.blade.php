@@ -11,17 +11,18 @@
             corporations: [], // from API
             boards: ['base game', 'Hellas', 'Elysium'],
             colonies: ['Luna', 'Ceres', 'Triton', 'Ganymede', 'Calisto', 'Io', 'Europa', 'Enceladus', 'Miranda', 'Titan', 'Pluto'],
-            milestones: [
-                'terraformer', 'mayor', 'gardener', 'builder', 'planner', 
-                'generalist', 'specialist', 'ecologist', 'tycoon', 'legend',
-                'diversifier', 'tactican', 'energizer', 'rim settler', // + polar explorer
-                'floaters'
+            // which board has which milestones and awards
+            milestonesOnBoard: [
+                ['terraformer', 'mayor', 'gardener', 'builder', 'planner'], // base board
+                ['diversifier', 'tactican', 'energizer', 'rim settler'], // + polar explorer, Hellas
+                ['generalist', 'specialist', 'ecologist', 'tycoon', 'legend'], // Elysium
+                ['floaters'] // not on board
             ],
-            awards: [
-                'landlord', 'banker', 'scientist', 'thermalist', 'miner',
-                'celebrity', 'industrialist', 'estate dealer', 'benefactor', // + desert settler
-                'cultivator', 'magnate', 'space baron', 'excentric', 'contractor',
-                'venus'
+            awardsOnBoard: [
+                ['landlord', 'banker', 'scientist', 'thermalist', 'miner'], // base board
+                ['cultivator', 'magnate', 'space baron', 'excentric', 'contractor'], // Hellas
+                ['celebrity', 'industrialist', 'estate dealer', 'benefactor'], // + desert settler, Elysium
+                ['venus']
             ],
             // which indexes are selected
             boardMapping: 0,
@@ -70,7 +71,19 @@
             },
             awardNum: function() {
                 return this.chosenBoard == 'Elysium' ? 5 : 6;
-            }
+            },
+            // flatten milestonesOnBoard array
+            milestones: function() {
+                // perserving original order of milestones
+                var originalMSOrder = [this.milestonesOnBoard[0], this.milestonesOnBoard[2], this.milestonesOnBoard[1], this.milestonesOnBoard[3]];
+                return [].concat.apply([], originalMSOrder);
+            },
+            // flatten awardsOnBoard array
+            awards: function() {
+                // perserving original order of awards
+                var originalAOrder = [this.awardsOnBoard[0], this.awardsOnBoard[2], this.awardsOnBoard[1], this.awardsOnBoard[3]];
+                return [].concat.apply([], originalAOrder);
+            },
         },
         methods: {
             filename: function(name) {
