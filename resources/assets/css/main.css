@@ -31,6 +31,7 @@ table.random-mars img {
 }
 .random-mars-flex-content img {
     max-width: 95%;
+    margin-bottom: 0.2em;
 }
 break{
     flex-basis: 100%;
