@@ -543,10 +543,22 @@
                 this.factionForm.big_photo_id = null;
             },
             // faction changed on player form
-            playerFactionChanged:function() {
+            playerFactionChanged: function() {
                 if (this.playerForm.notes == null) {
                     this.playerForm.notes = this.getFactionById(this.playerForm.faction_id).name;
                 }
+            },
+            // counts how many times a player played in the season
+            countPlayerSession: function(userId) {
+                var count = 0;
+                for (var i = 0; i < this.sessionList.length; i++) {
+                    for (var u = 0; u < this.sessionList[i].players.length; u++)
+                        if (this.sessionList[i].players[u].user.id == userId) {
+                            count++;
+                            break;
+                        }
+                }
+                return count;
             }
         }
 
