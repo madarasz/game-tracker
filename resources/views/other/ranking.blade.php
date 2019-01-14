@@ -5,13 +5,18 @@
             ELO Leaderboard
             @include('other.season-string')
         </h5>
-        <ol style="max-width: 200px; font-size: 90%">
-            <li v-for="rank in ranking">
-                @{{ rank.userName }}
-                <span class="text-info">(@{{ countPlayerSession(rank.user_id) }})</span>
-                <span class="text-primary pull-right">@{{ rank.points }}</span>
-            </li>
-        </ol>
+        <table class="table table-striped table-sm " style="max-width: 200px; font-size: 90%">
+            <tr v-for="(rank, index) in ranking">
+                <td>@{{ (index+1) }}.</td>
+                <td>
+                    @{{ rank.userName }}
+                    <span class="text-info">(@{{ countPlayerSession(rank.user_id) }})</span>
+                </td>
+                <td class="text-right text-primary">
+                    @{{ rank.points }}
+                </td>
+            </tr>
+        </table>
         <div class="small-text" v-if="ranking.length == 0">
             no concluded sessions yet
         </div>
