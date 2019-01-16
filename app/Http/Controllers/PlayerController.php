@@ -5,13 +5,22 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PlayerRequest;
 use App\Player;
 use App\User;
+use App\GameSession;
+use App\Game;
 
 class PlayerController extends Controller
 {
     public function indexUsers() {
         $users = User::get();
-
         return response()->json($users);
+    }
+
+    public function userDetail($userId) {
+        $user = User::findOrFail($userId);
+        $sessionIds = Player::where('user_id', $userId)->pluck('game_session_id')->toArray();
+        $gameIds = GameSession::whereIn('id', $sessionIds)->groupBy('game_id')->pluck('game_id')->toArray();
+        $games = Game::whereIn('id', $gameIds)->with(['seasons', 'seasons.points'])->get();
+        return response()->json(['user' => $user, 'games' => $games]);
     }
 
     /**

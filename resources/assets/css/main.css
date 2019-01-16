@@ -16,6 +16,9 @@ table.random-mars {
 table.random-mars img {
     max-width: 100%;
 }
+table.borderless th {
+    border: 0;
+}
 .random-mars-flex {
     display: flex; 
     flex-direction: row; 

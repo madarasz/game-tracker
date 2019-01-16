@@ -9,7 +9,7 @@
             <tr v-for="(rank, index) in ranking">
                 <td>@{{ (index+1) }}.</td>
                 <td>
-                    @{{ rank.userName }}
+                    <a :href="'/user-details/'+rank.user_id" style="color: black">@{{ rank.userName }}</a>
                     <span class="text-info">(@{{ countPlayerSession(rank.user_id) }})</span>
                 </td>
                 <td class="text-right text-primary">

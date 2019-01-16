@@ -28,6 +28,7 @@ Route::resource('game-factions', 'GameFactionController');
 Route::get('game-sessions/game/{gameid}', 'GameSessionController@indexForGame');
 Route::get('game-sessions/game/{gameid}/{seasonid}', 'GameSessionController@indexForGame');
 Route::get('users', 'PlayerController@indexUsers');
+Route::get('user-details/{userid}', 'PlayerController@userDetail');
 Route::get('players/session/{sessionid}', 'PlayerController@indexForSession');
 Route::get('photos/session/{sessionid}', 'PhotoController@indexForSession');
 Route::get('photos/{id}/rotate/{dir}', 'PhotoController@rotate');

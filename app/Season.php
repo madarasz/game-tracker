@@ -14,6 +14,10 @@ class Season extends Model
         return $this->hasOne(Game::class, 'id', 'game_id');
     }
 
+    public function points() {
+        return $this->hasMany(EloPoint::class, 'season_id', 'id');
+    }
+
     public function getSessionCountAttribute() {
         return GameSession::where('game_id', $this->game_id)->where('season_id', $this->id)->count();
     }
