@@ -14,7 +14,7 @@
                 </div>
             </div>
         </div>
-        <div class="row pb-3" v-for="game in games">
+        <div class="row pb-3" v-for="game in games" v-if="dataLoaded">
             {{--Game info--}}
             <div class="col-lg-3">
                 @include('other.user-game-info')
@@ -63,11 +63,15 @@
                 
             </div>
             <div class="col-lg-4" v-if="game.selectedSeasonId > -1">
-                <div class="card">
+                <div class="card" style="background-color: #d9fce1">
                     <div class="card-block" style="font-size: 90%">
                         <div class="text-center pb-1">
                             <strong>@{{ game.title }} season:</strong>
                             @{{ getSeason(game.id, game.selectedSeasonId).title }}
+                            <span class="text-info">(@{{ getSeason(game.id, game.selectedSeasonId).sessionCount }})</span>
+                            <div v-if="getSeason(game.id, game.selectedSeasonId).points.length == 0" class="small-text">
+                                no sessions yet
+                            </div>
                         </div>
                         <table class="table table-striped table-sm " style="max-width: 200px; font-size: 90%; margin: 0 auto">
                             <tr v-for="(point, index) in getSeason(game.id, game.selectedSeasonId).points">

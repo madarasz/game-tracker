@@ -5,7 +5,9 @@
         data: {
             userId: '{{ $userId }}',
             user: {},
-            games: []
+            games: [],
+            dataLoaded: false,
+            seasonsToBeLoaded: 0
         },
 
         mounted: function() {
@@ -16,28 +18,48 @@
             loadUserDetails: function() {
                 axios.get('/api/user-details/'+this.userId).then(function (response) {
                     userDetails.user = response.data.user;
-                    userDetails.games = response.data.games.sort((a,b) => (b.sessionCount - a.sessionCount));
-                    // add ranking for sessions without seasons
-                    for (var i = 0; i < userDetails.games.length; i++) {
-                        userDetails.games[i].selectedSeasonId = -1;
-                        if (userDetails.games[i].sessionsWithoutSeason > 0) {
-                            axios.get('/api/games/'+userDetails.games[i].id+'/0/ranking').then(function (response) {
-                                var regex = /(?:\/api\/games\/)([\d]*)/g;
-                                var gameId = parseInt(regex.exec(response.config.url)[1]);
-                                var game_ = userDetails.games.filter(x => x.id == gameId)[0];
-                                var season = { 
-                                    id: null,
-                                    title: 'without season',
-                                    sessionCount: game_.sessionsWithoutSeason,
-                                    points: response.data 
-                                };
-                                
-                                game_.seasons.push(season);
-                                //userDetails.games.[i].seasons.push(season);
-                            });
+                    userDetails.games = response.data.games.sort((a, b) => (b.sessionCount - a.sessionCount));
+                    // select latest season
+                    userDetails.games.map(x => { 
+                        if (x.seasons.length > 0) {
+                            x.selectedSeasonId = x.seasons[0].id;
+                        } else {
+                            x.selectedSeasonId = null;
                         }
+                        return x;
+                    });
+                    // check if there are sessions without season
+                    userDetails.seasonsToBeLoaded = response.data.games.filter(x => x.sessionsWithoutSeason > 0).length;
+                    if (userDetails.seasonsToBeLoaded > 0) {
+                        userDetails.loadRankingWithoutSeason();
+                    } else {
+                        userDetails.dataLoaded = true;
                     }
                 });
+            },
+            loadRankingWithoutSeason: function() {
+                for (var i = 0; i < this.games.length; i++) {
+                    if (this.games[i].sessionsWithoutSeason > 0) {
+                        axios.get('/api/games/'+this.games[i].id+'/0/ranking').then(function (response) {
+                            var gameId = parseInt(/(?:\/api\/games\/)([\d]*)/g.exec(response.config.url)[1]);
+                            var game_ = userDetails.games.filter(x => x.id == gameId)[0];
+                            var season = { 
+                                id: null,
+                                title: 'without season',
+                                sessionCount: game_.sessionsWithoutSeason,
+                                points: response.data 
+                            
+                            };
+                            game_.seasons.push(season);
+                            // check if all is loaded
+                            if (--userDetails.seasonsToBeLoaded == 0) {
+                                userDetails.dataLoaded = true;
+                            }
+                            
+                        });
+                    }
+                
+                }
             },
             getSeason: function(gameId, seasonId) {
                 return this.games.filter(x => x.id == gameId)[0]
