@@ -19,7 +19,9 @@ class PlayerController extends Controller
         $user = User::findOrFail($userId);
         $sessionIds = Player::where('user_id', $userId)->pluck('game_session_id')->toArray();
         $gameIds = GameSession::whereIn('id', $sessionIds)->groupBy('game_id')->pluck('game_id')->toArray();
-        $games = Game::whereIn('id', $gameIds)->with(['seasons', 'seasons.points'])->get();
+        $games = Game::whereIn('id', $gameIds)->with(['seasons', 'seasons.points' => function($q) {
+            $q->orderBy('points', 'desc');
+        }])->get();
         return response()->json(['user' => $user, 'games' => $games]);
     }
 
