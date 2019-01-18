@@ -7,6 +7,7 @@ use App\Player;
 use App\User;
 use App\GameSession;
 use App\Game;
+use DB;
 
 class PlayerController extends Controller
 {
@@ -23,6 +24,20 @@ class PlayerController extends Controller
             $q->orderBy('points', 'desc');
         }])->get();
         return response()->json(['user' => $user, 'games' => $games]);
+    }
+
+    public function userFactions($userId, $gameId) {
+        $user = User::findOrFail($userId);
+        $sessionIds = GameSession::where('game_id', $gameId)->pluck('id')->toArray();
+        $factions = DB::table('players')
+            ->select('faction_id', 'game_factions.name', 'icons.filename as icon', 'cards.filename as corp', DB::raw('count(*) as total'))
+            ->whereNotNull('faction_id')->where('user_id', $userId)->whereIn('players.game_session_id', $sessionIds)
+            ->groupBy('faction_id')
+            ->leftJoin('game_factions', 'players.faction_id', '=', 'game_factions.id')
+            ->leftJoin('photos as icons', 'game_factions.photo_id', '=', 'icons.id')
+            ->leftJoin('photos as cards', 'game_factions.big_photo_id', '=', 'cards.id')
+            ->orderBy('total', 'desc')->get();
+        return response()->json($factions);
     }
 
     /**

@@ -12,7 +12,7 @@ class Game extends Model
     protected $fillable = ['title', 'description', 'thumbnail_url', 'game_type_id'];
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
     protected $hidden = ['created_at', 'updated_at', 'deleted_at', 'sessions'];
-    protected $appends = ['sessionCount', 'leader', 'activeSeason', 'sessionsWithoutSeason'];
+    protected $appends = ['sessionCount', 'leader', 'activeSeason', 'sessionsWithoutSeason', 'factionCount'];
 
     public function game_type() {
         return $this->hasOne(GameType::class, 'id', 'game_type_id');
@@ -43,6 +43,10 @@ class Game extends Model
 
     public function factions() {
         return $this->hasMany(GameFaction::class, 'game_id', 'id');
+    }
+
+    public function getFactionCountAttribute() {
+        return $this->factions->count();
     }
 
     public function getActiveSeasonAttribute() {

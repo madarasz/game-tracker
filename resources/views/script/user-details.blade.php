@@ -30,15 +30,18 @@
                     });
                     // check if there are sessions without season
                     userDetails.seasonsToBeLoaded = response.data.games.filter(x => x.sessionsWithoutSeason > 0).length;
-                    if (userDetails.seasonsToBeLoaded > 0) {
-                        userDetails.loadRankingWithoutSeason();
+                    userDetails.factionsToBeLoaded = response.data.games.filter(x => x.factionCount > 0).length;
+                    if (userDetails.seasonsToBeLoaded + userDetails.factionsToBeLoaded> 0) {
+                        userDetails.loadAdditionalData();
                     } else {
                         userDetails.dataLoaded = true;
                     }
                 });
             },
-            loadRankingWithoutSeason: function() {
+            // load rankings without seasons and factions
+            loadAdditionalData: function() {
                 for (var i = 0; i < this.games.length; i++) {
+                    // rankings without seasons
                     if (this.games[i].sessionsWithoutSeason > 0) {
                         axios.get('/api/games/'+this.games[i].id+'/0/ranking').then(function (response) {
                             var gameId = parseInt(/(?:\/api\/games\/)([\d]*)/g.exec(response.config.url)[1]);
@@ -52,13 +55,24 @@
                             };
                             game_.seasons.push(season);
                             // check if all is loaded
-                            if (--userDetails.seasonsToBeLoaded == 0) {
+                            if (--userDetails.seasonsToBeLoaded < 1) {
                                 userDetails.dataLoaded = true;
                             }
                             
                         });
                     }
-                
+                    // factions
+                    if (this.games[i].factionCount > 0) {
+                        axios.get('/api/user-details/'+this.userId+'/factions/'+this.games[i].id).then(function (response) {
+                            var gameId = parseInt(/([\d]*)$/g.exec(response.config.url)[1]);
+                            var game_ = userDetails.games.filter(x => x.id == gameId)[0];
+                            game_.factionStats = response.data;
+                            // check if all is loaded
+                            if (--userDetails.seasonsToBeLoaded < 1) {
+                                userDetails.dataLoaded = true;
+                            }
+                        });
+                    }
                 }
             },
             getSeason: function(gameId, seasonId) {
@@ -106,5 +120,11 @@
                 Vue.set(this.games, gameIndex, game_);                
             }
         }
+    });
+
+    // EKKO Lightbox
+    $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+        event.preventDefault();
+        $(this).ekkoLightbox();
     });
 </script>

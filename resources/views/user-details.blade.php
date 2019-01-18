@@ -14,15 +14,31 @@
                 </div>
             </div>
         </div>
-        <div class="row pb-3" v-for="game in games" v-if="dataLoaded">
+        <div class="row pb-3" v-for="(game, gameIndex) in games" v-if="dataLoaded">
             {{--Game info--}}
             <div class="col-lg-3">
                 @include('other.user-game-info')
             </div>
-            {{--Season list--}}
             <div class="col-lg-5">
+                {{--Faction List--}}
+                <div class="card mb-2" v-if="game.factionStats">
+                    <div class="card-block text-center p-2" style="font-size: 90%">
+                        <strong>top faction stats</strong>
+                        <table class="table vmiddle borderless table-sm" style="max-width: 200px; margin: 0 auto">
+                            <tr v-for="(faction, ind) in game.factionStats" v-if="ind < 5 || game.displayAllFactions">
+                                <td class="text-right">@{{ faction.total }}</td>
+                                <td>
+                                    <a :href="'/img/photos/'+faction.corp" data-toggle="lightbox" data-gallery="gallery-factions">
+                                        <img :src="'/img/photos/'+faction.icon" :alt="faction.name" style="max-width: 100%; max-height: 1.5rem" />
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                {{--Season list--}}
                 <div class="card">
-                    <div class="card-block">
+                    <div class="card-block p-2">
                         <table class="table table-striped vmiddle borderless hover-row" style="font-size: 90%">
                             <thead>
                                 <th>season</th>
@@ -60,11 +76,11 @@
                         </table>
                     </div>
                 </div>
-                
             </div>
+            {{--Season details--}}
             <div class="col-lg-4" v-if="game.selectedSeasonId > -1">
                 <div class="card" style="background-color: #d9fce1">
-                    <div class="card-block" style="font-size: 90%">
+                    <div class="card-block p-2" style="font-size: 90%">
                         <div class="text-center pb-1">
                             <strong>@{{ game.title }} season:</strong>
                             @{{ getSeason(game.id, game.selectedSeasonId).title }}
