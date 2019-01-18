@@ -7,7 +7,8 @@
             user: {},
             games: [],
             dataLoaded: false,
-            seasonsToBeLoaded: 0
+            seasonsToBeLoaded: 0,
+            factionsToBeLoaded: 0
         },
 
         mounted: function() {
@@ -31,7 +32,7 @@
                     // check if there are sessions without season
                     userDetails.seasonsToBeLoaded = response.data.games.filter(x => x.sessionsWithoutSeason > 0).length;
                     userDetails.factionsToBeLoaded = response.data.games.filter(x => x.factionCount > 0).length;
-                    if (userDetails.seasonsToBeLoaded + userDetails.factionsToBeLoaded> 0) {
+                    if (userDetails.seasonsToBeLoaded + userDetails.factionsToBeLoaded > 0) {
                         userDetails.loadAdditionalData();
                     } else {
                         userDetails.dataLoaded = true;
@@ -55,7 +56,7 @@
                             };
                             game_.seasons.push(season);
                             // check if all is loaded
-                            if (--userDetails.seasonsToBeLoaded < 1) {
+                            if (--userDetails.seasonsToBeLoaded + userDetails.factionsToBeLoaded < 1) {
                                 userDetails.dataLoaded = true;
                             }
                             
@@ -66,9 +67,9 @@
                         axios.get('/api/user-details/'+this.userId+'/factions/'+this.games[i].id).then(function (response) {
                             var gameId = parseInt(/([\d]*)$/g.exec(response.config.url)[1]);
                             var game_ = userDetails.games.filter(x => x.id == gameId)[0];
-                            game_.factionStats = response.data;
+                            game_.factionStats = response.data;2
                             // check if all is loaded
-                            if (--userDetails.seasonsToBeLoaded < 1) {
+                            if (--userDetails.factionsToBeLoaded + userDetails.seasonsToBeLoaded < 1) {
                                 userDetails.dataLoaded = true;
                             }
                         });
