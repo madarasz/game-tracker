@@ -77,9 +77,12 @@
                             <tr v-for="(point, index) in getSeason(game.id, game.selectedSeasonId).points">
                                 <td>@{{ (index+1) }}.</td>
                                 <td>
-                                    <span :style="point.user_id == userId ? 'font-weight: bolder' : ''">
+                                    <span v-if="point.user_id == userId " style="font-weight: bolder">
                                         @{{ point.userName }}
                                     </span>
+                                    <a v-if="point.user_id != userId" :href="'/user-details/' + point.user_id" style="color: black">
+                                        @{{ point.userName }}
+                                    </a>
                                     <span class="text-info">(@{{ point.sessionCount }})</span>
                                 </td>
                                 <td class="text-right text-primary">

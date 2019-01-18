@@ -28,7 +28,9 @@
             <i class="fa fa-trophy" aria-hidden="true" v-if="parseInt(player.winner)"></i>
         </td>
         <td>
-            @{{ player.user.name }}
+            <a :href="'/user-details/'+player.user.id" style="color: black">
+                @{{ player.user.name }}
+            </a>
         </td>
         <td class="text-right">@{{ player.score }}</td>
         <td>@{{ player.notes }}</td>
