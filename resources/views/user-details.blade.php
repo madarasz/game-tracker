@@ -26,7 +26,7 @@
                         <strong>top faction stats</strong>
                         <table class="table vmiddle borderless table-sm" style="max-width: 200px; margin: 0 auto">
                             <tr v-for="(faction, ind) in game.factionStats" v-if="ind < 5 || game.displayAllFactions">
-                                <td class="text-right">@{{ faction.total }}</td>
+                                <td class="text-right">@{{ faction.total }}x</td>
                                 <td>
                                     <a :href="'/img/photos/'+faction.corp" data-toggle="lightbox" data-gallery="gallery-factions">
                                         <img :src="'/img/photos/'+faction.icon" :alt="faction.name" style="max-width: 100%; max-height: 1.5rem" />

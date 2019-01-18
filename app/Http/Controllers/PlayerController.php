@@ -32,7 +32,7 @@ class PlayerController extends Controller
         $factions = DB::table('players')
             ->select('faction_id', 'game_factions.name', 'icons.filename as icon', 'cards.filename as corp', DB::raw('count(*) as total'))
             ->whereNotNull('faction_id')->where('user_id', $userId)->whereIn('players.game_session_id', $sessionIds)
-            ->groupBy('faction_id')
+            ->groupBy('faction_id', 'game_factions.name', 'icon', 'corp')
             ->leftJoin('game_factions', 'players.faction_id', '=', 'game_factions.id')
             ->leftJoin('photos as icons', 'game_factions.photo_id', '=', 'icons.id')
             ->leftJoin('photos as cards', 'game_factions.big_photo_id', '=', 'cards.id')
