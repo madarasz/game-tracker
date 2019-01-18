@@ -5,7 +5,7 @@
             ELO Leaderboard
             @include('other.season-string')
         </h5>
-        <table class="table table-striped table-sm " style="max-width: 200px; font-size: 90%">
+        <table class="table table-striped table-sm " style="max-width: 200px; font-size: 90%; margin: 0 auto">
             <tr v-for="(rank, index) in ranking">
                 <td>@{{ (index+1) }}.</td>
                 <td>

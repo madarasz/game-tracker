@@ -120,21 +120,31 @@
         </div>
 
         <div class="col-sm-12 col-lg-3 pull-lg-9">
-            {{--Game info--}}
-            @include('other.game-info')
-            {{--Leaderboard--}}
-            @include('other.ranking')
-            {{--Seasons--}}
-            @include('other.seasons')
-            {{--Factions--}}
-            @include('other.factions')
-
-            {{--Back to games list--}}
-            <div class="text-center mt-3">
-                <a href="/" class="btn btn-primary mb-3">
-                    <i class="fa fa-chevron-left" aria-hidden="true"></i>
-                    all games
-                </a>
+            <div class="row">
+                <div class="col-sm-6 col-lg-12">
+                    {{--Game info--}}
+                    @include('other.game-info')
+                </div>
+                <div class="col-sm-6 col-lg-12">
+                    {{--Seasons--}}
+                    @include('other.seasons')
+                </div>
+                <div class="col-sm-6 col-lg-12">
+                    {{--Leaderboard--}}
+                    @include('other.ranking')
+                </div>
+                
+                <div class="col-sm-6 col-lg-12">
+                    {{--Factions--}}
+                    @include('other.factions')
+                </div>
+                {{--Back to games list--}}
+                <div class="col-12 text-center mt-3">
+                    <a href="/" class="btn btn-primary mb-3">
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                        all games
+                    </a>
+                </div>
             </div>
         </div>
 

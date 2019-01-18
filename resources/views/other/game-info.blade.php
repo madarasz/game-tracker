@@ -1,5 +1,5 @@
 {{--Game info--}}
-<div class="card">
+<div class="card mb-3">
     <img class="card-img-top img-fluid hidden-md-down" :src="game.thumbnail_url"/>
     <div class="card-block">
         <img class="hidden-lg-up img-thumb float-left mr-3" :src="game.thumbnail_url"/>

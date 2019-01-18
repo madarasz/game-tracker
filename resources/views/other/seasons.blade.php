@@ -1,5 +1,5 @@
 {{--Seasons--}}
-<div class="card mt-3">
+<div class="card">
     <div class="card-block">
         <h5 class="card-title">Seasons</h5>
         {{--active--}}

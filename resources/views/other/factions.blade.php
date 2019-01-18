@@ -3,7 +3,7 @@
     <div class="card-block">
         <h5 class="card-title">Factions</h5>
         {{--Factions list--}}
-        <table class="small-text table vmiddle hover-row mt-3" v-if="factionList.length > 0">
+        <table class="small-text table vmiddle hover-row mt-3" v-if="factionList.length > 0" style="margin: 0 auto; max-width: 300px">
             <thead>
                 <tr>
                     <th>#</th>
