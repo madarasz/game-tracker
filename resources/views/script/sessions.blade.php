@@ -194,6 +194,7 @@
                     }
 
                     viewGame.session = response.data;
+                    viewGame.displaySeason(response.data.season_id);
                     $(window).scrollTop(0);
                 });
 
