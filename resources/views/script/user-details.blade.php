@@ -1,3 +1,4 @@
+<script type="text/javascript" src="/js/ekko-lightbox.min.js"></script>
 <script type="text/javascript">
     var userDetails = new Vue({
         el: '#user-details',
