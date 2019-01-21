@@ -1,6 +1,10 @@
 {{--Factions--}}
+@include('modal.random-faction')
 <div class="card mt-3">
     <div class="card-block">
+        <a class="btn btn-sm btn-primary pull-right" data-toggle="modal" data-target="#modal-random-faction" @click="randomFaction">
+            <i class="fa fa-cube text-white" title="pick random" aria-hidden="true"></i>
+        </a>
         <h5 class="card-title">Factions</h5>
         {{--Factions list--}}
         <table class="small-text table vmiddle hover-row mt-3" v-if="factionList.length > 0" style="margin: 0 auto; max-width: 300px">

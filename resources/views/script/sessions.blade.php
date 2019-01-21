@@ -39,7 +39,8 @@
             dataTable: {},
             chartOptions: {},
             confirmCallback: function() {},
-            confirmText: ''
+            confirmText: '',
+            randomFactionId: 0
         },
 
         mounted: function() {
@@ -560,6 +561,10 @@
                         }
                 }
                 return count;
+            },
+            // random faction
+            randomFaction: function() {
+                this.randomFactionId = Math.floor(Math.random()*this.factionList.length);
             }
         }
 
