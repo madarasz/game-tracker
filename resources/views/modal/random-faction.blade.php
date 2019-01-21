@@ -9,7 +9,7 @@
             <div class="modal-body text-center" v-if="factionList.length" >
                 <div>
                     <a :href="factionList[randomFactionId].factionFile" data-toggle="lightbox" data-gallery="gallery-random-faction">
-                        <img :src="factionList[randomFactionId].iconFile" style="max-width: 80%"/>
+                        <img :src="factionList[randomFactionId].iconFile" style="width: 60%"/>
                     </a>
                 </div>
                 <div>
