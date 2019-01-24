@@ -121,7 +121,7 @@
 
         <div class="col-sm-12 col-lg-3 pull-lg-9">
             <div class="row">
-                <div class="col-sm-6 col-lg-12">
+                <div class="col-12">
                     {{--Game info--}}
                     @include('other.game-info')
                 </div>
@@ -139,7 +139,7 @@
                     @include('other.factions')
                 </div>
                 {{--Back to games list--}}
-                <div class="col-12 text-center mt-3">
+                <div class="col-sm-6 col-lg-12 text-center mt-3">
                     <a href="/" class="btn btn-primary mb-3">
                         <i class="fa fa-chevron-left" aria-hidden="true"></i>
                         all games

@@ -1,6 +1,6 @@
 {{--Factions--}}
 @include('modal.random-faction')
-<div class="card mt-3">
+<div class="card">
     <div class="card-block">
         <a class="btn btn-sm btn-primary pull-right" data-toggle="modal" data-target="#modal-random-faction" @click="randomFaction">
             <i class="fa fa-cube text-white" title="pick random" aria-hidden="true"></i>
