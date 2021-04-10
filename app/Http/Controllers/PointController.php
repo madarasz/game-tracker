@@ -53,21 +53,7 @@ class PointController extends Controller
             for ($u = $i + 1; $u < count($players); $u++) {
 
                 // decide who won
-                if ($players[$i]->score > $players[$u]->score) {
-                    $s1 = 1;
-                } else {
-                    if ($players[$i]->score == $players[$u]->score) { // draw
-                        if ($players[$i]->winner == $players[$u]->winner) {
-                            $s1 = 0.5;
-                        } elseif ($players[$i]->winner) {   // winner flag decides draw
-                            $s1 = 1;
-                        } else {
-                            $s1 = 0;
-                        }
-                    } else {
-                        $s1 = 0;
-                    }
-                }
+                $s1 = $this->whoWon($players[$i], $players[$u]);
 
                 // calculate elo delta
                 $delta = $this->calculateEloDelta(
@@ -90,6 +76,21 @@ class PointController extends Controller
 
         $session->update(['concluded' => true]);
         return response()->json($session);
+    }
+
+    public function whoWon($player1, $player2) {
+        if ($player1->score > $player2->score) {
+            return 1;
+        } else {
+            if ($player1->score == $player2->score) { // draw
+                if ($player1->winner == $player2->winner) {
+                    return 0.5;
+                } elseif ($player1->winner) {   // winner flag decides draw
+                    return 1;
+                } 
+            }
+        }
+        return 0;
     }
 
     public function calculateEloDelta($elo1, $elo2, $win1) {
