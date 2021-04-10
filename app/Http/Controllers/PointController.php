@@ -52,12 +52,6 @@ class PointController extends Controller
 
             for ($u = $i + 1; $u < count($players); $u++) {
 
-                // calculate elo delta
-                $r1 = pow(10, $players[$i]->elo_score($session->game_id, $session->season_id)->points / 400);
-                $r2 = pow(10, $players[$u]->elo_score($session->game_id, $session->season_id)->points / 400);
-                $e1 = $r1 / ($r1 + $r2);
-                $e2 = $r2 / ($r1 + $r2);
-
                 // decide who won
                 if ($players[$i]->score > $players[$u]->score) {
                     $s1 = 1;
@@ -75,12 +69,15 @@ class PointController extends Controller
                     }
                 }
 
-                $s2 = 1 - $s1;
-                $delta1 = (int) round($this->k * ($s1 - $e1));
-                $delta2 = (int) round($this->k * ($s2 - $e2));
+                // calculate elo delta
+                $delta = $this->calculateEloDelta(
+                    $players[$i]->elo_score($session->game_id, $session->season_id)->points,
+                    $players[$u]->elo_score($session->game_id, $session->season_id)->points,
+                    $s1
+                );
 
-                $players[$i]->elo_delta()->update(['delta' => $players[$i]->elo_delta()->delta + $delta1]);
-                $players[$u]->elo_delta()->update(['delta' => $players[$u]->elo_delta()->delta + $delta2]);
+                $players[$i]->elo_delta()->update(['delta' => $players[$i]->elo_delta()->delta + $delta[0]]);
+                $players[$u]->elo_delta()->update(['delta' => $players[$u]->elo_delta()->delta + $delta[1]]);
             }
 
         }
@@ -93,6 +90,17 @@ class PointController extends Controller
 
         $session->update(['concluded' => true]);
         return response()->json($session);
+    }
+
+    public function calculateEloDelta($elo1, $elo2, $win1) {
+        $r1 = pow(10, $elo1 / 400);
+        $r2 = pow(10, $elo2 / 400);
+        $e1 = $r1 / ($r1 + $r2);
+        $e2 = $r2 / ($r1 + $r2);
+        $win2 = 1 - $win1;
+        $delta1 = (int) round($this->k * ($win1 - $e1));
+        $delta2 = (int) round($this->k * ($win2 - $e2));
+        return array($delta1, $delta2);
     }
 
     public function recalculateGame($gameid, $seasonid) {
