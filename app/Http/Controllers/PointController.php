@@ -76,6 +76,10 @@ class PointController extends Controller
         }
 
         $session->update(['concluded' => true]);
+
+        // update faction elo
+        $this->recalculateFactionElo($session->game_id);
+
         return response()->json($session);
     }
 
@@ -119,6 +123,8 @@ class PointController extends Controller
                 $this->concludeSession($session->id, true);
             }
         }
+
+        $this->recalculateFactionElo($gameid);
 
         return $this->getGameRanking($gameid, $seasonid);
     }
@@ -191,8 +197,8 @@ class PointController extends Controller
                         $s1 = $this->whoWon($players[$i], $players[$u]);
                         // calculate elo delta
                         $delta = $this->calculateEloDelta(
-                            $players[$i]->elo_score($session->game_id, $session->season_id)->points,
-                            $players[$u]->elo_score($session->game_id, $session->season_id)->points,
+                            $players[$i]->points,
+                            $players[$u]->points,
                             $s1
                         );
                         $factiondelta[$players[$i]->faction_id] += $delta[0];
@@ -204,7 +210,10 @@ class PointController extends Controller
                 $faction['elo'] += $factiondelta[$faction->id];
             }
         }
-        $sorted = $factions->sortBy('elo');
-        return response()->json($sorted);
+        foreach($factions as $faction) {
+            $faction->save();
+        }
+        $sorted = $factions->sortByDesc('elo')->makeHidden('id');
+        return response()->json($sorted->values()->all());
     }
 }

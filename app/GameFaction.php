@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class GameFaction extends Model
 {
     public $timestamps = false;
-    protected $fillable = ['name', 'game_id', 'photo_id', 'big_photo_id'];
+    protected $fillable = ['name', 'game_id', 'photo_id', 'big_photo_id', 'elo'];
     protected $appends = ['playerNumber', 'iconFile', 'factionFile'];
     protected $hidden = ['photo_id', 'big_photo_id'];
 

@@ -146,7 +146,7 @@
                 axios.get('/api/games/' + this.id).then(function (response) {
                     viewGame.game = response.data;
                     viewGame.seasonList = viewGame.game.seasons;
-                    viewGame.factionList = viewGame.game.factions.sort((a,b) => (b.playerNumber - a.playerNumber));
+                    viewGame.factionList = viewGame.game.factions.sort((a,b) => (b.elo - a.elo));
                     // decide on which season to request
                     if (viewGame.game.activeSeason && viewGame.requestedSeasonId == null) {
                         viewGame.requestedSeasonId = viewGame.game.activeSeason.id;

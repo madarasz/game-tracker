@@ -10,14 +10,17 @@
         <table class="small-text table vmiddle hover-row mt-3" v-if="factionList.length > 0" style="margin: 0 auto; max-width: 300px">
             <thead>
                 <tr>
-                    <th>#</th>
+                    <th>ELO(#)</th>
                     <th class="text-center">faction</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="(faction, index) in factionList">
-                    <td>@{{ faction.playerNumber}}</td>
+                    <td class="text-center">
+                        @{{ faction.elo }}
+                        <span class="text-info">(@{{ faction.playerNumber}})</span>
+                    </td>
                     <td style="padding: 0.25rem" class="text-center">
                         <span v-if="faction.iconFile == null">@{{ faction.name }}</span>
                         <img v-if="faction.iconFile != null && faction.factionFile == null" :src="faction.iconFile" :alt="faction.name" style="max-width: 100%; max-height: 2rem" />
