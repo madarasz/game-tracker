@@ -7,6 +7,7 @@ use App\EloPoint;
 use App\Game;
 use App\GameSession;
 use App\Player;
+use App\GameFaction;
 use Illuminate\Http\Request;
 
 class PointController extends Controller
@@ -170,5 +171,40 @@ class PointController extends Controller
         }
 
         return response()->json($history);
+    }
+
+    public function recalculateFactionElo($gameid) {
+        $game = Game::findOrFail($gameid);
+        $factions = GameFaction::where('game_id', $gameid)->get()->makeHidden(['game_id', 'iconFile', 'factionFile', 'photo', 'bigPhoto']);
+        foreach($factions as $faction) {
+            $faction['elo'] = 1500;
+        }
+        foreach($game->sessions as $session) {
+            foreach($factions as $faction) {
+                $factiondelta[$faction->id] = 0;
+            }
+            $players = $session->players;
+            foreach ($players as $i => $player) {
+                for ($u = $i + 1; $u < count($players); $u++) {
+                    if ((!is_null($players[$i]->faction)) && (!is_null($players[$u]->faction))) {
+                        // decide who won
+                        $s1 = $this->whoWon($players[$i], $players[$u]);
+                        // calculate elo delta
+                        $delta = $this->calculateEloDelta(
+                            $players[$i]->elo_score($session->game_id, $session->season_id)->points,
+                            $players[$u]->elo_score($session->game_id, $session->season_id)->points,
+                            $s1
+                        );
+                        $factiondelta[$players[$i]->faction_id] += $delta[0];
+                        $factiondelta[$players[$u]->faction_id] += $delta[1];
+                    }
+                }
+            }
+            foreach($factions as $faction) {
+                $faction['elo'] += $factiondelta[$faction->id];
+            }
+        }
+        $sorted = $factions->sortBy('elo');
+        return response()->json($sorted);
     }
 }

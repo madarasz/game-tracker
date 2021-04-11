@@ -39,6 +39,7 @@ Route::get('game-factions/game/{gameid}', 'GameFactionController@listForGame');
 Route::get('game-sessions/{id}/conclude', 'PointController@concludeSession');
 Route::get('games/{id}/{seasonid}/ranking', 'PointController@getGameRanking');
 Route::get('games/{id}/{seasonid}/ranking/recalculate', 'PointController@recalculateGame');
+Route::get('games/{id}/ranking/faction-recalculate', 'PointController@recalculateFactionElo');
 Route::get('ranking/game/{gameid}/{seasonid}', 'PointController@historyForGame');
 
 Route::post('/register', 'AuthController@register');
