@@ -79,7 +79,7 @@ class PointController extends Controller
 
         // update faction elo
         $this->recalculateFactionElo($session->game_id);
-
+        
         return response()->json($session);
     }
 
@@ -195,10 +195,12 @@ class PointController extends Controller
                     if ((!is_null($players[$i]->faction)) && (!is_null($players[$u]->faction))) {
                         // decide who won
                         $s1 = $this->whoWon($players[$i], $players[$u]);
+                        $faction1 = $factions->where('id', $players[$i]->faction_id)->first();
+                        $faction2 = $factions->where('id', $players[$u]->faction_id)->first();
                         // calculate elo delta
                         $delta = $this->calculateEloDelta(
-                            $players[$i]->points,
-                            $players[$u]->points,
+                            $faction1->elo,
+                            $faction2->elo,
                             $s1
                         );
                         $factiondelta[$players[$i]->faction_id] += $delta[0];
