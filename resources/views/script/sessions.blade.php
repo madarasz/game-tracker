@@ -1,6 +1,29 @@
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript" src="/js/ekko-lightbox.min.js"></script>
 <script type="text/javascript">
+
+    function setCookie(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        var expires = "expires="+d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+
+    function getCookie(cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return false;
+    }
+
     var viewGame = new Vue({
         el: '#game-viewer',
 
@@ -41,7 +64,8 @@
             confirmCallback: function() {},
             confirmText: '',
             randomFactionId: 0,
-            factionWinrateLoaded: false
+            factionWinrateLoaded: false,
+            sortByWinrate: false
         },
 
         mounted: function() {
@@ -574,6 +598,8 @@
                         viewGame.factionList.find(faction => faction.id == response.data[i].id).winrate = response.data[i]
                     }
                     viewGame.factionWinrateLoaded = true;
+                    viewGame.sortByWinrate = getCookie('sortByWinrate')
+                    viewGame.sortFactions()
                 })
             },
             getFactionDetails: function(factionId) {
@@ -591,6 +617,18 @@
             },
             formatPerc: function(value) {
                 return parseFloat(value * 100).toFixed(1)+"%"
+            },
+            changeFactionSort: function() {
+                this.sortByWinrate = !this.sortByWinrate
+                setCookie('sortByWinrate', this.sortByWinrate, 30)
+                this.sortFactions()
+            },
+            sortFactions: function() {
+                if (this.sortByWinrate) {
+                    this.game.factions.sort((a,b) => (b.winrate.winrate - a.winrate.winrate) || (b.winrate.sessionCount - a.winrate.sessionCount));
+                } else {
+                    this.game.factions.sort((a,b) => (b.elo - a.elo));
+                }
             }
         }
 

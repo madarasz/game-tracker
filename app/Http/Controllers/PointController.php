@@ -231,7 +231,8 @@ class PointController extends Controller
             'factionName' => $faction->name,
             'elo' => $faction->elo,
             'sessionCount' => count($sessionids),
-            'winratePerPlayerNumber' => []
+            'winratePerPlayerNumber' => [],
+            'winrate' => 0
         ];
         if (count($sessionids) == 0) return $result;
         

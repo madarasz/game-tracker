@@ -10,7 +10,7 @@
         <table class="small-text table vmiddle hover-row mt-3" v-if="factionList.length > 0" style="margin: 0 auto; max-width: 300px">
             <thead>
                 <tr>
-                    <th>ELO(#)</th>
+                    <th @click="changeFactionSort()">@{{ sortByWinrate? 'winrate(#)' : 'ELO(#)' }}</th>
                     <th class="text-center">faction</th>
                     <th></th>
                 </tr>
@@ -18,7 +18,7 @@
             <tbody>
                 <tr v-for="(faction, index) in factionList">
                     <td class="text-center">
-                        @{{ faction.elo }}
+                        @{{ sortByWinrate? formatPerc(faction.winrate.winrate) : faction.elo }}
                         <span class="text-info">(@{{ faction.playerNumber}})</span>
                     </td>
                     <td style="padding: 0.25rem" class="text-center">
