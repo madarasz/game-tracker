@@ -40,7 +40,8 @@
             chartOptions: {},
             confirmCallback: function() {},
             confirmText: '',
-            randomFactionId: 0
+            randomFactionId: 0,
+            factionWinrateLoaded: false
         },
 
         mounted: function() {
@@ -159,6 +160,7 @@
                     }
                     viewGame.loadRankings();
                     viewGame.listSessionsForGame();
+                    viewGame.loadFactionWinrates();
                 });
             },
             // list sessions for game
@@ -565,6 +567,30 @@
             // random faction
             randomFaction: function() {
                 this.randomFactionId = Math.floor(Math.random()*this.factionList.length);
+            },
+            loadFactionWinrates: function() {
+                axios.get('/api/games/winrate/' + this.id).then(function (response) {
+                    for (var i = 0; i < response.data.length; i++) {
+                        viewGame.factionList.find(faction => faction.id == response.data[i].id).winrate = response.data[i]
+                    }
+                    viewGame.factionWinrateLoaded = true;
+                })
+            },
+            getFactionDetails: function(factionId) {
+                if (!this.factionWinrateLoaded) return "";
+                const faction = this.factionList.find(faction => faction.id == factionId)
+                result = "<strong>elo:</strong> " + faction.elo
+                result += " <strong>winrate:</strong> " + this.formatPerc(faction.winrate.winrate)
+                result += " (" + faction.winrate.sessionCount + ")"
+                result += '<table width="100%" border="1px black solid"><tr>'
+                for (const [key, value] of Object.entries(faction.winrate.winratePerPlayerNumber)) {
+                    result += '<td align="center"><i>' + key + " players</i><br/>" + this.formatPerc(value.winrate) + " (" + value.sessionCount + ")</td>"
+                }
+                result += "</tr></table>"
+                return result
+            },
+            formatPerc: function(value) {
+                return parseFloat(value * 100).toFixed(1)+"%"
             }
         }
 

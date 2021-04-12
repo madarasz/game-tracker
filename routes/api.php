@@ -40,6 +40,8 @@ Route::get('game-sessions/{id}/conclude', 'PointController@concludeSession');
 Route::get('games/{id}/{seasonid}/ranking', 'PointController@getGameRanking');
 Route::get('games/{id}/{seasonid}/ranking/recalculate', 'PointController@recalculateGame');
 Route::get('games/{id}/ranking/faction-recalculate', 'PointController@recalculateFactionElo');
+Route::get('factions/winrate/{id}', 'PointController@winrateFaction');
+Route::get('games/winrate/{id}', 'PointController@winrateGame');
 Route::get('ranking/game/{gameid}/{seasonid}', 'PointController@historyForGame');
 
 Route::post('/register', 'AuthController@register');

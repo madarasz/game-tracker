@@ -182,10 +182,11 @@ class PointController extends Controller
     public function recalculateFactionElo($gameid) {
         $game = Game::findOrFail($gameid);
         $factions = GameFaction::where('game_id', $gameid)->get()->makeHidden(['game_id', 'iconFile', 'factionFile', 'photo', 'bigPhoto']);
+        $faction_elo = [];
         foreach($factions as $faction) {
-            $faction['elo'] = 1500;
+            $faction_elo[$faction->id] = 1500;
         }
-        foreach($game->sessions as $session) {
+        foreach($game->sessions as $x=>$session) {
             foreach($factions as $faction) {
                 $factiondelta[$faction->id] = 0;
             }
@@ -195,27 +196,79 @@ class PointController extends Controller
                     if ((!is_null($players[$i]->faction)) && (!is_null($players[$u]->faction))) {
                         // decide who won
                         $s1 = $this->whoWon($players[$i], $players[$u]);
-                        $faction1 = $factions->where('id', $players[$i]->faction_id)->first();
-                        $faction2 = $factions->where('id', $players[$u]->faction_id)->first();
+                        $faction1_id = $players[$i]->faction_id;
+                        $faction2_id = $players[$u]->faction_id;
                         // calculate elo delta
                         $delta = $this->calculateEloDelta(
-                            $faction1->elo,
-                            $faction2->elo,
+                            $faction_elo[$faction1_id],
+                            $faction_elo[$faction2_id],
                             $s1
                         );
-                        $factiondelta[$players[$i]->faction_id] += $delta[0];
-                        $factiondelta[$players[$u]->faction_id] += $delta[1];
+                        $factiondelta[$faction1_id] += $delta[0];
+                        $factiondelta[$faction2_id] += $delta[1];
                     }
                 }
             }
             foreach($factions as $faction) {
-                $faction['elo'] += $factiondelta[$faction->id];
+                $faction_elo[$faction->id] += $factiondelta[$faction->id];
             }
         }
         foreach($factions as $faction) {
-            $faction->save();
+            $faction->update(['elo' => $faction_elo[$faction->id]]);
         }
         $sorted = $factions->sortByDesc('elo')->makeHidden('id');
         return response()->json($sorted->values()->all());
+    }
+
+    public function winrateFaction($factionid, $http = true) {
+        $faction = GameFaction::findOrFail($factionid);
+        $gameid = $faction->id;
+        $sessionids = Player::where('faction_id', $factionid)->pluck('game_session_id')->toArray();
+        $sessions = GameSession::whereIn('id', $sessionids)->get();
+        $players = Player::whereIn('game_session_id', $sessionids)->get();
+        $result = [
+            'id' => $faction->id,
+            'factionName' => $faction->name,
+            'elo' => $faction->elo,
+            'sessionCount' => count($sessionids),
+            'winratePerPlayerNumber' => []
+        ];
+        if (count($sessionids) == 0) return $result;
+        
+        // iterate sessions with faction
+        $wincount = 0;
+        $session_counter = array_fill(2, 10, 0);
+        $win_counter = array_fill(2, 10, 0);
+        foreach($sessions as $session) {
+            $session_players = $players->where('game_session_id', $session->id);
+            $player_num = count($session_players);
+            $session_counter[$player_num]++;
+            if ($session_players->where('winner', 1)->where('faction_id', $factionid)->count() > 0) {
+                $wincount++;
+                $win_counter[$player_num]++;
+            }
+        }
+        // collect winrates per player number
+        foreach($session_counter as $player_num=>$counter) {
+            if ($counter > 0) {
+                $result['winratePerPlayerNumber'][$player_num]['sessionCount'] = $counter;
+                $result['winratePerPlayerNumber'][$player_num]['winrate'] = $win_counter[$player_num] / $counter;
+            }
+        }
+        $result['winrate'] = $wincount / count($sessionids);
+        if ($http) {
+            return response()->json($result);
+        } else {
+            return $result;
+        }
+    }
+
+    public function winrateGame($gameid) {
+        $factions = GameFaction::where('game_id', $gameid)->get();
+        $result = [];
+        foreach($factions as $faction) {
+            array_push($result, $this->winrateFaction($faction->id, false));
+        }
+        return response()->json($result);
     }
 }
