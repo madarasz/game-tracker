@@ -10,7 +10,12 @@
         <table class="small-text table vmiddle hover-row mt-3" v-if="factionList.length > 0" style="margin: 0 auto; max-width: 300px">
             <thead>
                 <tr>
-                    <th @click="changeFactionSort()">@{{ sortByWinrate? 'winrate(#)' : 'ELO(#)' }}</th>
+                    <th @click="changeFactionSort()">
+                        <button type="button" class="btn btn-sm btn-primary">
+                            <span class="fa fa-sort-amount-desc" title="change order by" aria-hidden="true"/>
+                            @{{ sortByWinrate? 'winrate' : 'ELO' }}
+                        </button>
+                    </th>
                     <th class="text-center">faction</th>
                     <th></th>
                 </tr>
